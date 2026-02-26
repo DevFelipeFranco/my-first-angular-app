@@ -55,12 +55,22 @@ import { IconComponent } from '../components/ui/icons.component';
       <div class="flex-1 flex flex-col justify-center items-center relative bg-white px-6 py-12 lg:px-16 lg:py-24">
         
         <!-- Mobile Logo -->
-        <div class="md:hidden flex flex-col items-center gap-4 mb-10 mt-12 animate-fade-in-up">
-          <div class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30">
-             <app-icon name="scale" class="text-white" [size]="32" [strokeWidth]="2"></app-icon>
+        <div class="md:hidden flex flex-col items-center gap-4 mb-10 mt-12 animate-fade-in-up group cursor-pointer">
+          <div class="w-16 h-16 flex items-center justify-center">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full drop-shadow-md transition-all duration-700 group-hover:drop-shadow-[0_8px_16px_rgba(220,38,38,0.5)]">
+              <g class="origin-[45px_45px] transition-transform duration-[1.5s] ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-[1.12] group-hover:-rotate-3">
+                <polygon points="6,24 16,14 16,24" fill="#ef4444" class="transition-all duration-[1.2s] ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-x-2 group-hover:-translate-y-1 group-hover:-rotate-3" />
+                <polygon points="18,12 36,12 36,38 18,38" fill="#ef4444" class="transition-all duration-[1.2s] ease-[cubic-bezier(0.2,0.8,0.2,1)] delay-[50ms] group-hover:-translate-x-1 group-hover:-translate-y-2 group-hover:-rotate-1 origin-[27px_25px]" />
+                <polygon points="38,38 58,18 58,38" fill="#ef4444" class="transition-all duration-[1.2s] ease-[cubic-bezier(0.2,0.8,0.2,1)] delay-[75ms] group-hover:-translate-y-2 group-hover:rotate-1 origin-[48px_28px]" />
+                <polygon points="60,4 90,4 60,34" fill="#ef4444" class="transition-all duration-[1.2s] ease-[cubic-bezier(0.2,0.8,0.2,1)] delay-[100ms] group-hover:translate-x-3 group-hover:-translate-y-3 group-hover:rotate-3 origin-[75px_19px]" />
+                <polygon points="76,20 94,8 72,24" fill="#ef4444" class="transition-all duration-[1.2s] ease-[cubic-bezier(0.2,0.8,0.2,1)] delay-[150ms] group-hover:translate-x-4 group-hover:-translate-y-4 group-hover:rotate-6 origin-[83px_14px]" />
+                <polygon points="20,40 56,40 44,76" fill="#ef4444" class="transition-all duration-[1.2s] ease-[cubic-bezier(0.2,0.8,0.2,1)] delay-[50ms] group-hover:translate-y-2 group-hover:scale-[1.03] origin-[40px_58px]" />
+                <polygon points="58,42 40,96 58,96" fill="#ef4444" class="transition-all duration-[1.2s] ease-[cubic-bezier(0.2,0.8,0.2,1)] delay-[125ms] group-hover:translate-x-2 group-hover:translate-y-3 group-hover:-rotate-2 origin-[49px_69px]" />
+              </g>
+            </svg>
           </div>
-          <span class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-500">
-             Jurixia
+          <span class="text-3xl font-extrabold text-[#022c22] tracking-tight">
+             dokqet
           </span>
         </div>
 

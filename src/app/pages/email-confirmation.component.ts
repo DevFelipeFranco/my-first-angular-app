@@ -30,7 +30,7 @@ import { IconComponent } from '../components/ui/icons.component';
 
             <h1 class="text-2xl font-bold text-slate-900 mb-2">¡Correo Verificado!</h1>
             <p class="text-slate-500 mb-8 leading-relaxed">
-              Gracias por confirmar tu identidad. Tu cuenta en <span class="font-semibold text-indigo-700">Nexus Legal</span> ha sido activada correctamente.
+              Gracias por confirmar tu identidad. Tu cuenta en <span class="font-semibold text-indigo-700">dokqet</span> ha sido activada correctamente.
             </p>
 
             <div class="bg-slate-50 rounded-xl p-4 mb-8 border border-slate-100 text-left">

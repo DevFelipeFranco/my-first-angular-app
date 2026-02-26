@@ -4,22 +4,33 @@ import { RouterLink } from '@angular/router';
 import { IconComponent } from '../components/ui/icons.component';
 
 @Component({
-    selector: 'app-landing',
-    standalone: true,
-    imports: [CommonModule, RouterLink, IconComponent],
-    template: `
+  selector: 'app-landing',
+  standalone: true,
+  imports: [CommonModule, RouterLink, IconComponent],
+  template: `
     <div class="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-indigo-100 selection:text-indigo-900 overflow-x-hidden">
       
       <!-- Navbar -->
       <nav class="fixed w-full z-50 bg-slate-900/80 backdrop-blur-md border-b border-white/10 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between items-center h-20">
-            <div class="flex items-center gap-2">
-              <div class="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-500/30">
-                <app-icon name="scale" class="text-white" [size]="24" [strokeWidth]="2"></app-icon>
+            <div class="flex items-center gap-2.5 group cursor-pointer relative">
+              <div class="w-10 h-10 flex items-center justify-center relative transition-all duration-500 group-hover:scale-110 group-hover:-rotate-3 z-10">
+                <div class="absolute inset-0 bg-red-600/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] transition-all duration-700 group-hover:drop-shadow-[0_8px_16px_rgba(220,38,38,0.5)]">
+                  <g class="origin-[45px_45px] transition-transform duration-[1.5s] ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-[1.12] group-hover:-rotate-3">
+                    <polygon points="6,24 16,14 16,24" fill="#ef4444" class="transition-all duration-[1.2s] ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-x-2 group-hover:-translate-y-1 group-hover:-rotate-3" />
+                    <polygon points="18,12 36,12 36,38 18,38" fill="#ef4444" class="transition-all duration-[1.2s] ease-[cubic-bezier(0.2,0.8,0.2,1)] delay-[50ms] group-hover:-translate-x-1 group-hover:-translate-y-2 group-hover:-rotate-1 origin-[27px_25px]" />
+                    <polygon points="38,38 58,18 58,38" fill="#ef4444" class="transition-all duration-[1.2s] ease-[cubic-bezier(0.2,0.8,0.2,1)] delay-[75ms] group-hover:-translate-y-2 group-hover:rotate-1 origin-[48px_28px]" />
+                    <polygon points="60,4 90,4 60,34" fill="#ef4444" class="transition-all duration-[1.2s] ease-[cubic-bezier(0.2,0.8,0.2,1)] delay-[100ms] group-hover:translate-x-3 group-hover:-translate-y-3 group-hover:rotate-3 origin-[75px_19px]" />
+                    <polygon points="76,20 94,8 72,24" fill="#ef4444" class="transition-all duration-[1.2s] ease-[cubic-bezier(0.2,0.8,0.2,1)] delay-[150ms] group-hover:translate-x-4 group-hover:-translate-y-4 group-hover:rotate-6 origin-[83px_14px]" />
+                    <polygon points="20,40 56,40 44,76" fill="#ef4444" class="transition-all duration-[1.2s] ease-[cubic-bezier(0.2,0.8,0.2,1)] delay-[50ms] group-hover:translate-y-2 group-hover:scale-[1.03] origin-[40px_58px]" />
+                    <polygon points="58,42 40,96 58,96" fill="#ef4444" class="transition-all duration-[1.2s] ease-[cubic-bezier(0.2,0.8,0.2,1)] delay-[125ms] group-hover:translate-x-2 group-hover:translate-y-3 group-hover:-rotate-2 origin-[49px_69px]" />
+                  </g>
+                </svg>
               </div>
-              <span class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
-                Jurixia
+              <span class="text-2xl font-black tracking-[-0.06em] translate-y-[2px] select-none relative z-10">
+                <span class="text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-200 transition-all duration-500 group-hover:to-white">dok</span><span class="text-transparent bg-clip-text bg-gradient-to-br from-red-500 to-red-600 transition-all duration-500 group-hover:from-red-400 group-hover:to-red-500 drop-shadow-[0_0_8px_rgba(220,38,38,0.4)] group-hover:drop-shadow-[0_0_16px_rgba(220,38,38,0.8)] relative z-20">q</span><span class="text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-200 transition-all duration-500 group-hover:to-white">et</span>
               </span>
             </div>
             
@@ -303,10 +314,20 @@ import { IconComponent } from '../components/ui/icons.component';
           
           <div class="mt-24 pt-8 border-t border-slate-800/50 flex flex-col md:flex-row justify-between items-center text-sm text-slate-500">
             <div class="flex items-center gap-2 mb-4 md:mb-0">
-              <div class="w-6 h-6 bg-slate-800 rounded-md flex items-center justify-center">
-                <app-icon name="scale" class="text-slate-400" [size]="12" [strokeWidth]="2"></app-icon>
+              <div class="w-6 h-6 flex items-center justify-center grayscale opacity-80">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full opacity-80 mix-blend-luminosity hover:mix-blend-normal transition-all duration-500">
+                  <g class="origin-center">
+                    <polygon points="6,24 16,14 16,24" fill="#ef4444" />
+                    <polygon points="18,12 36,12 36,38 18,38" fill="#ef4444" />
+                    <polygon points="38,38 58,18 58,38" fill="#ef4444" />
+                    <polygon points="60,4 90,4 60,34" fill="#ef4444" />
+                    <polygon points="76,20 94,8 72,24" fill="#ef4444" />
+                    <polygon points="20,40 56,40 44,76" fill="#ef4444" />
+                    <polygon points="58,42 40,96 58,96" fill="#ef4444" />
+                  </g>
+                </svg>
               </div>
-              <p>&copy; 2026 Jurixia. Todos los derechos reservados.</p>
+              <p>&copy; 2026 dokqet. Todos los derechos reservados.</p>
             </div>
             <div class="flex space-x-8">
               <a href="#" class="hover:text-indigo-400 transition-colors">Privacidad</a>

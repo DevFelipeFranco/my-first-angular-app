@@ -6,10 +6,10 @@ import { IconComponent } from '../components/ui/icons.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
-    selector: 'app-client-create',
-    standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, RouterModule, IconComponent],
-    template: `
+  selector: 'app-client-create',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, IconComponent],
+  template: `
     <div class="animate-fade-in pb-12">
       
       <!-- Top Bar / Navigation -->
@@ -241,7 +241,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
                    <!-- Card Footer -->
                    <div class="mt-6 text-center">
-                      <p class="text-[10px] text-slate-400 font-medium">Nexus Legal System</p>
+                      <p class="text-[10px] text-slate-400 font-medium">dokqet System</p>
                    </div>
                 </div>
              </div>
@@ -260,7 +260,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
       </div>
     </div>
   `,
-    styles: [`
+  styles: [`
     .animate-fade-in { animation: fadeIn 0.6s ease-out; }
     .animate-fade-in-up { animation: fadeInUp 0.3s ease-out; }
     
@@ -275,42 +275,42 @@ import { toSignal } from '@angular/core/rxjs-interop';
   `]
 })
 export class ClientCreateComponent {
-    private fb = inject(FormBuilder);
-    private router = inject(Router);
+  private fb = inject(FormBuilder);
+  private router = inject(Router);
 
-    isLoading = signal(false);
-    randomId = Math.floor(Math.random() * 900) + 100;
+  isLoading = signal(false);
+  randomId = Math.floor(Math.random() * 900) + 100;
 
-    clientForm = this.fb.group({
-        name: ['', [Validators.required, Validators.minLength(3)]],
-        company: [''],
-        email: ['', [Validators.required, Validators.email]],
-        phone: ['', [Validators.required, Validators.minLength(10)]],
-        status: ['Activo']
-    });
+  clientForm = this.fb.group({
+    name: ['', [Validators.required, Validators.minLength(3)]],
+    company: [''],
+    email: ['', [Validators.required, Validators.email]],
+    phone: ['', [Validators.required, Validators.minLength(10)]],
+    status: ['Activo']
+  });
 
-    // Signal to reactively update preview
-    formValues = toSignal(this.clientForm.valueChanges, {
-        initialValue: {
-            name: '', company: '', email: '', phone: '', status: 'Activo'
-        }
-    });
-
-    hasError(field: string): boolean {
-        const control = this.clientForm.get(field);
-        return !!(control && control.invalid && (control.dirty || control.touched));
+  // Signal to reactively update preview
+  formValues = toSignal(this.clientForm.valueChanges, {
+    initialValue: {
+      name: '', company: '', email: '', phone: '', status: 'Activo'
     }
+  });
 
-    onSubmit() {
-        if (this.clientForm.valid) {
-            this.isLoading.set(true);
-            // Simulate API call
-            setTimeout(() => {
-                this.isLoading.set(false);
-                this.router.navigate(['/clients']);
-            }, 1500);
-        } else {
-            this.clientForm.markAllAsTouched();
-        }
+  hasError(field: string): boolean {
+    const control = this.clientForm.get(field);
+    return !!(control && control.invalid && (control.dirty || control.touched));
+  }
+
+  onSubmit() {
+    if (this.clientForm.valid) {
+      this.isLoading.set(true);
+      // Simulate API call
+      setTimeout(() => {
+        this.isLoading.set(false);
+        this.router.navigate(['/clients']);
+      }, 1500);
+    } else {
+      this.clientForm.markAllAsTouched();
     }
+  }
 }

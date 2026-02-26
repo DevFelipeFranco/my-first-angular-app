@@ -16,7 +16,7 @@ import { map } from 'rxjs/operators';
         <li class="inline-flex items-center">
           <a routerLink="/dashboard" class="inline-flex items-center hover:text-slate-900 transition-colors">
             <app-icon name="home" [size]="16" class="mr-2"></app-icon>
-            Nexus
+            dokqet
           </a>
         </li>
         @for (crumb of breadcrumbs(); track crumb.path) {
@@ -71,7 +71,7 @@ export class BreadcrumbsComponent {
 
       return this.createBreadcrumbs(child, url, breadcrumbs);
     }
-    
+
     return breadcrumbs;
   }
 }

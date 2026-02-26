@@ -23,7 +23,7 @@ export class AuthService {
     {
       id: 'usr-1',
       name: 'Carlos Socio',
-      email: 'carlos.socio@nexus.com',
+      email: 'carlos.socio@dokqet.com',
       avatar: 'https://picsum.photos/seed/carlos/100/100',
       role: 'admin',
       department: 'Dirección General',
@@ -33,7 +33,7 @@ export class AuthService {
     {
       id: 'usr-2',
       name: 'Ana García',
-      email: 'ana.garcia@nexus.com',
+      email: 'ana.garcia@dokqet.com',
       avatar: 'https://picsum.photos/seed/ana/100/100',
       role: 'lawyer',
       department: 'Litigio Civil',
@@ -43,7 +43,7 @@ export class AuthService {
     {
       id: 'usr-3',
       name: 'Roberto Diaz',
-      email: 'roberto.diaz@nexus.com',
+      email: 'roberto.diaz@dokqet.com',
       avatar: 'https://picsum.photos/seed/roberto/100/100',
       role: 'lawyer',
       department: 'Corporativo',
@@ -53,7 +53,7 @@ export class AuthService {
     {
       id: 'usr-4',
       name: 'Maria Rodríguez',
-      email: 'm.rodriguez@nexus.com',
+      email: 'm.rodriguez@dokqet.com',
       avatar: 'https://picsum.photos/seed/maria/100/100',
       role: 'lawyer',
       department: 'Propiedad Intelectual',
@@ -63,7 +63,7 @@ export class AuthService {
     {
       id: 'usr-5',
       name: 'Lucía Fernández',
-      email: 'lucia.f@nexus.com',
+      email: 'lucia.f@dokqet.com',
       avatar: 'https://picsum.photos/seed/lucia/100/100',
       role: 'lawyer',
       department: 'Laboral',
@@ -78,7 +78,7 @@ export class AuthService {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
     // Check local storage for persistence only if in browser
     if (isPlatformBrowser(this.platformId)) {
-      const stored = localStorage.getItem('nexus_user');
+      const stored = localStorage.getItem('dokqet_user');
       if (stored) {
         this._currentUser.set(JSON.parse(stored));
       }
@@ -109,7 +109,7 @@ export class AuthService {
     this._currentUser.set(user);
 
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('nexus_user', JSON.stringify(user));
+      localStorage.setItem('dokqet_user', JSON.stringify(user));
     }
     return true;
   }
@@ -117,7 +117,7 @@ export class AuthService {
   logout() {
     this._currentUser.set(null);
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem('nexus_user');
+      localStorage.removeItem('dokqet_user');
     }
   }
 

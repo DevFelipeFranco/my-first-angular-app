@@ -16,16 +16,26 @@ import { AuthService } from '../../services/auth.service';
     >
       <!-- Logo Area -->
       <div class="h-20 flex items-center justify-center border-b border-slate-800">
-        <div class="flex items-center gap-3 overflow-hidden whitespace-nowrap px-4 transition-all">
-          <div class="min-w-[32px] w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-indigo-500/30">
-            N
+        <div class="flex items-center gap-2 overflow-hidden whitespace-nowrap px-4 transition-all">
+          <div class="group min-w-[32px] w-8 h-8 flex items-center justify-center cursor-pointer">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full drop-shadow-sm transition-all duration-700 group-hover:drop-shadow-[0_4px_8px_rgba(220,38,38,0.5)]">
+              <g class="origin-[45px_45px] transition-transform duration-[1.5s] ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-[1.12] group-hover:-rotate-3">
+                <polygon points="6,24 16,14 16,24" fill="#ef4444" class="transition-all duration-[1.2s] ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-x-2 group-hover:-translate-y-1 group-hover:-rotate-3" />
+                <polygon points="18,12 36,12 36,38 18,38" fill="#ef4444" class="transition-all duration-[1.2s] ease-[cubic-bezier(0.2,0.8,0.2,1)] delay-[50ms] group-hover:-translate-x-1 group-hover:-translate-y-2 group-hover:-rotate-1 origin-[27px_25px]" />
+                <polygon points="38,38 58,18 58,38" fill="#ef4444" class="transition-all duration-[1.2s] ease-[cubic-bezier(0.2,0.8,0.2,1)] delay-[75ms] group-hover:-translate-y-2 group-hover:rotate-1 origin-[48px_28px]" />
+                <polygon points="60,4 90,4 60,34" fill="#ef4444" class="transition-all duration-[1.2s] ease-[cubic-bezier(0.2,0.8,0.2,1)] delay-[100ms] group-hover:translate-x-3 group-hover:-translate-y-3 group-hover:rotate-3 origin-[75px_19px]" />
+                <polygon points="76,20 94,8 72,24" fill="#ef4444" class="transition-all duration-[1.2s] ease-[cubic-bezier(0.2,0.8,0.2,1)] delay-[150ms] group-hover:translate-x-4 group-hover:-translate-y-4 group-hover:rotate-6 origin-[83px_14px]" />
+                <polygon points="20,40 56,40 44,76" fill="#ef4444" class="transition-all duration-[1.2s] ease-[cubic-bezier(0.2,0.8,0.2,1)] delay-[50ms] group-hover:translate-y-2 group-hover:scale-[1.03] origin-[40px_58px]" />
+                <polygon points="58,42 40,96 58,96" fill="#ef4444" class="transition-all duration-[1.2s] ease-[cubic-bezier(0.2,0.8,0.2,1)] delay-[125ms] group-hover:translate-x-2 group-hover:translate-y-3 group-hover:-rotate-2 origin-[49px_69px]" />
+              </g>
+            </svg>
           </div>
-          <span class="font-bold text-xl text-white tracking-wide transition-opacity duration-300"
+          <span class="font-bold text-2xl text-white tracking-tight transition-opacity duration-300 translate-y-[2px]"
             [class.opacity-100]="expanded()"
             [class.opacity-0]="!expanded()"
             [class.hidden]="!expanded()"
           >
-            NEXUS LEGAL
+            dokqet
           </span>
         </div>
       </div>

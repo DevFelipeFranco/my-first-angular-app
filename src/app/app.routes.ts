@@ -14,77 +14,77 @@ import { ClientCreateComponent } from './pages/client-create.component';
 import { LandingComponent } from './pages/landing.component';
 import { MyProcessesComponent } from './pages/my-processes.component';
 import { ProcessDetailComponent } from './pages/process-detail.component';
+import { AppLayoutComponent } from './components/layout/app-layout.component';
 
 export const routes: Routes = [
+    // Public routes
     { path: '', component: LandingComponent },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'confirm-email', component: EmailConfirmationComponent },
+
+    // Protected routes wrapped in AppLayoutComponent
     {
-        path: 'dashboard',
-        component: DashboardComponent,
+        path: '',
+        component: AppLayoutComponent,
         canActivate: [authGuard],
-        data: { breadcrumb: 'Panel General' }
-    },
-    {
-        path: 'users',
-        component: UsersComponent,
-        canActivate: [authGuard],
-        data: { breadcrumb: 'Gestión de Usuarios' }
-    },
-    {
-        path: 'cases',
-        component: CasesComponent,
-        canActivate: [authGuard],
-        data: { breadcrumb: 'Expedientes' }
-    },
-    {
-        path: 'activities',
-        component: ActivitiesComponent,
-        canActivate: [authGuard],
-        data: { breadcrumb: 'Historial de Actividad' }
-    },
-    {
-        path: 'clients',
-        component: ClientsComponent,
-        canActivate: [authGuard],
-        data: { breadcrumb: 'Clientes' }
-    },
-    {
-        path: 'clients/new',  // New Route
-        component: ClientCreateComponent,
-        canActivate: [authGuard],
-        data: { breadcrumb: 'Nuevo Cliente' }
-    },
-    {
-        path: 'calendar',
-        component: PlaceholderComponent,
-        canActivate: [authGuard],
-        data: { breadcrumb: 'Agenda Judicial' }
-    },
-    {
-        path: 'documents',
-        component: PlaceholderComponent,
-        canActivate: [authGuard],
-        data: { breadcrumb: 'Documentos' }
-    },
-    {
-        path: 'settings',
-        component: SettingsComponent,
-        canActivate: [authGuard],
-        data: { breadcrumb: 'Configuración' }
-    },
-    {
-        path: 'judiciales/mis-procesos',
-        component: MyProcessesComponent,
-        canActivate: [authGuard],
-        data: { breadcrumb: 'Mis Procesos Judiciales' }
-    },
-    {
-        path: 'judiciales/mis-procesos/:id',
-        component: ProcessDetailComponent,
-        canActivate: [authGuard],
-        data: { breadcrumb: 'Detalle del Proceso Judicial' }
+        children: [
+            {
+                path: 'dashboard',
+                component: DashboardComponent,
+                data: { breadcrumb: 'Panel General' }
+            },
+            {
+                path: 'users',
+                component: UsersComponent,
+                data: { breadcrumb: 'Gestión de Usuarios' }
+            },
+            {
+                path: 'cases',
+                component: CasesComponent,
+                data: { breadcrumb: 'Expedientes' }
+            },
+            {
+                path: 'activities',
+                component: ActivitiesComponent,
+                data: { breadcrumb: 'Historial de Actividad' }
+            },
+            {
+                path: 'clients',
+                component: ClientsComponent,
+                data: { breadcrumb: 'Clientes' }
+            },
+            {
+                path: 'clients/new',
+                component: ClientCreateComponent,
+                data: { breadcrumb: 'Nuevo Cliente' }
+            },
+            {
+                path: 'calendar',
+                component: PlaceholderComponent,
+                data: { breadcrumb: 'Agenda Judicial' }
+            },
+            {
+                path: 'documents',
+                component: PlaceholderComponent,
+                data: { breadcrumb: 'Documentos' }
+            },
+            {
+                path: 'settings',
+                component: SettingsComponent,
+                data: { breadcrumb: 'Configuración' }
+            },
+            {
+                path: 'judiciales/mis-procesos',
+                component: MyProcessesComponent,
+                data: { breadcrumb: 'Mis Procesos Judiciales' }
+            },
+            {
+                path: 'judiciales/mis-procesos/:id',
+                component: ProcessDetailComponent,
+                data: { breadcrumb: 'Detalle del Proceso Judicial' }
+            }
+        ]
     },
     { path: '**', redirectTo: 'dashboard' }
 ];

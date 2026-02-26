@@ -179,9 +179,9 @@ interface LegalProcess {
                 </button>
               </div>
               
-              <p class="mt-6 text-sm text-slate-400 font-medium">
-                Con la confianza de la tecnología Nexus Legal
-              </p>
+              <p class="mt-8 text-xs text-slate-400 font-medium">
+                Con la confianza de la tecnología dokqet
+            </p>
             </div>
           </div>
         }
