@@ -10,125 +10,203 @@ import { IconComponent } from '../components/ui/icons.component';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule, IconComponent],
   template: `
-    <div class="min-h-screen flex items-center justify-center bg-slate-50 p-4">
-      <div class="bg-white p-8 md:p-10 rounded-3xl shadow-xl w-full max-w-md border border-slate-100">
+    <div class="min-h-screen flex flex-col md:flex-row bg-slate-50 selection:bg-indigo-100 selection:text-indigo-900 border-x border-slate-200/50">
+      
+      <!-- Premium Back Button -->
+      <a routerLink="/" class="absolute top-6 left-6 z-50 flex items-center gap-2 px-4 py-2 bg-white/10 md:bg-white/60 backdrop-blur-md rounded-full text-slate-700 hover:text-indigo-700 shadow-sm hover:shadow-lg border border-slate-200/50 hover:border-indigo-200/60 transition-all duration-300 hover:-translate-x-1 group overflow-hidden">
+         <!-- Subtle gradient overlay on hover -->
+         <div class="absolute inset-0 bg-gradient-to-r from-indigo-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+         <app-icon name="chevron-right" class="rotate-180 transition-transform duration-300 group-hover:-translate-x-1 relative z-10" [size]="18" [strokeWidth]="2.5"></app-icon>
+         <span class="text-sm font-semibold tracking-wide relative z-10 hidden sm:block">Volver al Inicio</span>
+      </a>
+
+      <!-- Decorative Brand Section (Hidden on small screens) -->
+      <div class="hidden md:flex relative flex-1 bg-slate-900 items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')]"></div>
+        <div class="absolute -top-[40%] text-white -right-[10%] w-[70%] h-[70%] rounded-full bg-indigo-600/30 blur-[120px]"></div>
+        <div class="absolute -bottom-[40%] text-white -left-[10%] w-[70%] h-[70%] rounded-full bg-blue-600/30 blur-[120px]"></div>
         
-        <div class="text-center mb-10">
-          <div class="w-12 h-12 bg-indigo-600 rounded-xl mx-auto flex items-center justify-center mb-4 shadow-lg shadow-indigo-200">
-            <span class="text-white font-bold text-xl">N</span>
+        <div class="relative z-10 p-12 max-w-lg text-center animate-fade-in-up">
+          <div class="w-20 h-20 bg-white/10 backdrop-blur-xl rounded-3xl mx-auto flex items-center justify-center mb-10 border border-white/20 shadow-2xl">
+            <app-icon name="scale" class="text-white" [size]="40" [strokeWidth]="2"></app-icon>
           </div>
-          <h1 class="text-2xl font-bold text-slate-800">Bienvenido de nuevo</h1>
-          <p class="text-slate-500 mt-2">Ingresa a tu cuenta para continuar</p>
+          <h2 class="text-4xl lg:text-5xl font-extrabold text-white mb-6 leading-tight tracking-tight">
+            Tu práctica legal,<br/>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-blue-400">más inteligente</span>
+          </h2>
+          <p class="text-indigo-200/80 text-lg leading-relaxed font-medium">
+            Accede a expedientes, clientes y calendario judicial desde una única plataforma diseñada para la abogacía moderna.
+          </p>
+
+          <!-- Mock Stats/Features overlay -->
+          <div class="mt-16 grid grid-cols-2 gap-4 text-left">
+             <div class="bg-white/5 backdrop-blur-md rounded-2xl p-5 border border-white/10 hover:bg-white/10 transition-colors">
+                <div class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center mb-3">
+                   <app-icon name="shield" class="text-indigo-400" [size]="16"></app-icon>
+                </div>
+                <h4 class="text-white font-semibold">Seguridad Total</h4>
+                <p class="text-xs text-indigo-200/60 mt-1">Encriptación nivel bancario.</p>
+             </div>
+             <div class="bg-white/5 backdrop-blur-md rounded-2xl p-5 border border-white/10 hover:bg-white/10 transition-colors">
+                <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center mb-3">
+                   <app-icon name="clock" class="text-blue-400" [size]="16"></app-icon>
+                </div>
+                <h4 class="text-white font-semibold">24/7 Disponible</h4>
+                <p class="text-xs text-indigo-200/60 mt-1">Acceso en la nube mundial.</p>
+             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Section -->
+      <div class="flex-1 flex flex-col justify-center items-center relative bg-white px-6 py-12 lg:px-16 lg:py-24">
+        
+        <!-- Mobile Logo -->
+        <div class="md:hidden flex flex-col items-center gap-4 mb-10 mt-12 animate-fade-in-up">
+          <div class="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/30">
+             <app-icon name="scale" class="text-white" [size]="32" [strokeWidth]="2"></app-icon>
+          </div>
+          <span class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-blue-500">
+             Jurixia
+          </span>
         </div>
 
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5">
+        <div class="w-full max-w-sm animate-fade-in-up" style="animation-delay: 100ms;">
           
-          <!-- Custom Role Selector -->
-          <div class="space-y-1 relative">
-            <label class="text-sm font-medium text-slate-700 ml-1">Selecciona tu Perfil</label>
-            
-            <button 
-              type="button"
-              (click)="toggleDropdown()"
-              (blur)="closeDropdownDelayed()"
-              class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 hover:border-indigo-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none transition-all flex items-center justify-between group"
-              [class.ring-2]="dropdownOpen()"
-              [class.ring-indigo-100]="dropdownOpen()"
-              [class.border-indigo-500]="dropdownOpen()"
-            >
-              <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center">
-                   <app-icon [name]="currentRole()?.icon || 'user'" [size]="18"></app-icon>
-                </div>
-                <div class="text-left">
-                   <p class="text-sm font-bold text-slate-800 leading-tight">{{ currentRole()?.label }}</p>
-                   <p class="text-[10px] text-slate-500 font-medium">{{ currentRole()?.desc }}</p>
-                </div>
-              </div>
-              <app-icon name="chevron-down" [size]="18" class="text-slate-400 transition-transform duration-300" [class.rotate-180]="dropdownOpen()"></app-icon>
-            </button>
+          <div class="text-center md:text-left mb-10">
+            <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Bienvenido de nuevo</h1>
+            <p class="text-slate-500 mt-2 text-base">Ingresa a tu cuenta para continuar</p>
+          </div>
 
-            <!-- Dropdown Menu -->
-            <div 
-              class="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden z-20 transition-all duration-200 origin-top"
-              [class.opacity-0]="!dropdownOpen()"
-              [class.scale-95]="!dropdownOpen()"
-              [class.pointer-events-none]="!dropdownOpen()"
-              [class.opacity-100]="dropdownOpen()"
-              [class.scale-100]="dropdownOpen()"
-            >
-              <div class="p-1">
-                @for (role of roles; track role.id) {
-                  <button 
-                    type="button"
-                    (click)="selectRole(role.id)"
-                    class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-50 transition-colors group text-left mb-1 last:mb-0"
-                    [class.bg-indigo-50]="isSelected(role.id)"
-                  >
-                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
-                             [class]="isSelected(role.id) ? 'bg-indigo-100 text-indigo-600' : 'bg-slate-100 text-slate-500 group-hover:bg-white group-hover:shadow-sm'">
-                           <app-icon [name]="role.icon" [size]="18"></app-icon>
-                        </div>
-                        <div>
-                           <p class="text-sm font-bold leading-tight" [class]="isSelected(role.id) ? 'text-indigo-900' : 'text-slate-700'">{{ role.label }}</p>
-                           <p class="text-[10px] font-medium" [class]="isSelected(role.id) ? 'text-indigo-600/80' : 'text-slate-400'">{{ role.desc }}</p>
-                        </div>
-                     </div>
-                     @if (isSelected(role.id)) {
-                        <app-icon name="check" [size]="16" class="text-indigo-600"></app-icon>
-                     }
-                  </button>
-                }
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
+            
+            <!-- Custom Role Selector -->
+            <div class="space-y-2 relative">
+              <label class="text-sm font-semibold text-slate-700">Selecciona tu Perfil</label>
+              
+              <button 
+                type="button"
+                (click)="toggleDropdown()"
+                (blur)="closeDropdownDelayed()"
+                class="w-full px-4 py-3.5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-indigo-300 hover:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all flex items-center justify-between group shadow-sm text-left"
+                [class.ring-4]="dropdownOpen()"
+                [class.ring-indigo-500]="dropdownOpen()"
+                [class.bg-white]="dropdownOpen()"
+                [class.border-indigo-500]="dropdownOpen()"
+              >
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shadow-inner">
+                     <app-icon [name]="currentRole()?.icon || 'user'" [size]="20"></app-icon>
+                  </div>
+                  <div>
+                     <p class="text-sm font-bold text-slate-800 leading-tight group-hover:text-indigo-600 transition-colors">{{ currentRole()?.label }}</p>
+                     <p class="text-xs text-slate-500 font-medium">{{ currentRole()?.desc }}</p>
+                  </div>
+                </div>
+                <app-icon name="chevron-down" [size]="20" class="text-slate-400 group-hover:text-indigo-400 transition-transform duration-300" [class.rotate-180]="dropdownOpen()"></app-icon>
+              </button>
+
+              <!-- Dropdown Menu -->
+              <div 
+                class="absolute top-[calc(100%+8px)] left-0 right-0 bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden z-20 transition-all duration-200 origin-top"
+                [class.opacity-0]="!dropdownOpen()"
+                [class.scale-95]="!dropdownOpen()"
+                [class.pointer-events-none]="!dropdownOpen()"
+                [class.opacity-100]="dropdownOpen()"
+                [class.scale-100]="dropdownOpen()"
+              >
+                <div class="p-2 space-y-1">
+                  @for (role of roles; track role.id) {
+                    <button 
+                      type="button"
+                      (click)="selectRole(role.id)"
+                      class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-colors group text-left"
+                      [class.bg-indigo-50]="isSelected(role.id)"
+                    >
+                       <div class="flex items-center gap-3">
+                          <div class="w-10 h-10 rounded-xl flex items-center justify-center transition-colors shadow-sm"
+                               [class]="isSelected(role.id) ? 'bg-indigo-600 text-white' : 'bg-white text-slate-500 group-hover:text-indigo-600 border border-slate-100'">
+                             <app-icon [name]="role.icon" [size]="20"></app-icon>
+                          </div>
+                          <div>
+                             <p class="text-sm font-bold leading-tight" [class]="isSelected(role.id) ? 'text-indigo-900' : 'text-slate-700'">{{ role.label }}</p>
+                             <p class="text-xs font-medium" [class]="isSelected(role.id) ? 'text-indigo-600/80' : 'text-slate-400'">{{ role.desc }}</p>
+                          </div>
+                       </div>
+                       @if (isSelected(role.id)) {
+                          <app-icon name="check-circle" [size]="20" class="text-indigo-600 shadow-sm rounded-full bg-white"></app-icon>
+                       }
+                    </button>
+                  }
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="space-y-1">
-            <label class="text-sm font-medium text-slate-700 ml-1">Email</label>
-            <input 
-              type="email" 
-              formControlName="email"
-              class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all"
-              placeholder="tu@email.com"
+            <!-- Email Field -->
+            <div class="space-y-2">
+              <label class="text-sm font-semibold text-slate-700">Correo Electrónico</label>
+              <div class="relative group">
+                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <app-icon name="user" class="text-slate-400 group-focus-within:text-indigo-500 transition-colors" [size]="18"></app-icon>
+                 </div>
+                 <input 
+                   type="email" 
+                   formControlName="email"
+                   class="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all shadow-sm"
+                   placeholder="tu@email.com"
+                 >
+              </div>
+            </div>
+
+            <!-- Password Field -->
+            <div class="space-y-2">
+              <label class="text-sm font-semibold text-slate-700">Contraseña</label>
+              <div class="relative group">
+                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <app-icon name="lock" class="text-slate-400 group-focus-within:text-indigo-500 transition-colors" [size]="18"></app-icon>
+                 </div>
+                 <input 
+                   type="password" 
+                   formControlName="password"
+                   class="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all shadow-sm"
+                   placeholder="••••••••"
+                 >
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between text-sm py-2">
+              <label class="flex items-center gap-2.5 cursor-pointer text-slate-600 group">
+                <input type="checkbox" class="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 transition-all cursor-pointer">
+                <span class="group-hover:text-slate-900 transition-colors font-medium">Recordarme</span>
+              </label>
+              <a href="#" class="text-indigo-600 font-semibold hover:text-indigo-800 transition-colors">¿Olvidaste tu contraseña?</a>
+            </div>
+
+            <button 
+              type="submit" 
+              [disabled]="loginForm.invalid || isLoading()"
+              class="relative w-full py-4 text-white rounded-2xl font-bold shadow-xl shadow-indigo-600/30 overflow-hidden group disabled:opacity-70 disabled:cursor-not-allowed transition-all hover:shadow-indigo-600/40 hover:-translate-y-0.5 active:translate-y-0 active:shadow-indigo-600/20"
             >
-          </div>
+              <div class="absolute inset-0 bg-gradient-to-r from-indigo-600 to-blue-600 transition-opacity duration-300"></div>
+              <div class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="relative flex items-center justify-center gap-3">
+                 @if (isLoading()) {
+                   <div class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                   <span>Ingresando...</span>
+                 } @else {
+                   <span>Ingresar al Sistema</span>
+                   <app-icon name="chevron-right" [size]="18" class="group-hover:translate-x-1 transition-transform"></app-icon>
+                 }
+              </div>
+            </button>
 
-          <div class="space-y-1">
-            <label class="text-sm font-medium text-slate-700 ml-1">Contraseña</label>
-            <input 
-              type="password" 
-              formControlName="password"
-              class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all"
-              placeholder="••••••••"
-            >
-          </div>
+          </form>
 
-          <div class="flex items-center justify-between text-sm">
-            <label class="flex items-center gap-2 cursor-pointer text-slate-600">
-              <input type="checkbox" class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500">
-              Recordarme
-            </label>
-            <a href="#" class="text-indigo-600 font-medium hover:text-indigo-700">¿Olvidaste tu contraseña?</a>
-          </div>
-
-          <button 
-            type="submit" 
-            [disabled]="loginForm.invalid || isLoading()"
-            class="w-full py-3.5 bg-indigo-600 text-white rounded-xl font-semibold shadow-lg shadow-indigo-200 hover:bg-indigo-700 hover:shadow-indigo-300 active:scale-[0.98] transition-all disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2"
-          >
-            @if (isLoading()) {
-              <div class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-            }
-            <span>Iniciar Sesión</span>
-          </button>
-
-        </form>
-
-        <p class="text-center mt-8 text-slate-500 text-sm">
-          ¿No tienes una cuenta? 
-          <a routerLink="/register" class="text-indigo-600 font-semibold hover:text-indigo-700">Regístrate</a>
-        </p>
+          <p class="text-center mt-10 text-slate-500 text-sm font-medium">
+            ¿No tienes cuenta empresarial? 
+            <a routerLink="/register" class="text-indigo-600 font-bold hover:text-indigo-800 transition-colors hover:underline underline-offset-4 decoration-2">Contáctanos</a>
+          </p>
+        </div>
       </div>
     </div>
   `

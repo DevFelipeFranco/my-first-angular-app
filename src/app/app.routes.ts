@@ -11,9 +11,12 @@ import { SettingsComponent } from './pages/settings.component';
 import { authGuard } from './auth/auth-guard';
 import { PlaceholderComponent } from './components/placeholder.component';
 import { ClientCreateComponent } from './pages/client-create.component';
+import { LandingComponent } from './pages/landing.component';
+import { MyProcessesComponent } from './pages/my-processes.component';
+import { ProcessDetailComponent } from './pages/process-detail.component';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+    { path: '', component: LandingComponent },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'confirm-email', component: EmailConfirmationComponent },
@@ -70,6 +73,18 @@ export const routes: Routes = [
         component: SettingsComponent,
         canActivate: [authGuard],
         data: { breadcrumb: 'Configuración' }
+    },
+    {
+        path: 'judiciales/mis-procesos',
+        component: MyProcessesComponent,
+        canActivate: [authGuard],
+        data: { breadcrumb: 'Mis Procesos Judiciales' }
+    },
+    {
+        path: 'judiciales/mis-procesos/:id',
+        component: ProcessDetailComponent,
+        canActivate: [authGuard],
+        data: { breadcrumb: 'Detalle del Proceso Judicial' }
     },
     { path: '**', redirectTo: 'dashboard' }
 ];

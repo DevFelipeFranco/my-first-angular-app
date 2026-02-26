@@ -1,4 +1,4 @@
-import { Component, input, inject, computed } from '@angular/core';
+import { Component, input, inject, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { IconComponent } from '../ui/icons.component';
@@ -127,7 +127,7 @@ import { AuthService } from '../../services/auth.service';
             }
           </a>
 
-           <a routerLink="/documents" routerLinkActive="bg-indigo-600 text-white shadow-lg shadow-indigo-900/50" 
+          <a routerLink="/documents" routerLinkActive="bg-indigo-600 text-white shadow-lg shadow-indigo-900/50" 
              class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-slate-800 transition-all group relative">
             <app-icon name="file-text" [size]="20" class="min-w-[20px]"></app-icon>
             <span class="whitespace-nowrap transition-opacity duration-300" 
@@ -140,6 +140,52 @@ import { AuthService } from '../../services/auth.service';
               </div>
             }
           </a>
+        </div>
+
+        <!-- Judiciales Module (Expandable) -->
+        <div class="my-4 border-t border-slate-800 pt-4">
+          <p *ngIf="expanded()" class="px-3 text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Módulo Legal</p>
+
+          <div class="space-y-1">
+            <button 
+              (click)="toggleJudiciales()"
+              class="w-full flex items-center justify-between px-3 py-3 rounded-xl hover:bg-slate-800 transition-all group relative"
+              [class.bg-slate-800]="judicialesExpanded()"
+              [class.text-indigo-400]="judicialesExpanded()"
+            >
+              <div class="flex items-center gap-3">
+                <app-icon name="gavel" [size]="20" class="min-w-[20px] transition-colors" [class.text-indigo-400]="judicialesExpanded()"></app-icon>
+                <span class="whitespace-nowrap transition-opacity duration-300 font-medium" 
+                      [class.opacity-0]="!expanded()" [class.hidden]="!expanded()">
+                  Judiciales
+                </span>
+              </div>
+              @if (expanded()) {
+                <app-icon name="chevron-down" [size]="16" class="text-slate-500 transition-transform duration-300" [class.rotate-180]="judicialesExpanded()"></app-icon>
+              }
+              
+              @if (!expanded()) {
+                <div class="absolute left-full ml-2 px-2 py-1 bg-slate-800 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap text-white">
+                  Judiciales
+                </div>
+              }
+            </button>
+
+            <!-- Submenu -->
+            <div class="overflow-hidden transition-all duration-300 ease-in-out"
+                 [class.max-h-0]="!judicialesExpanded() || !expanded()"
+                 [class.max-h-40]="judicialesExpanded() && expanded()"
+                 [class.opacity-0]="!judicialesExpanded() || !expanded()"
+                 [class.opacity-100]="judicialesExpanded() && expanded()">
+              <div class="pl-11 pr-3 py-1 space-y-1">
+                <a routerLink="/judiciales/mis-procesos" routerLinkActive="text-indigo-400 font-semibold" 
+                   class="block py-2 text-sm text-slate-400 hover:text-indigo-300 transition-colors">
+                  Mis Procesos
+                </a>
+                <!-- Future submenus could go here -->
+              </div>
+            </div>
+          </div>
         </div>
 
       </nav>
@@ -175,11 +221,20 @@ import { AuthService } from '../../services/auth.service';
 })
 export class SidebarComponent {
   expanded = input.required<boolean>();
-  
+
   private authService = inject(AuthService);
   private router = inject(Router);
 
   isAdmin = computed(() => this.authService.currentUser()?.role === 'admin');
+
+  // State for expandable modules
+  judicialesExpanded = signal(false);
+
+  toggleJudiciales() {
+    // If opening while sidebar is collapsed, we might want to expand the whole sidebar first
+    // For now, just toggle the boolean. It's hidden when collapsed via CSS.
+    this.judicialesExpanded.update((v: boolean) => !v);
+  }
 
   handleLogout() {
     this.authService.logout();
