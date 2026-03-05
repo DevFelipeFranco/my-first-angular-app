@@ -4,17 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  avatar: string;
-  role: 'admin' | 'lawyer';
-  isBlocked?: boolean;
-  lastConnection?: string;
-  department?: string;
-}
+import { User, RegisteredUser } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -126,9 +116,9 @@ export class AuthService {
     }
   }
 
-  register(name: string, email: string, password?: string): Observable<any> {
+  register(user: RegisteredUser): Observable<any> {
     // Best practice: using HttpClient to consume the API
-    return this.http.post(`${environment.apiUrl}/auth/register`, { name, email, password }).pipe(
+    return this.http.post(`${environment.apiUrl}/auth/register`, user).pipe(
       tap((response: any) => {
         // Here you can handle the successful response
         // e.g. storing a JWT token, or automatically logging the user in

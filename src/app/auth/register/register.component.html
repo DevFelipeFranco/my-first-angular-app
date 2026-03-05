@@ -103,26 +103,11 @@
           <!-- Document Type Field -->
           <div class="space-y-1 relative pb-5">
             <label class="text-sm font-semibold text-slate-700">Tipo de Documento</label>
-            <div class="relative group">
-              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <app-icon name="file-text" class="text-slate-400 group-focus-within:text-blue-500 transition-colors"
-                  [size]="18"></app-icon>
-              </div>
-              <select formControlName="documentType"
-                class="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all shadow-sm appearance-none cursor-pointer"
-                [class.border-red-300]="isFieldInvalid('documentType')"
-                [class.focus:border-red-500]="isFieldInvalid('documentType')"
-                [class.focus:ring-red-500]="isFieldInvalid('documentType')">
-                <option value="" disabled selected>
-                  {{ isLoadingDocs() ? 'Cargando tipos...' : 'Seleccione...' }}
-                </option>
-                @for (type of documentTypes(); track type.id) {
-                <option [value]="type.id">{{ type.name }}</option>
-                }
-              </select>
-              <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-                <app-icon name="chevron-down" class="text-slate-400" [size]="16"></app-icon>
-              </div>
+            <div class="relative w-full">
+              <app-searchable-select [options]="documentTypeOptions()" [value]="f.documentType.value"
+                (valueChange)="onDocumentTypeChange($event)"
+                placeholder="{{ isLoadingDocs() ? 'Cargando tipos...' : 'Seleccione...' }}" icon="file-text"
+                [invalid]="isFieldInvalid('documentType')"></app-searchable-select>
             </div>
             <!-- Error -->
             <p class="absolute bottom-0 left-1 text-[11px] font-semibold text-red-500 transition-all duration-300 transform"

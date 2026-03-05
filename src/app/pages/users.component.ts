@@ -1,7 +1,8 @@
 import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../components/ui/icons.component';
-import { AuthService, User } from '../services/auth.service';
+import { AuthService } from '../services/auth.service';
+import { User } from '../models/user.model';
 
 @Component({
   selector: 'app-users',
@@ -149,7 +150,7 @@ import { AuthService, User } from '../services/auth.service';
 })
 export class UsersComponent {
   private authService = inject(AuthService);
-  
+
   users = this.authService.allUsers;
   currentUserId = computed(() => this.authService.currentUser()?.id);
 
@@ -162,10 +163,10 @@ export class UsersComponent {
 
     return this.users().filter(user => {
       const matchesSearch = user.name.toLowerCase().includes(term) || user.email.toLowerCase().includes(term);
-      const matchesStatus = status === 'all' 
-        ? true 
+      const matchesStatus = status === 'all'
+        ? true
         : status === 'blocked' ? user.isBlocked : !user.isBlocked;
-      
+
       return matchesSearch && matchesStatus;
     });
   });

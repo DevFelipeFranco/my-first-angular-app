@@ -1,15 +1,18 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
 import { IconComponent } from '../../components/ui/icons.component';
-import { CommonsService, DocumentType } from '../../services/commons.service';
+import { SearchableSelectComponent, SelectOption } from '../../components/ui/searchable-select.component';
+import { CommonsService } from '../../services/commons.service';
+import { AuthService } from '../../services/auth.service';
+import { DocumentType } from '../../models/document-type.model';
+import { RegisteredUser } from '../../models/user.model';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, IconComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, IconComponent, SearchableSelectComponent],
   templateUrl: './register.component.html'
 })
 export class RegisterComponent {
@@ -23,6 +26,10 @@ export class RegisterComponent {
 
   // Opciones de tipo de documento cargadas desde el servicio
   documentTypes = signal<DocumentType[]>([]);
+
+  documentTypeOptions = computed<SelectOption[]>(() => {
+    return this.documentTypes().map(dt => ({ value: dt.id, label: dt.name }));
+  });
 
   ngOnInit() {
     this.commonsService.getDocumentTypes().subscribe({
@@ -55,18 +62,26 @@ export class RegisterComponent {
     return field ? (field.invalid && (field.dirty || field.touched)) : false;
   }
 
+  onDocumentTypeChange(value: string) {
+    this.registerForm.patchValue({ documentType: value });
+    const control = this.registerForm.get('documentType');
+    if (control) {
+      control.markAsTouched();
+      control.markAsDirty();
+    }
+  }
+
   onSubmit() {
     if (this.registerForm.valid) {
       this.isLoading.set(true);
-      const values = this.registerForm.value;
-      const fullName = `${values.firstName} ${values.lastName}`.trim();
+      const userPayload: RegisteredUser = this.registerForm.value as RegisteredUser;
 
-      this.authService.register(fullName, values.email!, values.password!).subscribe({
-        next: (response) => {
+      this.authService.register(userPayload).subscribe({
+        next: (response: any) => {
           this.router.navigate(['/login']);
           this.isLoading.set(false);
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Error durante el registro:', error);
           this.isLoading.set(false);
         }
