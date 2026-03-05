@@ -10,7 +10,9 @@ export interface User {
 }
 
 export interface RegisteredUser {
-    documentType: string;
+    companyName: string;
+    planType: 'INDIVIDUAL' | 'ENTERPRISE';
+    documentTypeId: number;
     documentNumber: string;
     firstName: string;
     middleName?: string;

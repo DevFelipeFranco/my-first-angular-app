@@ -45,30 +45,31 @@ export class RegisterComponent {
 
     // Check URL parameters for pre-selected plan
     this.route.queryParams.subscribe(params => {
-      if (params['plan']) {
+      if (params['planType']) {
         const validPlans = ['individual', 'individual-profesional', 'empresarial'];
-        if (validPlans.includes(params['plan'].toLowerCase())) {
-          this.registerForm.patchValue({ planType: params['plan'].toLowerCase() });
+        if (validPlans.includes(params['planType'].toLowerCase())) {
+          this.registerForm.patchValue({ planType: params['planType'].toLowerCase() });
         }
       }
     });
 
-    // Dynamically update validators for companyName based on planType
-    this.registerForm.get('planType')?.valueChanges.subscribe(plan => {
-      const companyControl = this.registerForm.get('companyName');
-      if (plan === 'individual-profesional' || plan === 'empresarial') {
-        companyControl?.setValidators([Validators.required, Validators.minLength(3)]);
+    // Dynamically update validators for tenantName based on plan
+    this.registerForm.get('planType')?.valueChanges.subscribe(planValue => {
+      const tenantControl = this.registerForm.get('companyName');
+      if (planValue === 'individual-profesional' || planValue === 'empresarial') {
+        tenantControl?.setValidators([Validators.required, Validators.minLength(3)]);
       } else {
-        companyControl?.clearValidators();
+        // Individual plan doesn't require manual tenant name; we auto-build it later
+        tenantControl?.clearValidators();
       }
-      companyControl?.updateValueAndValidity();
+      tenantControl?.updateValueAndValidity();
     });
   }
 
   registerForm = this.fb.group({
     planType: ['individual', [Validators.required]],
     companyName: [''],
-    documentType: ['', [Validators.required]],
+    documentTypeId: [null as number | null, [Validators.required]],
     documentNumber: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
     firstName: ['', [Validators.required, Validators.minLength(2)]],
     middleName: [''],
@@ -87,8 +88,10 @@ export class RegisterComponent {
   }
 
   onDocumentTypeChange(value: string) {
-    this.registerForm.patchValue({ documentType: value });
-    const control = this.registerForm.get('documentType');
+    // Parse value to number since ID must be a Long (number in TS)
+    const numValue = parseInt(value, 10);
+    this.registerForm.patchValue({ documentTypeId: isNaN(numValue) ? null : numValue });
+    const control = this.registerForm.get('documentTypeId');
     if (control) {
       control.markAsTouched();
       control.markAsDirty();
@@ -98,7 +101,36 @@ export class RegisterComponent {
   onSubmit() {
     if (this.registerForm.valid) {
       this.isLoading.set(true);
-      const userPayload: RegisteredUser = this.registerForm.value as RegisteredUser;
+
+      const formValue = this.registerForm.value;
+      let generatedTenantName = formValue.companyName || '';
+
+      // Auto-generate tenantName for individual plans (First Name + Second Last Name/Last Name)
+      if (formValue.planType === 'individual') {
+        const firstN = formValue.firstName?.trim() || '';
+        // Using secondLastName if present, otherwise fallback to lastName to ensure a reasonable name
+        const lastN = (formValue.secondLastName?.trim() || formValue.lastName?.trim() || '');
+        generatedTenantName = `${firstN} ${lastN}`.trim();
+      }
+
+      // Map UI plan selection to backend expected ENUMS
+      let backendPlan: 'INDIVIDUAL' | 'ENTERPRISE' = 'INDIVIDUAL';
+      if (formValue.planType === 'empresarial') {
+        backendPlan = 'ENTERPRISE';
+      }
+
+      const userPayload: RegisteredUser = {
+        companyName: generatedTenantName,
+        planType: backendPlan,
+        documentTypeId: Number(formValue.documentTypeId),
+        documentNumber: formValue.documentNumber || '',
+        firstName: formValue.firstName || '',
+        middleName: formValue.middleName || undefined,
+        lastName: formValue.lastName || '',
+        secondLastName: formValue.secondLastName || undefined,
+        email: formValue.email || '',
+        password: formValue.password || ''
+      };
 
       this.authService.register(userPayload).subscribe({
         next: (response: any) => {

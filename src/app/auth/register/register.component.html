@@ -171,17 +171,19 @@
           <div class="space-y-1 relative pb-5">
             <label class="text-sm font-semibold text-slate-700">Tipo de Documento</label>
             <div class="relative w-full">
-              <app-searchable-select [options]="documentTypeOptions()" [value]="f.documentType.value"
+              <app-searchable-select [options]="documentTypeOptions()"
+                [value]="f.documentTypeId.value ? f.documentTypeId.value.toString() : ''"
                 (valueChange)="onDocumentTypeChange($event)"
                 placeholder="{{ isLoadingDocs() ? 'Cargando tipos...' : 'Seleccione...' }}" icon="file-text"
-                [invalid]="isFieldInvalid('documentType')"></app-searchable-select>
+                [invalid]="isFieldInvalid('documentTypeId')"></app-searchable-select>
             </div>
             <!-- Error -->
             <p class="absolute bottom-0 left-1 text-[11px] font-semibold text-red-500 transition-all duration-300 transform"
-              [class.opacity-100]="isFieldInvalid('documentType')"
-              [class.translate-y-0]="isFieldInvalid('documentType')" [class.opacity-0]="!isFieldInvalid('documentType')"
-              [class.-translate-y-1]="!isFieldInvalid('documentType')">
-              Selecciona un tipo.
+              [class.opacity-100]="isFieldInvalid('documentTypeId')"
+              [class.translate-y-0]="isFieldInvalid('documentTypeId')"
+              [class.opacity-0]="!isFieldInvalid('documentTypeId')"
+              [class.-translate-y-2]="!isFieldInvalid('documentTypeId')">
+              Requerido
             </p>
           </div>
 
