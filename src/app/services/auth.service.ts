@@ -1,5 +1,9 @@
-import { Injectable, signal, computed, Inject, PLATFORM_ID } from '@angular/core';
+import { Injectable, signal, computed, Inject, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 export interface User {
   id: string;
@@ -17,6 +21,7 @@ export interface User {
 })
 export class AuthService {
   private _currentUser = signal<User | null>(null);
+  private http = inject(HttpClient);
 
   // Mock database of users
   private _allUsers = signal<User[]>([
@@ -121,8 +126,15 @@ export class AuthService {
     }
   }
 
-  register(name: string, email: string) {
-    return this.login(email, name, 'lawyer');
+  register(name: string, email: string, password?: string): Observable<any> {
+    // Best practice: using HttpClient to consume the API
+    return this.http.post(`${environment.apiUrl}/auth/register`, { name, email, password }).pipe(
+      tap((response: any) => {
+        // Here you can handle the successful response
+        // e.g. storing a JWT token, or automatically logging the user in
+        console.log('Registration successful', response);
+      })
+    );
   }
 
   // Admin Methods
