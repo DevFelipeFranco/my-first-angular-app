@@ -185,7 +185,7 @@ import { IconComponent } from '../components/ui/icons.component';
             
             <!-- Basic Plan -->
             <div class="bg-white rounded-3xl p-8 border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl transition-all duration-300">
-              <h3 class="text-xl font-semibold text-slate-900">Básico</h3>
+              <h3 class="text-xl font-semibold text-slate-900">Individual</h3>
               <p class="text-slate-500 text-sm mt-2">Para abogados independientes.</p>
               <div class="mt-6 flex items-baseline gap-2">
                 <span class="text-4xl font-extrabold text-slate-900">$29</span>
@@ -211,7 +211,7 @@ import { IconComponent } from '../components/ui/icons.component';
                   <span class="text-slate-600 text-sm">Agenda Básica</span>
                 </li>
               </ul>
-              <a routerLink="/register" class="mt-8 block w-full py-3.5 px-6 text-center rounded-xl font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 hover:shadow-md transition-all">
+              <a [routerLink]="['/register']" [queryParams]="{plan: 'individual'}" class="mt-8 block w-full py-3.5 px-6 text-center rounded-xl font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 hover:shadow-md transition-all">
                 Comenzar Gratis 14 días
               </a>
             </div>
@@ -223,7 +223,7 @@ import { IconComponent } from '../components/ui/icons.component';
               <div class="absolute top-0 right-0 mt-6 mr-6 bg-gradient-to-r from-indigo-500 to-blue-500 text-white text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-lg">
                 Popular
               </div>
-              <h3 class="text-xl font-semibold text-white relative">Profesional</h3>
+              <h3 class="text-xl font-semibold text-white relative">Individual Profesional</h3>
               <p class="text-indigo-200/80 text-sm mt-2 relative">Para pequeños y medianos estudios.</p>
               <div class="mt-6 flex items-baseline gap-2 relative">
                 <span class="text-5xl font-extrabold text-white">$79</span>
@@ -255,7 +255,7 @@ import { IconComponent } from '../components/ui/icons.component';
                   <span class="text-slate-300 text-sm">Gestión Documental (50GB)</span>
                 </li>
               </ul>
-              <a routerLink="/register" class="mt-8 block w-full py-3.5 px-6 text-center rounded-xl font-semibold text-white bg-indigo-600 hover:bg-indigo-500 shadow-xl shadow-indigo-600/30 transition-all hover:-translate-y-1 relative">
+              <a [routerLink]="['/register']" [queryParams]="{plan: 'individual-profesional'}" class="mt-8 block w-full py-3.5 px-6 text-center rounded-xl font-semibold text-white bg-indigo-600 hover:bg-indigo-500 shadow-xl shadow-indigo-600/30 transition-all hover:-translate-y-1 relative">
                 Iniciar Plan Pro
               </a>
             </div>
@@ -293,7 +293,7 @@ import { IconComponent } from '../components/ui/icons.component';
                   <span class="text-slate-600 text-sm">Migración de Datos Incluida</span>
                 </li>
               </ul>
-              <a routerLink="/register" class="mt-8 block w-full py-3.5 px-6 text-center rounded-xl font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:shadow-md transition-all">
+              <a [routerLink]="['/register']" [queryParams]="{plan: 'empresarial'}" class="mt-8 block w-full py-3.5 px-6 text-center rounded-xl font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:shadow-md transition-all">
                 Contactar Ventas
               </a>
             </div>

@@ -1,7 +1,7 @@
 import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { IconComponent } from '../../components/ui/icons.component';
 import { SearchableSelectComponent, SelectOption } from '../../components/ui/searchable-select.component';
 import { CommonsService } from '../../services/commons.service';
@@ -20,6 +20,7 @@ export class RegisterComponent {
   private fb: FormBuilder = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   isLoading = signal(false);
   isLoadingDocs = signal(true);
@@ -41,9 +42,32 @@ export class RegisterComponent {
         this.isLoadingDocs.set(false);
       }
     });
+
+    // Check URL parameters for pre-selected plan
+    this.route.queryParams.subscribe(params => {
+      if (params['plan']) {
+        const validPlans = ['individual', 'individual-profesional', 'empresarial'];
+        if (validPlans.includes(params['plan'].toLowerCase())) {
+          this.registerForm.patchValue({ planType: params['plan'].toLowerCase() });
+        }
+      }
+    });
+
+    // Dynamically update validators for companyName based on planType
+    this.registerForm.get('planType')?.valueChanges.subscribe(plan => {
+      const companyControl = this.registerForm.get('companyName');
+      if (plan === 'individual-profesional' || plan === 'empresarial') {
+        companyControl?.setValidators([Validators.required, Validators.minLength(3)]);
+      } else {
+        companyControl?.clearValidators();
+      }
+      companyControl?.updateValueAndValidity();
+    });
   }
 
   registerForm = this.fb.group({
+    planType: ['individual', [Validators.required]],
+    companyName: [''],
     documentType: ['', [Validators.required]],
     documentNumber: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
     firstName: ['', [Validators.required, Validators.minLength(2)]],

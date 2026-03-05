@@ -96,7 +96,74 @@
         <p class="text-slate-500 mt-2 text-base">Comienza tus 14 días de prueba gratis</p>
       </div>
 
-      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-4">
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-6">
+
+        <!-- Plan Selection Section -->
+        <div class="space-y-4">
+          <label class="text-sm font-semibold text-slate-700">Selecciona tu Plan</label>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Individual -->
+            <label class="relative flex flex-col p-4 cursor-pointer rounded-2xl border-2 transition-all"
+              [ngClass]="f.planType.value === 'individual' ? 'border-indigo-600 bg-indigo-50/50' : 'border-slate-200 bg-white hover:border-indigo-300 hover:bg-slate-50'">
+              <input type="radio" formControlName="planType" value="individual" class="sr-only">
+              <span class="font-bold text-slate-900">Individual</span>
+              <span class="text-xs text-slate-500 mt-1">Gratis</span>
+              @if (f.planType.value === 'individual') {
+              <div class="absolute top-4 right-4 text-indigo-600"><app-icon name="check-circle" [size]="20"></app-icon>
+              </div>
+              }
+            </label>
+
+            <!-- Individual Profesional -->
+            <label class="relative flex flex-col p-4 cursor-pointer rounded-2xl border-2 transition-all"
+              [ngClass]="f.planType.value === 'individual-profesional' ? 'border-blue-600 bg-blue-50/50' : 'border-slate-200 bg-white hover:border-blue-300 hover:bg-slate-50'">
+              <input type="radio" formControlName="planType" value="individual-profesional" class="sr-only">
+              <span class="font-bold leading-tight text-slate-900">Individual<br />Profesional</span>
+              <span class="text-xs text-blue-600 font-semibold mt-1">Premium</span>
+              @if (f.planType.value === 'individual-profesional') {
+              <div class="absolute top-4 right-4 text-blue-600"><app-icon name="check-circle" [size]="20"></app-icon>
+              </div>
+              }
+            </label>
+
+            <!-- Empresarial -->
+            <label class="relative flex flex-col p-4 cursor-pointer rounded-2xl border-2 transition-all"
+              [ngClass]="f.planType.value === 'empresarial' ? 'border-amber-500 bg-amber-50/50' : 'border-slate-200 bg-white hover:border-amber-300 hover:bg-slate-50'">
+              <input type="radio" formControlName="planType" value="empresarial" class="sr-only">
+              <span class="font-bold text-slate-900">Empresarial</span>
+              <span class="text-xs text-amber-600 font-semibold mt-1">Corporativo</span>
+              @if (f.planType.value === 'empresarial') {
+              <div class="absolute top-4 right-4 text-amber-500"><app-icon name="check-circle" [size]="20"></app-icon>
+              </div>
+              }
+            </label>
+          </div>
+        </div>
+
+        <!-- Conditional Company Field -->
+        <div class="space-y-1 relative pb-5 transition-all duration-500 overflow-hidden"
+          [ngStyle]="{'max-height': f.planType.value !== 'individual' ? '500px' : '0px', 'opacity': f.planType.value !== 'individual' ? '1' : '0'}">
+          <label class="text-sm font-semibold text-slate-700">Nombre de la Firma / Empresa</label>
+          <div class="relative group">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <app-icon name="briefcase" class="text-slate-400 group-focus-within:text-blue-500 transition-colors"
+                [size]="18"></app-icon>
+            </div>
+            <input type="text" formControlName="companyName"
+              class="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all shadow-sm placeholder:text-slate-400"
+              [class.border-red-300]="isFieldInvalid('companyName')"
+              [class.focus:border-red-500]="isFieldInvalid('companyName')"
+              [class.focus:ring-red-500]="isFieldInvalid('companyName')" placeholder="Ej: Martínez & Asociados">
+          </div>
+          <p class="absolute bottom-0 left-1 text-[11px] font-semibold text-red-500 transition-all duration-300 transform"
+            [ngClass]="isFieldInvalid('companyName') ? 'translate-y-0 opacity-100' : '-translate-y-2 opacity-0 pointer-events-none'">
+            El nombre de la firma es requerido (mínimo 3 caracteres).
+          </p>
+        </div>
+
+        @if (f.planType.value !== 'individual') {
+        <hr class="border-slate-100 mb-4 opacity-50">
+        }
 
         <!-- Document Row -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
