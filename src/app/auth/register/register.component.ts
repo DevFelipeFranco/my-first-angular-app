@@ -6,8 +6,10 @@ import { IconComponent } from '../../components/ui/icons.component';
 import { SearchableSelectComponent, SelectOption } from '../../components/ui/searchable-select.component';
 import { CommonsService } from '../../services/commons.service';
 import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 import { DocumentType } from '../../models/document-type.model';
 import { RegisteredUser } from '../../models/user.model';
+import { ApiErrorResponse } from '../../models/api-response.model';
 
 @Component({
   selector: 'app-register',
@@ -21,6 +23,7 @@ export class RegisterComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private toastService = inject(ToastService);
 
   isLoading = signal(false);
   isLoadingDocs = signal(true);
@@ -87,6 +90,28 @@ export class RegisterComponent {
     return field ? (field.invalid && (field.dirty || field.touched)) : false;
   }
 
+  getErrorMessage(fieldName: string): string {
+    const field = this.registerForm.get(fieldName);
+    if (!field || (!field.dirty && !field.touched)) return '';
+
+    if (field.hasError('serverError')) {
+      return field.getError('serverError');
+    }
+    if (field.hasError('required')) {
+      return 'Este campo es requerido.';
+    }
+    if (field.hasError('minlength')) {
+      return 'Mínimo ' + field.getError('minlength').requiredLength + ' caracteres.';
+    }
+    if (field.hasError('email')) {
+      return 'Formato de correo inválido.';
+    }
+    if (field.hasError('pattern')) {
+      return 'Formato inválido (solo números permitidos).';
+    }
+    return 'Campo inválido.';
+  }
+
   onDocumentTypeChange(value: string) {
     // Parse value to number since ID must be a Long (number in TS)
     const numValue = parseInt(value, 10);
@@ -110,7 +135,7 @@ export class RegisterComponent {
         const firstN = formValue.firstName?.trim() || '';
         // Using secondLastName if present, otherwise fallback to lastName to ensure a reasonable name
         const lastN = (formValue.secondLastName?.trim() || formValue.lastName?.trim() || '');
-        generatedTenantName = `${firstN} ${lastN}`.trim();
+        generatedTenantName = (firstN + ' ' + lastN).trim();
       }
 
       // Map UI plan selection to backend expected ENUMS
@@ -137,13 +162,28 @@ export class RegisterComponent {
           this.router.navigate(['/login']);
           this.isLoading.set(false);
         },
-        error: (error: any) => {
-          console.error('Error durante el registro:', error);
+        error: (errorResponse: any) => {
+          console.error('Error durante el registro:', errorResponse);
           this.isLoading.set(false);
+
+          if (errorResponse.status === 400 && errorResponse.error?.fieldErrors) {
+            const apiError: ApiErrorResponse = errorResponse.error;
+            apiError.fieldErrors?.forEach(err => {
+              const control = this.registerForm.get(err.field);
+              if (control) {
+                control.setErrors({ serverError: err.message });
+                control.markAsTouched();
+              }
+            });
+            this.toastService.error('Por favor, corrige los errores resaltados en el formulario.', 6000, 'Error de Validación');
+          } else {
+            this.toastService.error('Ocurrió un error al crear tu cuenta. Por favor, verifica tus datos o inténtalo más tarde.', 5000);
+          }
         }
       });
     } else {
       this.registerForm.markAllAsTouched();
+      this.toastService.warning('Por favor, completa correctamente todos los campos obligatorios antes de continuar.', 4000);
     }
   }
 }

@@ -118,7 +118,7 @@ export class AuthService {
 
   register(user: RegisteredUser): Observable<any> {
     // Best practice: using HttpClient to consume the API
-    return this.http.post(`${environment.apiUrl}/auth/register`, user).pipe(
+    return this.http.post(`${environment.apiUrl}/auth/signup`, user).pipe(
       tap((response: any) => {
         // Here you can handle the successful response
         // e.g. storing a JWT token, or automatically logging the user in

@@ -6,6 +6,8 @@ export interface Toast {
     id: string;
     type: ToastType;
     message: string;
+    title?: string;
+    durationMs: number;
 }
 
 @Injectable({
@@ -15,25 +17,25 @@ export class ToastService {
     private _toasts = signal<Toast[]>([]);
     toasts = this._toasts.asReadonly();
 
-    success(message: string, durationMs = 4000) {
-        this.show('success', message, durationMs);
+    success(message: string, durationMs = 4000, title?: string) {
+        this.show('success', message, durationMs, title);
     }
 
-    error(message: string, durationMs = 5000) {
-        this.show('error', message, durationMs);
+    error(message: string, durationMs = 5000, title?: string) {
+        this.show('error', message, durationMs, title);
     }
 
-    info(message: string, durationMs = 4000) {
-        this.show('info', message, durationMs);
+    info(message: string, durationMs = 4000, title?: string) {
+        this.show('info', message, durationMs, title);
     }
 
-    warning(message: string, durationMs = 4000) {
-        this.show('warning', message, durationMs);
+    warning(message: string, durationMs = 4000, title?: string) {
+        this.show('warning', message, durationMs, title);
     }
 
-    private show(type: ToastType, message: string, durationMs: number) {
+    private show(type: ToastType, message: string, durationMs: number, title?: string) {
         const id = Math.random().toString(36).substr(2, 9);
-        const toast: Toast = { id, type, message };
+        const toast: Toast = { id, type, message, title, durationMs };
 
         this._toasts.update(current => [...current, toast]);
 
