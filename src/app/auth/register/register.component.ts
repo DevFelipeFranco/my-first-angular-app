@@ -32,7 +32,7 @@ export class RegisterComponent {
   documentTypes = signal<DocumentType[]>([]);
 
   documentTypeOptions = computed<SelectOption[]>(() => {
-    return this.documentTypes().map(dt => ({ value: dt.id, label: dt.name }));
+    return this.documentTypes().map(dt => ({ value: dt.id.toString(), label: dt.name }));
   });
 
   ngOnInit() {
@@ -159,8 +159,15 @@ export class RegisterComponent {
 
       this.authService.register(userPayload).subscribe({
         next: (response: any) => {
-          this.router.navigate(['/login']);
           this.isLoading.set(false);
+          this.toastService.success(
+            '¡Tu cuenta ha sido creada exitosamente! Ahora puedes iniciar sesión con tus credenciales.',
+            5000,
+            'Registro Exitoso'
+          );
+          setTimeout(() => {
+            this.router.navigate(['/login']);
+          }, 1500);
         },
         error: (errorResponse: any) => {
           console.error('Error durante el registro:', errorResponse);
@@ -176,6 +183,10 @@ export class RegisterComponent {
               }
             });
             this.toastService.error('Por favor, corrige los errores resaltados en el formulario.', 6000, 'Error de Validación');
+          } else if (errorResponse.status === 422 && errorResponse.error?.message) {
+            // General business logic errors (e.g. Email already exists, Document already registered)
+            const apiError: ApiErrorResponse = errorResponse.error;
+            this.toastService.warning(apiError.message, 6000, 'No se pudo procesar');
           } else {
             this.toastService.error('Ocurrió un error al crear tu cuenta. Por favor, verifica tus datos o inténtalo más tarde.', 5000);
           }
