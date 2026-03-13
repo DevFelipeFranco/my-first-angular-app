@@ -14,11 +14,11 @@ import { toSignal } from '@angular/core/rxjs-interop';
       
       <!-- Top Bar / Navigation -->
       <div class="flex items-center gap-4 mb-8">
-        <a routerLink="/clients" class="p-2 rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-indigo-600 hover:border-indigo-200 transition-colors shadow-sm">
+        <a routerLink="/clients" class="p-2 rounded-xl bg-white dark:bg-slate-800 transition-colors duration-300 border border-slate-200 text-slate-500 hover:text-indigo-600 hover:border-indigo-200 transition-colors shadow-sm">
           <app-icon name="chevron-right" class="rotate-180" [size]="20"></app-icon>
         </a>
         <div>
-          <h1 class="text-2xl font-bold text-slate-800">Registrar Nuevo Cliente</h1>
+          <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-200 transition-colors duration-300">Registrar Nuevo Cliente</h1>
           <p class="text-slate-500">Complete la información para abrir un nuevo expediente.</p>
         </div>
       </div>
@@ -27,9 +27,9 @@ import { toSignal } from '@angular/core/rxjs-interop';
         
         <!-- Left: Form Section -->
         <div class="lg:col-span-2 space-y-6">
-          <form [formGroup]="clientForm" (ngSubmit)="onSubmit()" class="bg-white rounded-2xl shadow-sm border border-slate-100 p-8">
+          <form [formGroup]="clientForm" (ngSubmit)="onSubmit()" class="bg-white dark:bg-slate-800 transition-colors duration-300 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 transition-colors duration-300 p-8">
             
-            <h3 class="font-bold text-lg text-slate-800 mb-6 flex items-center gap-2">
+            <h3 class="font-bold text-lg text-slate-800 dark:text-slate-200 transition-colors duration-300 mb-6 flex items-center gap-2">
               <span class="w-1 h-6 bg-indigo-500 rounded-full"></span>
               Información General
             </h3>
@@ -49,7 +49,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
                     <input 
                       type="text" 
                       formControlName="name"
-                      class="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all placeholder:text-slate-400"
+                      class="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white dark:bg-slate-800 transition-colors duration-300 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all placeholder:text-slate-400"
                       [class.border-rose-300]="hasError('name')"
                       [class.focus:border-rose-500]="hasError('name')"
                       placeholder="Ej. Roberto Gómez"
@@ -74,7 +74,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
                     <input 
                       type="text" 
                       formControlName="company"
-                      class="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all placeholder:text-slate-400"
+                      class="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white dark:bg-slate-800 transition-colors duration-300 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all placeholder:text-slate-400"
                       placeholder="Ej. TechCorp (Opcional)"
                     >
                   </div>
@@ -82,7 +82,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
               </div>
 
-              <h3 class="font-bold text-lg text-slate-800 pt-2 mb-6 flex items-center gap-2">
+              <h3 class="font-bold text-lg text-slate-800 dark:text-slate-200 transition-colors duration-300 pt-2 mb-6 flex items-center gap-2">
                 <span class="w-1 h-6 bg-emerald-500 rounded-full"></span>
                 Datos de Contacto
               </h3>
@@ -100,7 +100,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
                     <input 
                       type="email" 
                       formControlName="email"
-                      class="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all placeholder:text-slate-400"
+                      class="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white dark:bg-slate-800 transition-colors duration-300 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all placeholder:text-slate-400"
                       [class.border-rose-300]="hasError('email')"
                       placeholder="cliente@email.com"
                     >
@@ -123,7 +123,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
                     <input 
                       type="tel" 
                       formControlName="phone"
-                      class="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all placeholder:text-slate-400"
+                      class="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white dark:bg-slate-800 transition-colors duration-300 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all placeholder:text-slate-400"
                       [class.border-rose-300]="hasError('phone')"
                       placeholder="+52 55 0000 0000"
                     >
@@ -142,7 +142,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
               <div class="relative group pt-2">
                 <label class="block text-sm font-semibold text-slate-700 mb-2">Estado Inicial de la Cuenta</label>
                 <div class="relative">
-                  <select formControlName="status" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all appearance-none cursor-pointer text-slate-700 font-medium">
+                  <select formControlName="status" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white dark:bg-slate-800 transition-colors duration-300 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all appearance-none cursor-pointer text-slate-700 font-medium">
                     <option value="Activo">Activo - Cliente con procesos vigentes</option>
                     <option value="Potencial">Potencial - En etapa de negociación</option>
                     <option value="Inactivo">Inactivo - Sin procesos actuales</option>
@@ -153,7 +153,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
             </div> <!-- End space-y-8 -->
 
-            <div class="mt-10 pt-6 border-t border-slate-100 flex justify-end gap-3">
+            <div class="mt-10 pt-6 border-t border-slate-100 dark:border-slate-700 transition-colors duration-300 flex justify-end gap-3">
                <a routerLink="/clients" class="px-6 py-3 rounded-xl text-slate-600 font-bold text-sm hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all">
                 Cancelar
               </a>
@@ -179,17 +179,17 @@ import { toSignal } from '@angular/core/rxjs-interop';
              </div>
 
              <!-- The Card -->
-             <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 overflow-hidden border border-slate-100 transition-all duration-500 transform hover:scale-[1.02]">
+             <div class="bg-white dark:bg-slate-800 transition-colors duration-300 rounded-2xl shadow-xl shadow-slate-200/50 overflow-hidden border border-slate-100 dark:border-slate-700 transition-colors duration-300 transition-all duration-500 transform hover:scale-[1.02]">
                 <!-- Card Header / Cover -->
                 <div class="h-24 bg-gradient-to-r from-indigo-600 to-purple-600 relative overflow-hidden">
-                   <div class="absolute inset-0 bg-white/10" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 20px 20px; opacity: 0.2"></div>
-                   <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                   <div class="absolute inset-0 bg-white dark:bg-slate-800 transition-colors duration-300/10" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 20px 20px; opacity: 0.2"></div>
+                   <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-white dark:bg-slate-800 transition-colors duration-300/10 rounded-full blur-2xl"></div>
                 </div>
 
                 <!-- Card Content -->
                 <div class="px-6 pb-8 relative">
                    <!-- Avatar -->
-                   <div class="w-20 h-20 bg-white p-1 rounded-full shadow-md -mt-10 mb-4 mx-auto relative z-10">
+                   <div class="w-20 h-20 bg-white dark:bg-slate-800 transition-colors duration-300 p-1 rounded-full shadow-md -mt-10 mb-4 mx-auto relative z-10">
                       <img 
                         [src]="'https://ui-avatars.com/api/?name=' + (formValues().name || 'Nuevo Cliente') + '&background=6366f1&color=fff'" 
                         class="w-full h-full rounded-full object-cover bg-slate-100"
@@ -198,7 +198,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
                    <!-- Info -->
                    <div class="text-center space-y-1 mb-6">
-                      <h2 class="text-xl font-bold text-slate-800 break-words leading-tight">
+                      <h2 class="text-xl font-bold text-slate-800 dark:text-slate-200 transition-colors duration-300 break-words leading-tight">
                         {{ formValues().name || 'Nombre del Cliente' }}
                       </h2>
                       <p class="text-sm font-medium text-slate-500">
@@ -224,15 +224,15 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
                    <!-- Contact Details in Card -->
                    <div class="space-y-3 pt-4 border-t border-slate-50">
-                      <div class="flex items-center gap-3 text-sm text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100/50">
-                         <div class="p-1.5 bg-white rounded-lg text-indigo-500 shadow-sm">
+                      <div class="flex items-center gap-3 text-sm text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-700 transition-colors duration-300/50">
+                         <div class="p-1.5 bg-white dark:bg-slate-800 transition-colors duration-300 rounded-lg text-indigo-500 shadow-sm">
                            <!-- Simple Mail Icon -->
                            <div class="w-3 h-3 border border-current rounded-sm"></div>
                          </div>
                          <span class="truncate">{{ formValues().email || 'correo@ejemplo.com' }}</span>
                       </div>
-                      <div class="flex items-center gap-3 text-sm text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100/50">
-                         <div class="p-1.5 bg-white rounded-lg text-indigo-500 shadow-sm">
+                      <div class="flex items-center gap-3 text-sm text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-700 transition-colors duration-300/50">
+                         <div class="p-1.5 bg-white dark:bg-slate-800 transition-colors duration-300 rounded-lg text-indigo-500 shadow-sm">
                             <app-icon name="bell" [size]="12"></app-icon>
                          </div>
                          <span class="truncate">{{ formValues().phone || '+00 000 000 0000' }}</span>

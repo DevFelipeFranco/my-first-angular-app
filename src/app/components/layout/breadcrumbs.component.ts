@@ -14,7 +14,7 @@ import { map } from 'rxjs/operators';
     <nav class="flex items-center text-sm text-slate-500 mb-6" aria-label="Breadcrumb">
       <ol class="inline-flex items-center space-x-1 md:space-x-3">
         <li class="inline-flex items-center">
-          <a routerLink="/dashboard" class="inline-flex items-center hover:text-slate-900 transition-colors">
+          <a routerLink="/dashboard" class="inline-flex items-center text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 transition-colors duration-300">
             <app-icon name="home" [size]="16" class="mr-2"></app-icon>
             dokqet
           </a>
@@ -24,9 +24,9 @@ import { map } from 'rxjs/operators';
             <div class="flex items-center">
               <app-icon name="chevron-right" [size]="16" class="text-slate-400 mx-1"></app-icon>
               @if (crumb.isLast) {
-                <span class="ml-1 font-medium text-slate-900 md:ml-2">{{ crumb.label }}</span>
+                <span class="ml-1 font-medium text-slate-900 dark:text-slate-100 transition-colors duration-300 md:ml-2">{{ crumb.label }}</span>
               } @else {
-                <a [routerLink]="crumb.path" class="ml-1 font-medium hover:text-slate-900 md:ml-2 transition-colors">{{ crumb.label }}</a>
+                <a [routerLink]="crumb.path" class="ml-1 font-medium text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 transition-colors duration-300 md:ml-2">{{ crumb.label }}</a>
               }
             </div>
           </li>

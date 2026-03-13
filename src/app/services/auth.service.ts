@@ -2,9 +2,9 @@ import { Injectable, signal, computed, Inject, PLATFORM_ID, inject } from '@angu
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { User, RegisteredUser } from '../models/user.model';
+import { Observable, of } from 'rxjs';
+import { tap, map, catchError } from 'rxjs/operators';
+import { User, RegisteredUser, LoginRequest, AuthResponse } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -73,46 +73,57 @@ export class AuthService {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
     // Check local storage for persistence only if in browser
     if (isPlatformBrowser(this.platformId)) {
-      const stored = localStorage.getItem('dokqet_user');
-      if (stored) {
-        this._currentUser.set(JSON.parse(stored));
+      const storedUser = localStorage.getItem('dokqet_user');
+      const storedToken = localStorage.getItem('dokqet_token');
+      
+      if (storedUser && storedToken) {
+        this._currentUser.set(JSON.parse(storedUser));
+      } else {
+        // Clear anything that might be partially stored
+        this.logout();
       }
     }
   }
 
-  login(email: string, name: string, role: 'admin' | 'lawyer' = 'lawyer') {
-    // In a real app, we would validate against _allUsers here.
-    // For demo, we just create/set the session.
+  login(credentials: LoginRequest): Observable<boolean> {
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/login`, credentials).pipe(
+      map(response => {
+        const authUser = response.user;
+        
+        if (!authUser.active) {
+          alert('Esta cuenta ha sido bloqueada por el administrador.');
+          return false;
+        }
 
-    // Check if user is blocked in our mock DB (simulate check)
-    const existingUser = this._allUsers().find(u => u.email === email);
-    if (existingUser && existingUser.isBlocked) {
-      alert('Esta cuenta ha sido bloqueada por el administrador.');
-      return false;
-    }
+        const user: User = {
+          id: authUser.id,
+          name: authUser.fullName,
+          email: authUser.email,
+          avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(authUser.fullName)}&background=random`,
+          role: authUser.role === 'LEAD_LAWYER' ? 'admin' : authUser.role, // Handle mapping if needed
+          isBlocked: !authUser.active
+        };
 
-    const user: User = existingUser || {
-      id: Math.random().toString(36).substr(2, 9),
-      name: name,
-      email: email,
-      avatar: `https://picsum.photos/seed/${name}/100/100`,
-      role: role,
-      lastConnection: 'En línea',
-      isBlocked: false
-    };
+        this._currentUser.set(user);
 
-    this._currentUser.set(user);
-
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('dokqet_user', JSON.stringify(user));
-    }
-    return true;
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('dokqet_user', JSON.stringify(user));
+          localStorage.setItem('dokqet_token', response.token);
+        }
+        return true;
+      }),
+      catchError(error => {
+        console.error('Error durante el inicio de sesión:', error);
+        return of(false);
+      })
+    );
   }
 
   logout() {
     this._currentUser.set(null);
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('dokqet_user');
+      localStorage.removeItem('dokqet_token');
     }
   }
 
@@ -128,7 +139,7 @@ export class AuthService {
   }
 
   // Admin Methods
-  toggleUserBlock(userId: string) {
+  toggleUserBlock(userId: string | number) {
     this._allUsers.update(users =>
       users.map(u => {
         if (u.id === userId && u.id !== this._currentUser()?.id) { // Prevent self-blocking

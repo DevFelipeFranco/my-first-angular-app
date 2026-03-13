@@ -14,11 +14,11 @@ import { User } from '../models/user.model';
       <!-- Header -->
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 class="text-2xl font-bold text-slate-800">Gestión de Usuarios</h1>
+          <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-200 transition-colors duration-300">Gestión de Usuarios</h1>
           <p class="text-slate-500 mt-1">Administra los accesos y monitorea la actividad del equipo legal.</p>
         </div>
         <div class="flex gap-3">
-           <button class="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-xl text-sm font-medium hover:bg-slate-50 transition-colors">
+           <button class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 transition-colors duration-300 border border-slate-200 text-slate-600 rounded-xl text-sm font-medium hover:bg-slate-50 transition-colors">
              <app-icon name="file-text" [size]="16"></app-icon>
              Exportar Lista
            </button>
@@ -30,7 +30,7 @@ import { User } from '../models/user.model';
       </div>
 
       <!-- Filters -->
-      <div class="flex flex-col sm:flex-row items-center gap-4 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+      <div class="flex flex-col sm:flex-row items-center gap-4 bg-white dark:bg-slate-800 transition-colors duration-300 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 transition-colors duration-300 shadow-sm">
         <div class="relative w-full sm:w-80">
           <app-icon name="search" [size]="18" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></app-icon>
           <input 
@@ -49,16 +49,16 @@ import { User } from '../models/user.model';
       </div>
 
       <!-- Users Table -->
-      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+      <div class="bg-white dark:bg-slate-800 transition-colors duration-300 rounded-2xl border border-slate-100 dark:border-slate-700 transition-colors duration-300 shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
           <table class="w-full text-left text-sm text-slate-600">
-            <thead class="bg-slate-50 border-b border-slate-100">
+            <thead class="bg-slate-50 border-b border-slate-100 dark:border-slate-700 transition-colors duration-300">
               <tr>
-                <th class="px-6 py-4 font-semibold text-slate-800">Usuario</th>
-                <th class="px-6 py-4 font-semibold text-slate-800">Rol / Departamento</th>
-                <th class="px-6 py-4 font-semibold text-slate-800">Estado</th>
-                <th class="px-6 py-4 font-semibold text-slate-800">Última Conexión</th>
-                <th class="px-6 py-4 font-semibold text-slate-800 text-right">Acciones</th>
+                <th class="px-6 py-4 font-semibold text-slate-800 dark:text-slate-200 transition-colors duration-300">Usuario</th>
+                <th class="px-6 py-4 font-semibold text-slate-800 dark:text-slate-200 transition-colors duration-300">Rol / Departamento</th>
+                <th class="px-6 py-4 font-semibold text-slate-800 dark:text-slate-200 transition-colors duration-300">Estado</th>
+                <th class="px-6 py-4 font-semibold text-slate-800 dark:text-slate-200 transition-colors duration-300">Última Conexión</th>
+                <th class="px-6 py-4 font-semibold text-slate-800 dark:text-slate-200 transition-colors duration-300 text-right">Acciones</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
@@ -75,7 +75,7 @@ import { User } from '../models/user.model';
                         }
                       </div>
                       <div>
-                        <p class="font-bold text-slate-800" [class.text-slate-500]="user.isBlocked">{{ user.name }}</p>
+                        <p class="font-bold text-slate-800 dark:text-slate-200 transition-colors duration-300" [class.text-slate-500]="user.isBlocked">{{ user.name }}</p>
                         <p class="text-xs text-slate-400">{{ user.email }}</p>
                       </div>
                     </div>
@@ -111,7 +111,7 @@ import { User } from '../models/user.model';
                         class="px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors flex items-center gap-1 ml-auto"
                         [class]="user.isBlocked 
                           ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100' 
-                          : 'bg-white text-slate-500 border-slate-200 hover:border-red-200 hover:text-red-600 hover:bg-red-50'"
+                          : 'bg-white dark:bg-slate-800 transition-colors duration-300 text-slate-500 border-slate-200 hover:border-red-200 hover:text-red-600 hover:bg-red-50'"
                       >
                         @if (user.isBlocked) {
                           <app-icon name="unlock" [size]="14"></app-icon> Desbloquear
@@ -129,7 +129,7 @@ import { User } from '../models/user.model';
           </table>
         </div>
         
-        <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/50">
+        <div class="px-6 py-4 border-t border-slate-100 dark:border-slate-700 transition-colors duration-300 bg-slate-50/50">
            <p class="text-xs text-slate-400 text-center">
              Los usuarios bloqueados no podrán iniciar sesión en la plataforma hasta que sean desbloqueados.
            </p>
@@ -175,7 +175,7 @@ export class UsersComponent {
     this.searchTerm.set((event.target as HTMLInputElement).value);
   }
 
-  toggleBlock(userId: string) {
+  toggleBlock(userId: string | number) {
     if (confirm('¿Estás seguro de cambiar el estado de acceso de este usuario?')) {
       this.authService.toggleUserBlock(userId);
     }

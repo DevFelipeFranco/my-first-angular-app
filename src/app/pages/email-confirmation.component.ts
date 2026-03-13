@@ -9,13 +9,13 @@ import { IconComponent } from '../components/ui/icons.component';
   imports: [CommonModule, RouterModule, IconComponent],
   template: `
     <div class="min-h-screen flex items-center justify-center bg-slate-50 p-4">
-      <div class="bg-white p-8 md:p-12 rounded-3xl shadow-xl w-full max-w-md border border-slate-100 text-center relative overflow-hidden">
+      <div class="bg-white dark:bg-slate-800 transition-colors duration-300 p-8 md:p-12 rounded-3xl shadow-xl w-full max-w-md border border-slate-100 dark:border-slate-700 transition-colors duration-300 text-center relative overflow-hidden">
         
         @if (isLoading()) {
           <!-- Loading State -->
           <div class="py-12 flex flex-col items-center animate-fade-in">
              <div class="w-16 h-16 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin mb-6"></div>
-             <h2 class="text-xl font-semibold text-slate-800">Verificando enlace...</h2>
+             <h2 class="text-xl font-semibold text-slate-800 dark:text-slate-200 transition-colors duration-300">Verificando enlace...</h2>
              <p class="text-slate-500 mt-2">Por favor espera un momento.</p>
           </div>
         } @else {
@@ -28,12 +28,12 @@ import { IconComponent } from '../components/ui/icons.component';
               <app-icon name="check-circle" [size]="40" class="text-emerald-500"></app-icon>
             </div>
 
-            <h1 class="text-2xl font-bold text-slate-900 mb-2">¡Correo Verificado!</h1>
+            <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100 transition-colors duration-300 mb-2">¡Correo Verificado!</h1>
             <p class="text-slate-500 mb-8 leading-relaxed">
               Gracias por confirmar tu identidad. Tu cuenta en <span class="font-semibold text-indigo-700">dokqet</span> ha sido activada correctamente.
             </p>
 
-            <div class="bg-slate-50 rounded-xl p-4 mb-8 border border-slate-100 text-left">
+            <div class="bg-slate-50 rounded-xl p-4 mb-8 border border-slate-100 dark:border-slate-700 transition-colors duration-300 text-left">
                <div class="flex items-start gap-3">
                   <app-icon name="shield" [size]="20" class="text-indigo-600 mt-0.5"></app-icon>
                   <div>

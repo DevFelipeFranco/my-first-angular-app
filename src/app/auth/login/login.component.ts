@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
   private router = inject(Router);
 
   isLoading = signal(false);
+  loginError = signal<string | null>(null);
   dropdownOpen = signal(false);
   selectedRoleId = signal('admin');
 
@@ -47,7 +48,6 @@ export class LoginComponent implements OnInit {
   }
 
   closeDropdownDelayed() {
-    // Small delay to allow click event on options to fire before blur closes it
     setTimeout(() => {
       this.dropdownOpen.set(false);
     }, 200);
@@ -66,17 +66,24 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     if (this.loginForm.valid) {
       this.isLoading.set(true);
+      this.loginError.set(null); // Clear previous errors
 
-      // Simulate API delay
-      setTimeout(() => {
-        const { email, role } = this.loginForm.value;
-        // Mock name based on role for better demo
-        const name = role === 'admin' ? 'Carlos Socio' : 'Ana Abogada';
+      const { email, password } = this.loginForm.value;
 
-        this.authService.login(email!, name, role as 'admin' | 'lawyer');
-        this.router.navigate(['/dashboard']);
-        this.isLoading.set(false);
-      }, 800);
+      this.authService.login({ email: email!, password: password! }).subscribe({
+        next: (success) => {
+          this.isLoading.set(false);
+          if (success) {
+            this.router.navigate(['/dashboard']);
+          } else {
+            this.loginError.set('Credenciales incorrectas o cuenta bloqueada.');
+          }
+        },
+        error: () => {
+          this.isLoading.set(false);
+          this.loginError.set('Error de conexión con el servidor. Inténtalo más tarde.');
+        }
+      });
     }
   }
 }

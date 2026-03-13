@@ -16,7 +16,7 @@ import { AuthService } from '../services/auth.service';
           
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <h1 class="text-3xl font-bold text-slate-900">Vista de Socio Director</h1>
+              <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Vista de Socio Director</h1>
               <p class="text-slate-500 mt-1">Monitoreo global de la firma y rendimiento del equipo.</p>
             </div>
             <button class="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-medium hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200">
@@ -27,11 +27,11 @@ import { AuthService } from '../services/auth.service';
 
           <!-- Admin Stats -->
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+            <div class="bg-white dark:bg-slate-800 transition-colors duration-300 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
               <div class="flex justify-between items-start">
                  <div>
                     <p class="text-slate-500 text-sm font-medium">Ingresos Totales (Mes)</p>
-                    <h3 class="text-3xl font-bold text-slate-800 mt-1">$145,200</h3>
+                    <h3 class="text-3xl font-bold text-slate-800 dark:text-slate-200 mt-1">$145,200</h3>
                  </div>
                  <div class="p-2 bg-emerald-50 text-emerald-600 rounded-lg">
                     <app-icon name="bar-chart" [size]="24"></app-icon>
@@ -43,11 +43,11 @@ import { AuthService } from '../services/auth.service';
               </div>
             </div>
 
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+            <div class="bg-white dark:bg-slate-800 transition-colors duration-300 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
               <div class="flex justify-between items-start">
                  <div>
                     <p class="text-slate-500 text-sm font-medium">Expedientes Activos</p>
-                    <h3 class="text-3xl font-bold text-slate-800 mt-1">128</h3>
+                    <h3 class="text-3xl font-bold text-slate-800 dark:text-slate-200 mt-1">128</h3>
                  </div>
                  <div class="p-2 bg-blue-50 text-blue-600 rounded-lg">
                     <app-icon name="briefcase" [size]="24"></app-icon>
@@ -59,11 +59,11 @@ import { AuthService } from '../services/auth.service';
               </div>
             </div>
 
-             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+             <div class="bg-white dark:bg-slate-800 transition-colors duration-300 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
               <div class="flex justify-between items-start">
                  <div>
                     <p class="text-slate-500 text-sm font-medium">Tasa de Éxito</p>
-                    <h3 class="text-3xl font-bold text-slate-800 mt-1">94.2%</h3>
+                    <h3 class="text-3xl font-bold text-slate-800 dark:text-slate-200 mt-1">94.2%</h3>
                  </div>
                  <div class="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
                     <app-icon name="target" [size]="24"></app-icon>
@@ -75,11 +75,11 @@ import { AuthService } from '../services/auth.service';
               </div>
             </div>
 
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+            <div class="bg-white dark:bg-slate-800 transition-colors duration-300 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
               <div class="flex justify-between items-start">
                  <div>
                     <p class="text-slate-500 text-sm font-medium">Eficiencia del Equipo</p>
-                    <h3 class="text-3xl font-bold text-slate-800 mt-1">87%</h3>
+                    <h3 class="text-3xl font-bold text-slate-800 dark:text-slate-200 mt-1">87%</h3>
                  </div>
                  <div class="p-2 bg-purple-50 text-purple-600 rounded-lg">
                     <app-icon name="users" [size]="24"></app-icon>
@@ -95,7 +95,7 @@ import { AuthService } from '../services/auth.service';
             <!-- Team Monitoring Section -->
             <div class="lg:col-span-2">
               <div class="flex items-center justify-between mb-6">
-                <h2 class="text-xl font-bold text-slate-900">Estado del Equipo en Tiempo Real</h2>
+                <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Estado del Equipo en Tiempo Real</h2>
                 <button (click)="refreshTeamData()" class="text-sm font-medium text-indigo-600 hover:text-indigo-800 flex items-center gap-1">
                   <app-icon name="activity" [size]="16"></app-icon>
                   Actualizar Datos
@@ -104,12 +104,12 @@ import { AuthService } from '../services/auth.service';
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 @for (member of teamMembers(); track member.id) {
-                  <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                  <div class="bg-white dark:bg-slate-800 transition-colors duration-300 p-5 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow">
                     <div class="flex justify-between items-start mb-4">
                       <div class="flex items-center gap-3">
-                        <img [src]="member.avatar" class="w-10 h-10 rounded-full border border-slate-100">
+                        <img [src]="member.avatar" class="w-10 h-10 rounded-full border border-slate-100 dark:border-slate-700">
                         <div>
-                          <h4 class="font-bold text-slate-800">{{ member.name }}</h4>
+                          <h4 class="font-bold text-slate-800 dark:text-slate-200">{{ member.name }}</h4>
                           <p class="text-xs text-slate-500">{{ member.role }}</p>
                         </div>
                       </div>
@@ -142,15 +142,15 @@ import { AuthService } from '../services/auth.service';
 
             <!-- Charts / Analytics Column -->
             <div class="space-y-6">
-               <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-                  <h3 class="font-bold text-slate-800 mb-6">Distribución de Casos</h3>
+               <div class="bg-white dark:bg-slate-800 transition-colors duration-300 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm">
+                  <h3 class="font-bold text-slate-800 dark:text-slate-200 mb-6">Distribución de Casos</h3>
                   
                   <!-- CSS Only Pie Chart Representation (Simplified) -->
                   <div class="space-y-4">
                      <div>
                         <div class="flex justify-between text-sm mb-1">
                            <span class="text-slate-600">Corporativo (45%)</span>
-                           <span class="font-bold text-slate-800">58</span>
+                           <span class="font-bold text-slate-800 dark:text-slate-200">58</span>
                         </div>
                         <div class="w-full bg-slate-100 rounded-full h-2">
                            <div class="bg-indigo-600 h-2 rounded-full" style="width: 45%"></div>
@@ -159,7 +159,7 @@ import { AuthService } from '../services/auth.service';
                      <div>
                         <div class="flex justify-between text-sm mb-1">
                            <span class="text-slate-600">Laboral (25%)</span>
-                           <span class="font-bold text-slate-800">32</span>
+                           <span class="font-bold text-slate-800 dark:text-slate-200">32</span>
                         </div>
                         <div class="w-full bg-slate-100 rounded-full h-2">
                            <div class="bg-blue-500 h-2 rounded-full" style="width: 25%"></div>
@@ -168,7 +168,7 @@ import { AuthService } from '../services/auth.service';
                      <div>
                         <div class="flex justify-between text-sm mb-1">
                            <span class="text-slate-600">Penal (15%)</span>
-                           <span class="font-bold text-slate-800">19</span>
+                           <span class="font-bold text-slate-800 dark:text-slate-200">19</span>
                         </div>
                         <div class="w-full bg-slate-100 rounded-full h-2">
                            <div class="bg-rose-500 h-2 rounded-full" style="width: 15%"></div>
@@ -177,7 +177,7 @@ import { AuthService } from '../services/auth.service';
                      <div>
                         <div class="flex justify-between text-sm mb-1">
                            <span class="text-slate-600">Civil/Familiar (15%)</span>
-                           <span class="font-bold text-slate-800">19</span>
+                           <span class="font-bold text-slate-800 dark:text-slate-200">19</span>
                         </div>
                         <div class="w-full bg-slate-100 rounded-full h-2">
                            <div class="bg-emerald-500 h-2 rounded-full" style="width: 15%"></div>
@@ -211,25 +211,25 @@ import { AuthService } from '../services/auth.service';
         <div class="space-y-6">
           
           <div class="mb-8">
-            <h1 class="text-3xl font-bold text-slate-900">Hola, {{ currentUser()?.name }}</h1>
+            <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Hola, {{ currentUser()?.name }}</h1>
             <p class="text-slate-500 mt-1">Aquí está el resumen de tus casos para hoy.</p>
           </div>
 
           <!-- Personal Stats -->
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             @for (stat of lawyerStats(); track stat.label) {
-              <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow group">
+              <div class="bg-white dark:bg-slate-800 transition-colors duration-300 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow group">
                 <div class="flex items-center justify-between mb-4">
                   <div class="p-3 rounded-xl transition-colors duration-300" [class]="stat.bgClass">
                     <app-icon [name]="stat.icon" [class]="stat.iconClass" [size]="24"></app-icon>
                   </div>
                   <span class="text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider" 
-                        [class]="stat.trendUp ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : 'bg-slate-50 text-slate-600 border border-slate-100'">
+                        [class]="stat.trendUp ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : 'bg-slate-50 text-slate-600 border border-slate-100 dark:border-slate-700'">
                     {{ stat.trend }}
                   </span>
                 </div>
                 <h3 class="text-slate-500 text-sm font-medium">{{ stat.label }}</h3>
-                <p class="text-3xl font-bold text-slate-800 mt-1">{{ stat.value }}</p>
+                <p class="text-3xl font-bold text-slate-800 dark:text-slate-200 mt-1">{{ stat.value }}</p>
               </div>
             }
           </div>
@@ -237,9 +237,9 @@ import { AuthService } from '../services/auth.service';
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
             <!-- Upcoming Hearings Section -->
-            <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+            <div class="lg:col-span-2 bg-white dark:bg-slate-800 transition-colors duration-300 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
               <div class="flex items-center justify-between mb-6">
-                <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
                   <app-icon name="gavel" [size]="20" class="text-slate-400"></app-icon>
                   Mi Agenda Judicial
                 </h2>
@@ -248,9 +248,9 @@ import { AuthService } from '../services/auth.service';
               
               <div class="space-y-4">
                 @for (hearing of hearings(); track hearing.id) {
-                  <div class="flex items-center p-4 rounded-xl border border-slate-100 hover:border-indigo-200 hover:bg-slate-50/50 transition-all group cursor-pointer">
+                  <div class="flex items-center p-4 rounded-xl border border-slate-100 dark:border-slate-700 hover:border-indigo-200 hover:bg-slate-50/50 transition-all group cursor-pointer">
                     <!-- Date Box -->
-                    <div class="flex-shrink-0 w-16 h-16 bg-slate-50 rounded-xl flex flex-col items-center justify-center border border-slate-200 group-hover:border-indigo-300 group-hover:bg-white group-hover:shadow-sm transition-all">
+                    <div class="flex-shrink-0 w-16 h-16 bg-slate-50 rounded-xl flex flex-col items-center justify-center border border-slate-200 group-hover:border-indigo-300 group-hover:bg-white dark:bg-slate-800 transition-colors duration-300 group-hover:shadow-sm transition-all">
                       <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{{ hearing.day }}</span>
                       <span class="text-xl font-bold text-indigo-600">{{ hearing.date }}</span>
                     </div>
@@ -258,7 +258,7 @@ import { AuthService } from '../services/auth.service';
                     <!-- Details -->
                     <div class="ml-5 flex-1">
                       <div class="flex justify-between items-start">
-                        <h3 class="font-bold text-slate-800 text-base group-hover:text-indigo-700 transition-colors">{{ hearing.title }}</h3>
+                        <h3 class="font-bold text-slate-800 dark:text-slate-200 text-base group-hover:text-indigo-700 transition-colors">{{ hearing.title }}</h3>
                         <span class="text-[10px] font-bold px-2 py-1 rounded bg-slate-100 text-slate-600 border border-slate-200">{{ hearing.time }}</span>
                       </div>
                       <p class="text-xs text-slate-500 mt-1 flex items-center gap-2 font-medium">
@@ -279,22 +279,22 @@ import { AuthService } from '../services/auth.service';
             </div>
 
             <!-- Recent Case Updates / Urgent Tasks -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 flex flex-col">
-               <h2 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+            <div class="bg-white dark:bg-slate-800 transition-colors duration-300 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 flex flex-col">
+               <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-6 flex items-center gap-2">
                  <app-icon name="clock" [size]="20" class="text-slate-400"></app-icon>
                  Mis Vencimientos
                </h2>
                
                <div class="flex-1 space-y-4">
                  @for (deadline of deadlines(); track deadline.id) {
-                   <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 relative overflow-hidden group hover:border-slate-200 transition-colors">
+                   <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 dark:border-slate-700 relative overflow-hidden group hover:border-slate-200 transition-colors">
                      <div class="absolute left-0 top-0 bottom-0 w-1.5" [class]="deadline.urgent ? 'bg-rose-500' : 'bg-orange-400'"></div>
                      <div class="pl-3">
                        <div class="flex justify-between items-start mb-2">
                           <p class="text-xs font-bold uppercase tracking-wider" [class]="deadline.urgent ? 'text-rose-600' : 'text-orange-600'">{{ deadline.daysLeft }}</p>
-                          <span class="text-[10px] font-bold text-slate-500 border border-slate-200 px-1.5 py-0.5 rounded bg-white uppercase">{{ deadline.type }}</span>
+                          <span class="text-[10px] font-bold text-slate-500 border border-slate-200 px-1.5 py-0.5 rounded bg-white dark:bg-slate-800 transition-colors duration-300 uppercase">{{ deadline.type }}</span>
                        </div>
-                       <p class="text-sm font-bold text-slate-800 leading-tight group-hover:text-slate-900">{{ deadline.title }}</p>
+                       <p class="text-sm font-bold text-slate-800 dark:text-slate-200 leading-tight group-hover:text-slate-900 dark:text-slate-100">{{ deadline.title }}</p>
                        <p class="text-xs text-slate-500 mt-1 font-medium">Exp: {{ deadline.caseId }}</p>
                      </div>
                    </div>

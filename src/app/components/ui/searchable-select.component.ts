@@ -23,7 +23,7 @@ export interface SelectOption {
       <button 
         type="button"
         (click)="toggleOpen()"
-        class="relative w-full bg-slate-50 border border-slate-200 rounded-2xl pr-10 py-3.5 text-left focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white transition-all shadow-sm group"
+        class="relative w-full border border-slate-200 rounded-2xl pr-10 py-3.5 text-left focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-colors duration-300 shadow-sm group bg-slate-50 dark:bg-slate-800"
         [class.ring-4]="isOpen()"
         [class.ring-blue-500/10]="isOpen()"
         [class.border-blue-500]="isOpen()"
@@ -39,7 +39,7 @@ export interface SelectOption {
               <app-icon [name]="icon()" class="text-slate-400 group-focus-within:text-blue-500 transition-colors" [class.text-blue-500]="isOpen()" [size]="18"></app-icon>
            </div>
         }
-        <span class="block truncate text-slate-900" [class.text-slate-400]="!selectedOption()">
+        <span class="block truncate text-slate-900 dark:text-slate-100 transition-colors duration-300" [class.text-slate-400]="!selectedOption()">
           {{ selectedOption()?.label || placeholder() }}
         </span>
         <span class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
@@ -49,10 +49,10 @@ export interface SelectOption {
 
       <!-- Dropdown Panel -->
       @if (isOpen()) {
-        <div class="absolute z-50 mt-2 w-full bg-white rounded-xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden origin-top animate-fade-in-up" style="animation-duration: 0.2s;">
+        <div class="absolute z-50 mt-2 w-full bg-white dark:bg-slate-800 rounded-xl shadow-xl shadow-slate-200/50 border border-slate-100 dark:border-slate-700 transition-colors duration-300 overflow-hidden origin-top animate-fade-in-up" style="animation-duration: 0.2s;">
           
           <!-- Search Input -->
-          <div class="p-2 border-b border-slate-50 bg-slate-50/50">
+          <div class="p-2 border-b border-slate-50 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <app-icon name="search" [size]="16" class="text-slate-400"></app-icon>
@@ -61,7 +61,7 @@ export interface SelectOption {
                 type="text" 
                 [(ngModel)]="searchTerm"
                 (click)="$event.stopPropagation()"
-                class="w-full pl-9 pr-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all placeholder:text-slate-400"
+                class="w-full pl-9 pr-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all placeholder:text-slate-400 text-slate-800 dark:text-slate-200"
                 placeholder="Buscar..."
                 autofocus
               >

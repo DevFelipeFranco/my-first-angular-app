@@ -11,7 +11,7 @@ import { IconComponent } from './icons.component';
     <div class="fixed top-6 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-3 pointer-events-none items-center">
       @for (toast of toastService.toasts(); track toast.id) {
         <div 
-          class="relative flex items-start gap-3 w-[360px] max-w-[90vw] p-4 bg-white rounded-md shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-100 pointer-events-auto transition-all duration-300 transform animate-fade-in-down overflow-hidden group"
+          class="relative flex items-start gap-3 w-[360px] max-w-[90vw] p-4 bg-white dark:bg-slate-800 transition-colors duration-300 rounded-md shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-100 dark:border-slate-700 transition-colors duration-300 pointer-events-auto transition-all duration-300 transform animate-fade-in-down overflow-hidden group"
           role="alert"
         >
           <!-- Left accent border color -->

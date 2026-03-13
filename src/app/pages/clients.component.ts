@@ -38,13 +38,13 @@ interface Activity {
       
       <!-- Toolbar (Only visible in list view) -->
       @if (!selectedClient()) {
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-800 transition-colors duration-300 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 transition-colors duration-300 shadow-sm">
           <div class="relative w-full sm:w-64">
             <app-icon name="search" [size]="18" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></app-icon>
             <input type="text" placeholder="Buscar cliente..." class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400">
           </div>
           <div class="flex gap-3">
-             <button class="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-xl text-sm font-medium hover:bg-slate-50 transition-colors">
+             <button class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 transition-colors duration-300 border border-slate-200 text-slate-600 rounded-xl text-sm font-medium hover:bg-slate-50 transition-colors">
                <app-icon name="activity" [size]="16"></app-icon>
                Reiniciar Simulación
              </button>
@@ -63,7 +63,7 @@ interface Activity {
             <!-- Tailwind Styled Card with Progress -->
             <div 
               (click)="selectClient(client)"
-              class="bg-white rounded-2xl border border-slate-100 p-6 cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group relative overflow-hidden flex flex-col justify-between h-full"
+              class="bg-white dark:bg-slate-800 transition-colors duration-300 rounded-2xl border border-slate-100 dark:border-slate-700 transition-colors duration-300 p-6 cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group relative overflow-hidden flex flex-col justify-between h-full"
             >
               <!-- Top color bar -->
               <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -73,7 +73,7 @@ interface Activity {
                   <div class="flex items-center gap-3">
                     <img [src]="client.avatar" class="w-12 h-12 rounded-full border-2 border-slate-50 object-cover shadow-sm">
                     <div>
-                      <h3 class="font-bold text-slate-800 text-base leading-tight">{{ client.name }}</h3>
+                      <h3 class="font-bold text-slate-800 dark:text-slate-200 transition-colors duration-300 text-base leading-tight">{{ client.name }}</h3>
                        @if (client.currentTask) {
                         <p class="text-xs text-slate-500 font-medium truncate max-w-[150px]" [title]="client.currentTask">{{ client.currentTask }}</p>
                       } @else {
@@ -99,7 +99,7 @@ interface Activity {
                   <div class="space-y-2 mb-6">
                      <div class="flex justify-between items-end">
                         <span class="text-xs font-semibold text-slate-700">Progreso</span>
-                        <span class="text-xs font-bold text-slate-800">{{ client.progress }}%</span>
+                        <span class="text-xs font-bold text-slate-800 dark:text-slate-200 transition-colors duration-300">{{ client.progress }}%</span>
                      </div>
                      <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
                         <div class="bg-indigo-600 h-1.5 rounded-full transition-all duration-1000 ease-out" [style.width.%]="client.progress"></div>
@@ -156,11 +156,11 @@ interface Activity {
           </button>
 
           <!-- Client Header -->
-          <div class="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm mb-8 flex flex-col md:flex-row items-center md:items-start gap-6">
+          <div class="bg-white dark:bg-slate-800 transition-colors duration-300 rounded-2xl p-8 border border-slate-100 dark:border-slate-700 transition-colors duration-300 shadow-sm mb-8 flex flex-col md:flex-row items-center md:items-start gap-6">
              <img [src]="selectedClient()!.avatar" class="w-24 h-24 rounded-full border-4 border-slate-50 shadow-md object-cover">
              <div class="flex-1 text-center md:text-left">
                 <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 mb-2">
-                   <h1 class="text-3xl font-bold text-slate-800">{{ selectedClient()!.name }}</h1>
+                   <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-200 transition-colors duration-300">{{ selectedClient()!.name }}</h1>
                    <span class="inline-block px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold border border-emerald-200 self-center md:self-auto">
                      CLIENTE VIP
                    </span>
@@ -192,14 +192,14 @@ interface Activity {
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
              <!-- Timeline Section -->
              <div class="lg:col-span-2">
-                <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-3">
+                <h3 class="text-xl font-bold text-slate-800 dark:text-slate-200 transition-colors duration-300 mb-6 flex items-center gap-3">
                    <div class="p-2 rounded-lg bg-indigo-100 text-indigo-600">
                       <app-icon name="activity" [size]="20"></app-icon>
                    </div>
                    Línea de Tiempo del Proceso
                 </h3>
 
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-8">
+                <div class="bg-white dark:bg-slate-800 transition-colors duration-300 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 transition-colors duration-300 p-8">
                   <div class="relative border-l-2 border-slate-200 ml-3 space-y-12">
                      @for (group of clientHistory(); track group.date) {
                         <div class="relative">
@@ -215,10 +215,10 @@ interface Activity {
                                        [class]="getDotColor(item.type)">
                                     </div>
                                     
-                                    <div class="flex justify-between items-start gap-4 p-4 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100">
+                                    <div class="flex justify-between items-start gap-4 p-4 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 dark:border-slate-700 transition-colors duration-300">
                                        <div>
                                           <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">{{ item.time }}</p>
-                                          <h4 class="text-base font-bold text-slate-800">{{ item.title }}</h4>
+                                          <h4 class="text-base font-bold text-slate-800 dark:text-slate-200 transition-colors duration-300">{{ item.title }}</h4>
                                           <p class="text-sm text-slate-600 mt-1 leading-relaxed">{{ item.desc }}</p>
                                        </div>
                                        
@@ -242,16 +242,16 @@ interface Activity {
 
              <!-- Side Stats for Client -->
              <div class="space-y-6">
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-                   <h3 class="font-bold text-slate-800 mb-4">Resumen de Cuenta</h3>
+                <div class="bg-white dark:bg-slate-800 transition-colors duration-300 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 transition-colors duration-300 p-6">
+                   <h3 class="font-bold text-slate-800 dark:text-slate-200 transition-colors duration-300 mb-4">Resumen de Cuenta</h3>
                    <div class="space-y-4">
                       <div class="flex justify-between items-center p-3 bg-slate-50 rounded-xl">
                          <span class="text-sm text-slate-600">Total Facturado</span>
-                         <span class="font-bold text-slate-800">$12,450.00</span>
+                         <span class="font-bold text-slate-800 dark:text-slate-200 transition-colors duration-300">$12,450.00</span>
                       </div>
                       <div class="flex justify-between items-center p-3 bg-slate-50 rounded-xl">
                          <span class="text-sm text-slate-600">Horas Invertidas</span>
-                         <span class="font-bold text-slate-800">48 hrs</span>
+                         <span class="font-bold text-slate-800 dark:text-slate-200 transition-colors duration-300">48 hrs</span>
                       </div>
                       <div class="flex justify-between items-center p-3 bg-slate-50 rounded-xl">
                          <span class="text-sm text-slate-600">Estado Legal</span>
@@ -262,8 +262,8 @@ interface Activity {
 
                 <div class="bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-200 p-6 text-white relative overflow-hidden">
                    <!-- Decorative circles -->
-                   <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full"></div>
-                   <div class="absolute bottom-10 -left-10 w-24 h-24 bg-white/10 rounded-full"></div>
+                   <div class="absolute -top-10 -right-10 w-32 h-32 bg-white dark:bg-slate-800 transition-colors duration-300/10 rounded-full"></div>
+                   <div class="absolute bottom-10 -left-10 w-24 h-24 bg-white dark:bg-slate-800 transition-colors duration-300/10 rounded-full"></div>
 
                    <h3 class="font-bold text-lg mb-2 relative z-10">Próxima Audiencia</h3>
                    <p class="text-indigo-100 text-sm mb-6 relative z-10">Juzgado 4° de lo Civil</p>

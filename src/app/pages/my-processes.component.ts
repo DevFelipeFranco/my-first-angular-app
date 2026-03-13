@@ -23,43 +23,44 @@ interface LegalProcess {
       
       <!-- Page Header -->
       <div>
-        <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Mis Procesos Judiciales</h1>
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100 transition-colors duration-300 tracking-tight">Mis Procesos Judiciales</h1>
         <p class="text-slate-500 mt-1">Gestiona todos tus expedientes y requerimientos legales.</p>
       </div>
 
       <!-- Main Toolbar -->
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+      <!-- Main Toolbar -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900/40 dark:backdrop-blur-xl transition-all duration-300 p-4 rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-sm dark:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.5)]">
         
         <!-- Left Side Tools -->
-        <div class="flex items-center gap-2 text-slate-500">
-          <button class="p-2 hover:bg-slate-100 rounded-lg transition-colors" title="Seleccionar">
+        <div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+          <button class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800/80 rounded-lg transition-colors" title="Seleccionar">
              <app-icon name="square" [size]="20" [strokeWidth]="1.5"></app-icon>
           </button>
           
-          <div class="w-px h-5 bg-slate-200 mx-1"></div>
+          <div class="w-px h-5 bg-slate-200 dark:bg-slate-700 mx-1"></div>
 
-          <button class="p-2 hover:bg-slate-100 rounded-lg transition-colors" title="Recargar">
+          <button class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800/80 rounded-lg transition-colors" title="Recargar">
              <app-icon name="refresh-cw" [size]="18" [strokeWidth]="2"></app-icon>
           </button>
-          <button class="p-2 hover:bg-slate-100 rounded-lg transition-colors" title="Filtrar">
+          <button class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800/80 rounded-lg transition-colors" title="Filtrar">
              <app-icon name="filter" [size]="18" [strokeWidth]="2"></app-icon>
           </button>
-          <button class="p-2 hover:bg-slate-100 rounded-lg transition-colors" title="Exportar/Descargar">
+          <button class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800/80 rounded-lg transition-colors" title="Exportar/Descargar">
              <app-icon name="download" [size]="18" [strokeWidth]="2"></app-icon>
           </button>
-          <button class="p-2 hover:bg-red-50 text-slate-500 hover:text-red-500 rounded-lg transition-colors" title="Eliminar">
+          <button class="p-2 hover:bg-red-50 dark:hover:bg-rose-500/10 text-slate-500 dark:text-slate-400 hover:text-red-500 dark:hover:text-rose-400 rounded-lg transition-colors" title="Eliminar">
              <app-icon name="trash" [size]="18" [strokeWidth]="2"></app-icon>
           </button>
 
           <!-- Search Bar -->
           <div class="relative ml-2 w-full max-w-xs group hidden md:block">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <app-icon name="search" [size]="16" class="text-slate-400 group-focus-within:text-blue-500 transition-colors"></app-icon>
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <app-icon name="search" [size]="16" class="text-slate-400 dark:text-slate-500 group-focus-within:text-blue-500 dark:group-focus-within:text-indigo-400 transition-colors"></app-icon>
             </div>
             <input 
               type="text" 
               placeholder="Buscar proceso..." 
-              class="w-full pl-9 pr-4 py-2 bg-slate-100 hover:bg-slate-200/50 focus:bg-white border-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-xl text-sm transition-all outline-none"
+              class="w-full pl-10 pr-4 py-2.5 bg-slate-100 hover:bg-slate-200/50 focus:bg-white dark:bg-slate-900/50 dark:hover:bg-slate-900/80 dark:focus:bg-slate-900 transition-all duration-300 border border-transparent dark:border-slate-800 focus:border-blue-500 dark:focus:border-indigo-500/50 focus:ring-4 focus:ring-blue-500/10 dark:focus:ring-indigo-500/10 rounded-xl text-sm outline-none text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 shadow-inner dark:shadow-none"
             >
           </div>
         </div>
@@ -67,7 +68,7 @@ interface LegalProcess {
         <!-- Right Side Primary Button -->
         <button 
            (click)="openModal()"
-           class="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-700 hover:bg-blue-800 text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all">
+           class="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-2.5 rounded-xl text-sm font-semibold shadow-lg shadow-blue-500/30 dark:shadow-[0_0_15px_rgba(79,70,229,0.4)] hover:shadow-blue-500/50 dark:hover:shadow-[0_0_20px_rgba(79,70,229,0.6)] hover:-translate-y-0.5 transition-all outline-none">
           <app-icon name="plus" [size]="18" [strokeWidth]="2.5"></app-icon>
           <span>Nuevo Proceso</span>
         </button>
@@ -78,12 +79,12 @@ interface LegalProcess {
         
         <!-- Table View (If processes exist) -->
         @if (processes().length > 0) {
-          <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+          <div class="bg-white dark:bg-slate-900/40 dark:backdrop-blur-xl transition-all duration-300 border border-slate-200 dark:border-slate-800/60 rounded-2xl overflow-hidden shadow-sm dark:shadow-[0_4px_25px_-5px_rgba(0,0,0,0.5)]">
             <table class="w-full text-left border-collapse">
               <thead>
-                <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 text-xs uppercase tracking-wider">
+                <tr class="bg-slate-50/80 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800/80 text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider">
                   <th class="p-4 font-semibold w-12 text-center">
-                    <button class="hover:text-slate-700"><app-icon name="square" [size]="18"></app-icon></button>
+                    <button class="hover:text-slate-700 dark:hover:text-slate-300 transition-colors"><app-icon name="square" [size]="18"></app-icon></button>
                   </th>
                   <th class="p-4 font-semibold">Nº Expediente</th>
                   <th class="p-4 font-semibold">Descripción del Proceso</th>
@@ -93,40 +94,43 @@ interface LegalProcess {
                   <th class="p-4 font-semibold text-right">Acciones</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-slate-100">
+              <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60">
                 @for (proc of processes(); track proc.id) {
-                  <tr (click)="verDetalle(proc.id)" class="hover:bg-slate-50 transition-colors group cursor-pointer">
-                    <td class="p-4 text-center text-slate-400 group-hover:text-slate-500">
+                  <tr (click)="verDetalle(proc.id)" class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-all duration-200 group cursor-pointer relative dark:hover:shadow-[inset_0_0_20px_rgba(0,0,0,0.2)]">
+                    <td class="p-4 text-center text-slate-400 dark:text-slate-500 group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-colors">
                        <button (click)="$event.stopPropagation()"><app-icon name="square" [size]="18"></app-icon></button>
                     </td>
                     <td class="p-4">
-                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-slate-100 text-slate-800 border border-slate-200">
+                      <span class="inline-flex items-center px-2.5 py-1.5 rounded-md text-xs font-bold bg-slate-100 text-slate-800 dark:bg-slate-800/80 dark:text-slate-200 transition-colors duration-300 shadow-sm group-hover:bg-white dark:group-hover:bg-slate-700/50">
                         {{proc.id}}
                       </span>
                     </td>
-                    <td class="p-4 font-medium text-slate-900">{{proc.title}}</td>
-                    <td class="p-4 text-slate-600 hidden md:table-cell">{{proc.client}}</td>
+                    <td class="p-4 font-semibold text-slate-900 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-300">{{proc.title}}</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400 font-medium hidden md:table-cell">{{proc.client}}</td>
                     <td class="p-4">
-                       <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border"
+                       <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-wide border border-transparent shadow-sm transition-all"
                              [ngClass]="{
-                               'bg-emerald-50 text-emerald-700 border-emerald-200': proc.status === 'Activo',
-                               'bg-amber-50 text-amber-700 border-amber-200': proc.status === 'Pausado',
-                               'bg-slate-100 text-slate-700 border-slate-200': proc.status === 'Cerrado'
+                               'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20 dark:shadow-[0_0_10px_rgba(16,185,129,0.1)]': proc.status === 'Activo',
+                               'bg-amber-50 text-amber-700 border-amber-200 dark:bg-orange-500/10 dark:text-orange-400 dark:border-orange-500/20 dark:shadow-[0_0_10px_rgba(249,115,22,0.1)]': proc.status === 'Pausado',
+                               'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-500/10 dark:text-slate-400 dark:border-slate-500/20': proc.status === 'Cerrado'
                              }">
                          <div class="w-1.5 h-1.5 rounded-full"
                               [ngClass]="{
-                                'bg-emerald-500': proc.status === 'Activo',
-                                'bg-amber-500': proc.status === 'Pausado',
+                                'bg-emerald-500 dark:shadow-[0_0_5px_rgba(16,185,129,0.8)]': proc.status === 'Activo',
+                                'bg-amber-500 dark:bg-orange-500 dark:shadow-[0_0_5px_rgba(249,115,22,0.8)]': proc.status === 'Pausado',
                                 'bg-slate-400': proc.status === 'Cerrado'
                               }"></div>
                          {{proc.status}}
                        </span>
                     </td>
-                    <td class="p-4 text-slate-500 text-sm hidden lg:table-cell">{{proc.date | date:'mediumDate'}}</td>
+                    <td class="p-4 text-slate-500 dark:text-slate-500 text-sm hidden lg:table-cell font-medium">{{proc.date | date:'mediumDate'}}</td>
                     <td class="p-4 text-right">
-                       <button (click)="$event.stopPropagation()" class="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
-                         <app-icon name="more-vertical" [size]="18"></app-icon>
-                       </button>
+                       <!-- Default Action Icon (Static) -->
+                       <div class="flex justify-end pr-2 h-8 items-center">
+                         <button (click)="$event.stopPropagation()" class="p-2 text-slate-400 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-slate-800 rounded-xl transition-colors flex items-center justify-center">
+                           <app-icon name="more-vertical" [size]="20"></app-icon>
+                         </button>
+                       </div>
                     </td>
                   </tr>
                 }
@@ -137,7 +141,7 @@ interface LegalProcess {
         
         <!-- Empty State (No processes) -->
         @else {
-          <div class="h-full min-h-[500px] flex flex-col items-center justify-center text-center px-4 bg-white border border-slate-200 border-dashed rounded-2xl relative overflow-hidden group">
+          <div class="h-full min-h-[500px] flex flex-col items-center justify-center text-center px-4 bg-white dark:bg-slate-800 transition-colors duration-300 border border-slate-200 border-dashed rounded-2xl relative overflow-hidden group">
             
             <!-- Decorative blur background -->
             <div class="absolute inset-0 bg-gradient-to-br from-indigo-50/50 via-white to-blue-50/50 pointer-events-none"></div>
@@ -146,7 +150,7 @@ interface LegalProcess {
               <!-- Illustrated Icon Container -->
               <div class="w-32 h-32 mx-auto mb-8 relative">
                 <div class="absolute inset-0 bg-blue-100 rounded-full blur-xl scale-125 opacity-50 group-hover:opacity-70 transition-opacity duration-700"></div>
-                <div class="relative w-full h-full bg-white rounded-[2rem] shadow-xl shadow-blue-900/5 border border-slate-100 flex items-center justify-center transform group-hover:-translate-y-2 transition-transform duration-500">
+                <div class="relative w-full h-full bg-white dark:bg-slate-800 transition-colors duration-300 rounded-[2rem] shadow-xl shadow-blue-900/5 border border-slate-100 dark:border-slate-700 transition-colors duration-300 flex items-center justify-center transform group-hover:-translate-y-2 transition-transform duration-500">
                   <div class="absolute inset-0 bg-gradient-to-tr from-blue-50 to-transparent rounded-[2rem] opacity-50"></div>
                   <app-icon name="inbox" [size]="56" class="text-blue-600 relative z-10" [strokeWidth]="1.5"></app-icon>
                 </div>
@@ -161,7 +165,7 @@ interface LegalProcess {
               </div>
 
               <!-- Typography -->
-              <h2 class="text-3xl font-extrabold text-slate-800 mb-3 tracking-tight">
+              <h2 class="text-3xl font-extrabold text-slate-800 dark:text-slate-200 transition-colors duration-300 mb-3 tracking-tight">
                 El inicio de un entorno organizado
               </h2>
               <p class="text-slate-500 max-w-md mx-auto mb-10 text-lg leading-relaxed">
@@ -199,16 +203,16 @@ interface LegalProcess {
           </div>
 
           <!-- Modal Content Panel -->
-          <div class="relative w-full max-w-lg bg-white rounded-[2rem] shadow-2xl overflow-hidden animate-fade-in-up m-4 border border-slate-100">
+          <div class="relative w-full max-w-lg bg-white dark:bg-slate-800 transition-colors duration-300 rounded-[2rem] shadow-2xl overflow-hidden animate-fade-in-up m-4 border border-slate-100 dark:border-slate-700 transition-colors duration-300">
             
             <!-- Header -->
-            <div class="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+            <div class="px-8 py-6 border-b border-slate-100 dark:border-slate-700 transition-colors duration-300 flex items-center justify-between bg-slate-50/50">
               <div class="flex items-center gap-4">
                 <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600">
                   <app-icon name="briefcase" [size]="20" [strokeWidth]="2"></app-icon>
                 </div>
                 <div>
-                  <h3 class="text-xl font-bold text-slate-800 tracking-tight">Nuevo Proceso Judicial</h3>
+                  <h3 class="text-xl font-bold text-slate-800 dark:text-slate-200 transition-colors duration-300 tracking-tight">Nuevo Proceso Judicial</h3>
                   <p class="text-sm text-slate-500 font-medium">Completa los datos iniciales</p>
                 </div>
               </div>
@@ -252,7 +256,7 @@ interface LegalProcess {
                   </div>
                   <input 
                     type="text" 
-                    class="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all shadow-sm font-medium text-slate-800 placeholder:text-slate-400 placeholder:font-normal"
+                    class="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white dark:bg-slate-800 transition-colors duration-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all shadow-sm font-medium text-slate-800 dark:text-slate-200 transition-colors duration-300 placeholder:text-slate-400 placeholder:font-normal"
                     placeholder="23 dígitos del CPN"
                   >
                 </div>
@@ -264,7 +268,7 @@ interface LegalProcess {
             </div>
 
             <!-- Footer Actions -->
-            <div class="px-8 py-5 border-t border-slate-100 bg-slate-50 flex items-center gap-3 justify-end">
+            <div class="px-8 py-5 border-t border-slate-100 dark:border-slate-700 transition-colors duration-300 bg-slate-50 flex items-center gap-3 justify-end">
               <button (click)="closeModal()" class="px-6 py-2.5 rounded-xl font-semibold text-slate-600 hover:bg-slate-200 transition-colors">
                 Cancelar
               </button>

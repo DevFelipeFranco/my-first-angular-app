@@ -41,7 +41,10 @@ import { AuthService } from '../../services/auth.service';
       </div>
 
       <!-- Navigation -->
-      <nav class="flex-1 py-6 px-3 space-y-2 overflow-y-auto overflow-x-hidden">
+      <nav class="flex-1 py-6 px-3 space-y-2" 
+           [class.overflow-y-auto]="expanded()" 
+           [class.overflow-x-hidden]="expanded()" 
+           [class.overflow-visible]="!expanded()">
         
         <a routerLink="/dashboard" routerLinkActive="bg-indigo-600 text-white shadow-lg shadow-indigo-900/50" 
            class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-slate-800 transition-all group relative">
@@ -51,7 +54,7 @@ import { AuthService } from '../../services/auth.service';
             Panel General
           </span>
           @if (!expanded()) {
-            <div class="absolute left-full ml-2 px-2 py-1 bg-slate-800 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap text-white">
+            <div class="flex items-center absolute left-full ml-4 px-3 py-1.5 bg-slate-800 text-slate-100 text-[11px] font-semibold uppercase tracking-wider rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-300 -translate-x-2 group-hover:translate-x-0 z-50 whitespace-nowrap shadow-xl border border-slate-700/50 after:absolute after:top-1/2 after:-left-[5px] after:-mt-[5px] after:w-2.5 after:h-2.5 after:bg-slate-800 after:border-l after:border-b after:border-slate-700/50 after:rotate-45">
               Panel General
             </div>
           }
@@ -71,7 +74,7 @@ import { AuthService } from '../../services/auth.service';
               Gestión Usuarios
             </span>
             @if (!expanded()) {
-               <div class="absolute left-full ml-2 px-2 py-1 bg-slate-800 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap text-white">
+               <div class="flex items-center absolute left-full ml-4 px-3 py-1.5 bg-slate-800 text-slate-100 text-[11px] font-semibold uppercase tracking-wider rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-300 -translate-x-2 group-hover:translate-x-0 z-50 whitespace-nowrap shadow-xl border border-slate-700/50 after:absolute after:top-1/2 after:-left-[5px] after:-mt-[5px] after:w-2.5 after:h-2.5 after:bg-slate-800 after:border-l after:border-b after:border-slate-700/50 after:rotate-45">
                 Gestión Usuarios
               </div>
             }
@@ -89,7 +92,7 @@ import { AuthService } from '../../services/auth.service';
               Expedientes
             </span>
             @if (!expanded()) {
-               <div class="absolute left-full ml-2 px-2 py-1 bg-slate-800 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap text-white">
+               <div class="flex items-center absolute left-full ml-4 px-3 py-1.5 bg-slate-800 text-slate-100 text-[11px] font-semibold uppercase tracking-wider rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-300 -translate-x-2 group-hover:translate-x-0 z-50 whitespace-nowrap shadow-xl border border-slate-700/50 after:absolute after:top-1/2 after:-left-[5px] after:-mt-[5px] after:w-2.5 after:h-2.5 after:bg-slate-800 after:border-l after:border-b after:border-slate-700/50 after:rotate-45">
                 Expedientes
               </div>
             }
@@ -103,7 +106,7 @@ import { AuthService } from '../../services/auth.service';
               Actividad
             </span>
             @if (!expanded()) {
-               <div class="absolute left-full ml-2 px-2 py-1 bg-slate-800 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap text-white">
+               <div class="flex items-center absolute left-full ml-4 px-3 py-1.5 bg-slate-800 text-slate-100 text-[11px] font-semibold uppercase tracking-wider rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-300 -translate-x-2 group-hover:translate-x-0 z-50 whitespace-nowrap shadow-xl border border-slate-700/50 after:absolute after:top-1/2 after:-left-[5px] after:-mt-[5px] after:w-2.5 after:h-2.5 after:bg-slate-800 after:border-l after:border-b after:border-slate-700/50 after:rotate-45">
                 Actividad
               </div>
             }
@@ -117,7 +120,7 @@ import { AuthService } from '../../services/auth.service';
               Clientes
             </span>
             @if (!expanded()) {
-               <div class="absolute left-full ml-2 px-2 py-1 bg-slate-800 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap text-white">
+               <div class="flex items-center absolute left-full ml-4 px-3 py-1.5 bg-slate-800 text-slate-100 text-[11px] font-semibold uppercase tracking-wider rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-300 -translate-x-2 group-hover:translate-x-0 z-50 whitespace-nowrap shadow-xl border border-slate-700/50 after:absolute after:top-1/2 after:-left-[5px] after:-mt-[5px] after:w-2.5 after:h-2.5 after:bg-slate-800 after:border-l after:border-b after:border-slate-700/50 after:rotate-45">
                 Clientes
               </div>
             }
@@ -131,7 +134,7 @@ import { AuthService } from '../../services/auth.service';
               Agenda Judicial
             </span>
              @if (!expanded()) {
-               <div class="absolute left-full ml-2 px-2 py-1 bg-slate-800 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap text-white">
+               <div class="flex items-center absolute left-full ml-4 px-3 py-1.5 bg-slate-800 text-slate-100 text-[11px] font-semibold uppercase tracking-wider rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-300 -translate-x-2 group-hover:translate-x-0 z-50 whitespace-nowrap shadow-xl border border-slate-700/50 after:absolute after:top-1/2 after:-left-[5px] after:-mt-[5px] after:w-2.5 after:h-2.5 after:bg-slate-800 after:border-l after:border-b after:border-slate-700/50 after:rotate-45">
                 Agenda Judicial
               </div>
             }
@@ -145,7 +148,7 @@ import { AuthService } from '../../services/auth.service';
               Documentos
             </span>
              @if (!expanded()) {
-               <div class="absolute left-full ml-2 px-2 py-1 bg-slate-800 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap text-white">
+               <div class="flex items-center absolute left-full ml-4 px-3 py-1.5 bg-slate-800 text-slate-100 text-[11px] font-semibold uppercase tracking-wider rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-300 -translate-x-2 group-hover:translate-x-0 z-50 whitespace-nowrap shadow-xl border border-slate-700/50 after:absolute after:top-1/2 after:-left-[5px] after:-mt-[5px] after:w-2.5 after:h-2.5 after:bg-slate-800 after:border-l after:border-b after:border-slate-700/50 after:rotate-45">
                 Documentos
               </div>
             }
@@ -175,7 +178,7 @@ import { AuthService } from '../../services/auth.service';
               }
               
               @if (!expanded()) {
-                <div class="absolute left-full ml-2 px-2 py-1 bg-slate-800 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap text-white">
+                <div class="flex items-center absolute left-full ml-4 px-3 py-1.5 bg-slate-800 text-slate-100 text-[11px] font-semibold uppercase tracking-wider rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-300 -translate-x-2 group-hover:translate-x-0 z-50 whitespace-nowrap shadow-xl border border-slate-700/50 after:absolute after:top-1/2 after:-left-[5px] after:-mt-[5px] after:w-2.5 after:h-2.5 after:bg-slate-800 after:border-l after:border-b after:border-slate-700/50 after:rotate-45">
                   Judiciales
                 </div>
               }
@@ -210,6 +213,11 @@ import { AuthService } from '../../services/auth.service';
                  [class.opacity-0]="!expanded()" [class.hidden]="!expanded()">
              Configuración
            </span>
+           @if (!expanded()) {
+             <div class="flex items-center absolute left-full ml-4 px-3 py-1.5 bg-slate-800 text-slate-100 text-[11px] font-semibold uppercase tracking-wider rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-300 -translate-x-2 group-hover:translate-x-0 z-50 whitespace-nowrap shadow-xl border border-slate-700/50 after:absolute after:top-1/2 after:-left-[5px] after:-mt-[5px] after:w-2.5 after:h-2.5 after:bg-slate-800 after:border-l after:border-b after:border-slate-700/50 after:rotate-45">
+              Configuración
+            </div>
+           }
         </a>
 
         <button (click)="handleLogout()" 
@@ -220,7 +228,7 @@ import { AuthService } from '../../services/auth.service';
              Cerrar Sesión
            </span>
             @if (!expanded()) {
-             <div class="absolute left-full ml-2 px-2 py-1 bg-slate-800 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap text-white">
+             <div class="flex items-center absolute left-full ml-4 px-3 py-1.5 bg-slate-800 text-slate-100 text-[11px] font-semibold uppercase tracking-wider rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-300 -translate-x-2 group-hover:translate-x-0 z-50 whitespace-nowrap shadow-xl border border-slate-700/50 after:absolute after:top-1/2 after:-left-[5px] after:-mt-[5px] after:w-2.5 after:h-2.5 after:bg-slate-800 after:border-l after:border-b after:border-slate-700/50 after:rotate-45">
               Salir
             </div>
           }
