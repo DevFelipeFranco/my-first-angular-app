@@ -141,49 +141,49 @@ interface LegalProcess {
         
         <!-- Empty State (No processes) -->
         @else {
-          <div class="h-full min-h-[500px] flex flex-col items-center justify-center text-center px-4 bg-white dark:bg-slate-800 transition-colors duration-300 border border-slate-200 border-dashed rounded-2xl relative overflow-hidden group">
+          <div class="h-full min-h-[500px] flex flex-col items-center justify-center text-center px-4 bg-white/50 dark:bg-slate-900/40 dark:backdrop-blur-xl transition-colors duration-300 border border-slate-200 dark:border-slate-800/60 border-dashed rounded-2xl relative overflow-hidden group">
             
             <!-- Decorative blur background -->
-            <div class="absolute inset-0 bg-gradient-to-br from-indigo-50/50 via-white to-blue-50/50 pointer-events-none"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-indigo-50/50 via-white to-blue-50/50 dark:from-indigo-900/5 dark:via-transparent dark:to-blue-900/5 pointer-events-none"></div>
 
             <div class="relative z-10 animate-fade-in-up">
               <!-- Illustrated Icon Container -->
               <div class="w-32 h-32 mx-auto mb-8 relative">
-                <div class="absolute inset-0 bg-blue-100 rounded-full blur-xl scale-125 opacity-50 group-hover:opacity-70 transition-opacity duration-700"></div>
-                <div class="relative w-full h-full bg-white dark:bg-slate-800 transition-colors duration-300 rounded-[2rem] shadow-xl shadow-blue-900/5 border border-slate-100 dark:border-slate-700 transition-colors duration-300 flex items-center justify-center transform group-hover:-translate-y-2 transition-transform duration-500">
-                  <div class="absolute inset-0 bg-gradient-to-tr from-blue-50 to-transparent rounded-[2rem] opacity-50"></div>
-                  <app-icon name="inbox" [size]="56" class="text-blue-600 relative z-10" [strokeWidth]="1.5"></app-icon>
+                <div class="absolute inset-0 bg-blue-100 dark:bg-blue-900/40 rounded-full blur-xl scale-125 opacity-50 dark:opacity-30 group-hover:opacity-70 dark:group-hover:opacity-50 transition-opacity duration-700"></div>
+                <div class="relative w-full h-full bg-white dark:bg-slate-800/80 backdrop-blur-sm transition-colors duration-300 rounded-[2rem] shadow-xl shadow-blue-900/5 dark:shadow-[0_0_30px_rgba(30,58,138,0.2)] border border-slate-100 dark:border-slate-700/50 flex items-center justify-center transform group-hover:-translate-y-2 transition-transform duration-500">
+                  <div class="absolute inset-0 bg-gradient-to-tr from-blue-50 dark:from-blue-500/10 to-transparent rounded-[2rem] opacity-50"></div>
+                  <app-icon name="inbox" [size]="56" class="text-blue-600 dark:text-blue-400 relative z-10" [strokeWidth]="1.5"></app-icon>
                 </div>
                 
                 <!-- Floating mini elements -->
-                <div class="absolute -top-2 -right-2 w-8 h-8 bg-indigo-500 rounded-xl shadow-lg flex items-center justify-center transform rotate-12 group-hover:rotate-45 group-hover:scale-110 transition-all duration-500 delay-100">
+                <div class="absolute -top-2 -right-2 w-8 h-8 bg-indigo-500 dark:bg-indigo-600 rounded-xl shadow-lg dark:shadow-[0_0_15px_rgba(79,70,229,0.5)] flex items-center justify-center transform rotate-12 group-hover:rotate-45 group-hover:scale-110 transition-all duration-500 delay-100">
                   <app-icon name="file-text" [size]="14" class="text-white" [strokeWidth]="2"></app-icon>
                 </div>
-                <div class="absolute bottom-4 -left-4 w-6 h-6 bg-emerald-400 rounded-full shadow-md flex items-center justify-center transform -rotate-12 group-hover:-rotate-45 group-hover:scale-110 transition-all duration-500 delay-200">
+                <div class="absolute bottom-4 -left-4 w-6 h-6 bg-emerald-400 dark:bg-emerald-500 rounded-full shadow-md dark:shadow-[0_0_15px_rgba(16,185,129,0.5)] flex items-center justify-center transform -rotate-12 group-hover:-rotate-45 group-hover:scale-110 transition-all duration-500 delay-200">
                   <app-icon name="check" [size]="12" class="text-white" [strokeWidth]="3"></app-icon>
                 </div>
               </div>
 
               <!-- Typography -->
-              <h2 class="text-3xl font-extrabold text-slate-800 dark:text-slate-200 transition-colors duration-300 mb-3 tracking-tight">
+              <h2 class="text-3xl font-extrabold text-slate-800 dark:text-slate-100 transition-colors duration-300 mb-3 tracking-tight">
                 El inicio de un entorno organizado
               </h2>
-              <p class="text-slate-500 max-w-md mx-auto mb-10 text-lg leading-relaxed">
+              <p class="text-slate-500 dark:text-slate-400 max-w-md mx-auto mb-10 text-lg leading-relaxed">
                 Aún no tienes procesos judiciales registrados. Empieza a digitalizar tus expedientes centralizando todo en un solo lugar.
               </p>
 
               <!-- Main Call to Action -->
               <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
-                <button (click)="openModal()" class="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-3.5 rounded-2xl text-base font-bold shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-0.5 transition-all group/btn">
+                <button (click)="openModal()" class="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-3.5 rounded-2xl text-base font-bold shadow-lg shadow-blue-500/30 dark:shadow-[0_0_15px_rgba(79,70,229,0.4)] hover:shadow-blue-500/50 dark:hover:shadow-[0_0_20px_rgba(79,70,229,0.6)] hover:-translate-y-0.5 transition-all group/btn outline-none">
                   <app-icon name="plus" [size]="20" [strokeWidth]="2.5" class="transition-transform group-hover/btn:scale-110"></app-icon>
                   <span>Crear mi primer proceso</span>
                 </button>
-                <button (click)="toggleTestProcesses()" class="text-sm font-medium text-slate-400 hover:text-slate-600 hover:underline">
+                <button (click)="toggleTestProcesses()" class="text-sm font-medium text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:underline">
                    Cargar datos de prueba
                 </button>
               </div>
               
-              <p class="mt-8 text-xs text-slate-400 font-medium">
+              <p class="mt-8 text-xs text-slate-400 dark:text-slate-500 font-medium tracking-wide">
                 Con la confianza de la tecnología dokqet
             </p>
             </div>

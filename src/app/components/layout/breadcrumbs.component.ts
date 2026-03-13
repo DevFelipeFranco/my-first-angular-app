@@ -42,7 +42,13 @@ export class BreadcrumbsComponent {
   breadcrumbs = toSignal(
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd),
-      map(() => this.createBreadcrumbs(this.activatedRoute.root))
+      map(() => {
+        let crumbs = this.createBreadcrumbs(this.activatedRoute.root);
+        if (crumbs.length > 0) {
+          crumbs[crumbs.length - 1].isLast = true;
+        }
+        return crumbs;
+      })
     ),
     { initialValue: [] }
   );
@@ -62,11 +68,14 @@ export class BreadcrumbsComponent {
 
       const label = child.snapshot.data['breadcrumb'];
       if (label) {
-        breadcrumbs.push({
-          label: label,
-          path: url,
-          isLast: false // We will fix last item later or relies on loop index
-        });
+        // Prevent consecutive duplicate labels (caused by empty path children inheriting parent data)
+        if (breadcrumbs.length === 0 || breadcrumbs[breadcrumbs.length - 1].label !== label) {
+          breadcrumbs.push({
+            label: label,
+            path: url,
+            isLast: false // Gets overridden by the map observable above
+          });
+        }
       }
 
       return this.createBreadcrumbs(child, url, breadcrumbs);

@@ -76,13 +76,18 @@ export const routes: Routes = [
             },
             {
                 path: 'judiciales/mis-procesos',
-                component: MyProcessesComponent,
-                data: { breadcrumb: 'Mis Procesos Judiciales' }
-            },
-            {
-                path: 'judiciales/mis-procesos/:id',
-                component: ProcessDetailComponent,
-                data: { breadcrumb: 'Detalle del Proceso Judicial' }
+                data: { breadcrumb: 'Mis Procesos' },
+                children: [
+                    {
+                        path: '',
+                        component: MyProcessesComponent
+                    },
+                    {
+                        path: ':id',
+                        component: ProcessDetailComponent,
+                        data: { breadcrumb: 'Detalle del Proceso Judicial' }
+                    }
+                ]
             }
         ]
     },
