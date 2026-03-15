@@ -25,14 +25,11 @@ export interface SelectOption {
         (click)="toggleOpen()"
         class="relative w-full border border-slate-200 rounded-2xl pr-10 py-3.5 text-left focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-colors duration-300 shadow-sm group bg-slate-50 dark:bg-slate-800"
         [class.ring-4]="isOpen()"
-        [class.ring-blue-500/10]="isOpen()"
         [class.border-blue-500]="isOpen()"
         [class.bg-white]="isOpen()"
         [class.pl-11]="icon()"
         [class.pl-4]="!icon()"
         [class.border-red-300]="invalid()"
-        [class.focus:border-red-500]="invalid()"
-        [class.focus:ring-red-500]="invalid()"
       >
         @if (icon()) {
            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">

@@ -51,7 +51,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
                       formControlName="name"
                       class="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white dark:bg-slate-800 transition-colors duration-300 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all placeholder:text-slate-400"
                       [class.border-rose-300]="hasError('name')"
-                      [class.focus:border-rose-500]="hasError('name')"
                       placeholder="Ej. Roberto Gómez"
                     >
                   </div>

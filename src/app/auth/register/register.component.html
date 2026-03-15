@@ -151,9 +151,7 @@
             </div>
             <input type="text" formControlName="companyName"
               class="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-slate-50 border border-slate-200 focus:bg-white dark:bg-slate-800 transition-colors duration-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all shadow-sm placeholder:text-slate-400"
-              [class.border-red-300]="isFieldInvalid('companyName')"
-              [class.focus:border-red-500]="isFieldInvalid('companyName')"
-              [class.focus:ring-red-500]="isFieldInvalid('companyName')" placeholder="Ej: Martínez & Asociados">
+              [class.border-red-300]="isFieldInvalid('companyName')" placeholder="Ej: Martínez & Asociados">
           </div>
           <p class="absolute bottom-0 left-1 text-[11px] font-semibold text-red-500 transition-all duration-300 transform"
             [ngClass]="isFieldInvalid('companyName') ? 'translate-y-0 opacity-100' : '-translate-y-2 opacity-0 pointer-events-none'">
@@ -197,9 +195,7 @@
               </div>
               <input type="text" formControlName="documentNumber"
                 class="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-slate-50 border border-slate-200 focus:bg-white dark:bg-slate-800 transition-colors duration-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all shadow-sm"
-                [class.border-red-300]="isFieldInvalid('documentNumber')"
-                [class.focus:border-red-500]="isFieldInvalid('documentNumber')"
-                [class.focus:ring-red-500]="isFieldInvalid('documentNumber')" placeholder="Ej. 123456789">
+                [class.border-red-300]="isFieldInvalid('documentNumber')" placeholder="Ej. 123456789">
             </div>
             <!-- Error -->
             <div class="absolute bottom-0 left-1 transition-all duration-300 transform"

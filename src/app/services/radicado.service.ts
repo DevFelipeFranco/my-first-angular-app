@@ -1,0 +1,116 @@
+import { Injectable, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { Observable, EMPTY, from, switchMap } from 'rxjs';
+
+export interface SyncRadicadoRequest {
+  radicadoNumber: string;
+}
+
+export interface SyncRadicadoResponse {
+  trackingId: string;
+  status: string;
+  message: string;
+  timestamp: string;
+}
+
+export interface SyncStatusResponse {
+  trackingId: string;
+  status: string; // e.g., 'ACCEPTED', 'IN_PROGRESS', 'COMPLETED', 'FAILED'
+  message?: string;
+  timestamp?: string;
+  [key: string]: any; // Catch-all for possible extracted data
+}
+
+export interface RadicadoDto {
+  id: number;
+  radicadoNumber: string;
+  title: string;
+  status: string;
+  despacho: string;
+  departamento: string;
+  processDate: string;
+  lastActionDate: string;
+  updatedAt: string;
+  sujetosProcesales?: string;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class RadicadoService {
+  private http = inject(HttpClient);
+  private platformId = inject(PLATFORM_ID);
+  // Using the absolute URL as given by the user, but we could eventually move it to environment
+  private readonly baseUrl = 'http://localhost:8761/api/v1/radicados';
+
+  /**
+   * Starts the asynchronous synchronization process for a given radicado.
+   * @param req The sync request containing the radicado number
+   */
+  syncRadicado(req: SyncRadicadoRequest): Observable<SyncRadicadoResponse> {
+    // Note: The authInterceptor already adds the Authorization header automatically to HttpClient requests
+    return this.http.post<SyncRadicadoResponse>(`${this.baseUrl}/sync`, req);
+  }
+
+  /**
+   * Listens to the Server-Sent Events (SSE) stream for real-time synchronization status updates.
+   * @param trackingId The UUID returned by syncRadicado
+   */
+  getSyncStatusStream(trackingId: string): Observable<SyncStatusResponse> {
+    // EventSourcePolyfill uses btoa() internally which fails on Node.js (SSR).
+    // We use a dynamic import() so the module is NEVER evaluated by Node.js
+    // during SSR module loading — it only loads at runtime in the browser.
+    if (!isPlatformBrowser(this.platformId)) {
+      return EMPTY;
+    }
+
+    const token = localStorage.getItem('dokqet_token');
+    const url = `${this.baseUrl}/sync/${trackingId}`;
+
+    return from(import('event-source-polyfill')).pipe(
+      switchMap(({ EventSourcePolyfill }) => {
+        return new Observable<SyncStatusResponse>((observer) => {
+          const eventSource = new EventSourcePolyfill(url, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+
+          eventSource.onmessage = (event: any) => {
+            try {
+              const data: SyncStatusResponse = JSON.parse(event.data);
+              observer.next(data);
+            } catch (error) {
+              observer.error('Error parsing SSE data: ' + error);
+            }
+          };
+
+          eventSource.onerror = (error: any) => {
+            observer.error('SSE connection error or closed by server.');
+            eventSource.close();
+          };
+
+          // Cleanup when the subscriber unsubscribes
+          return () => {
+            eventSource.close();
+          };
+        });
+      })
+    );
+  }
+
+  /**
+   * Fetches all registered radicados from the backend.
+   */
+  getAllRadicados(): Observable<RadicadoDto[]> {
+    return this.http.get<RadicadoDto[]>(this.baseUrl);
+  }
+
+  /**
+   * Fetches a single radicado by its ID.
+   */
+  getRadicadoById(id: number): Observable<RadicadoDto> {
+    return this.http.get<RadicadoDto>(`${this.baseUrl}/${id}`);
+  }
+}
