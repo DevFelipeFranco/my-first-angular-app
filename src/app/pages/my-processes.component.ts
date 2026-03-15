@@ -52,7 +52,7 @@ import { takeWhile } from 'rxjs/operators';
       </div>
 
       <!-- Content + Detail Panel -->
-      <div class="flex gap-5 flex-1 min-h-0">
+      <div class="flex gap-5 flex-1 min-h-0 items-start">
 
         <!-- Table Area -->
         <div class="flex-1 min-w-0 min-h-[400px]">
@@ -105,7 +105,7 @@ import { takeWhile } from 'rxjs/operators';
                     <!-- Content Block -->
                     <div class="flex-1 min-w-0 space-y-1.5">
 
-                      <!-- Radicado Badge + Status Chip -->
+                      <!-- Radicado Badge + Status Chip + NEW badge -->
                       <div class="flex items-center flex-wrap gap-2">
                         <span class="font-mono text-xs font-bold tracking-widest text-indigo-700 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20 px-2.5 py-1 rounded-lg">
                           {{ proc.radicadoNumber }}
@@ -120,6 +120,12 @@ import { takeWhile } from 'rxjs/operators';
                           }">
                           {{ proc.status }}
                         </span>
+                        @if (newRadicadoIds().has(proc.radicadoNumber)) {
+                          <span class="new-badge inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider bg-emerald-500 text-white shadow-sm shadow-emerald-500/40">
+                            <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping opacity-75 flex-shrink-0"></span>
+                            Nuevo
+                          </span>
+                        }
                       </div>
 
                       <!-- Despacho -->
@@ -184,7 +190,7 @@ import { takeWhile } from 'rxjs/operators';
 
         <!-- ─── Slide-Over Detail Panel ─── -->
         @if (selectedProcess()) {
-          <aside class="w-[380px] flex-shrink-0 animate-slide-in-right">
+          <aside class="w-[380px] flex-shrink-0 animate-slide-in-right sticky top-4">
             <div class="bg-white dark:bg-slate-900/60 dark:backdrop-blur-xl border border-slate-200 dark:border-slate-800/60 rounded-2xl shadow-xl dark:shadow-[0_8px_40px_-8px_rgba(0,0,0,0.6)] overflow-hidden flex flex-col" style="max-height: calc(100vh - 220px);">
 
               <!-- Panel Header -->
@@ -482,6 +488,8 @@ export class MyProcessesComponent implements OnInit {
   selectedProcess = signal<RadicadoDto | null>(null);
   isLoading = signal(false);
   searchQuery = '';
+  /** Radicado numbers that were just created — shown as NEW until first click */
+  newRadicadoIds = signal<Set<string>>(new Set());
 
   filteredProcesses() {
     const q = this.searchQuery.toLowerCase().trim();
@@ -535,6 +543,10 @@ export class MyProcessesComponent implements OnInit {
   }
 
   selectProcess(proc: RadicadoDto) {
+    // Mark as seen — remove NEW badge on first click
+    if (this.newRadicadoIds().has(proc.radicadoNumber)) {
+      this.newRadicadoIds.update(s => { const n = new Set(s); n.delete(proc.radicadoNumber); return n; });
+    }
     this.selectedProcess.set(this.selectedProcess()?.id === proc.id ? null : proc);
   }
 
@@ -624,11 +636,55 @@ export class MyProcessesComponent implements OnInit {
           this.isSyncing.set(false);
           this.syncStep.set('done');
           this.syncMessage.set('¡Proceso registrado exitosamente!');
-          // Auto-refresh list and close modal after 1.8s
+
           setTimeout(() => {
+            // Capture form values BEFORE closeModal() clears the signals
+            const despLabel = this.despachos.find(d => d.value === this.selectedDespacho())?.label
+              || this.selectedDespacho() || 'Despacho Judicial';
+            const ciudLabel = this.ciudades.find(c => c.value === this.selectedCiudad())?.label
+              || this.selectedCiudad() || '';
+            const radicadoNum = this.radicadoNumber();
+
+            // Build optimistic entry with captured values
+            const optimistic: RadicadoDto = {
+              id: Date.now(),
+              radicadoNumber: radicadoNum,
+              title: `Proceso – ${despLabel}`,
+              despacho: despLabel,
+              departamento: ciudLabel.toUpperCase(),
+              status: 'PENDING',
+              processDate: new Date().toISOString(),
+              lastActionDate: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            };
+
+            // Insert at top, mark as NEW, auto-select → detail panel slides in immediately
+            this.processes.update(list => [optimistic, ...list]);
+            this.newRadicadoIds.update(s => new Set([...s, radicadoNum]));
+            this.selectedProcess.set(optimistic);
             this.closeModal();
-            this.loadProcesses();
-          }, 1800);
+
+            // Helper: try to replace optimistic with real data from backend
+            const tryReplace = (onNotFound?: () => void) => {
+              this.radicadoService.getAllRadicados().subscribe({
+                next: (data) => {
+                  const real = data.find(p => p.radicadoNumber === radicadoNum);
+                  if (real) {
+                    // Backend has the record → safe to refresh list and selection
+                    this.processes.set(data);
+                    this.selectedProcess.set(real);
+                  } else {
+                    // Backend not ready yet → keep optimistic entry, fire onNotFound callback
+                    onNotFound?.();
+                  }
+                },
+                error: () => { /* keep optimistic entry silently */ }
+              });
+            };
+
+            // First attempt immediately; if not found, retry once after 3 s
+            tryReplace(() => setTimeout(() => tryReplace(), 3000));
+          }, 600);
         } else if (['FAILED', 'ERROR'].includes(s)) {
           this.isSyncing.set(false);
           this.syncStep.set('error');
@@ -642,6 +698,51 @@ export class MyProcessesComponent implements OnInit {
         this.isSyncing.set(false);
         this.syncStep.set('error');
         this.syncMessage.set('Se perdió la conexión con el servidor de sincronización.');
+
+        // The POST already succeeded — the record was sent to the backend.
+        // After a brief delay (so the user sees the error), close modal and
+        // show the optimistic entry while reloading from the real API.
+        setTimeout(() => {
+          const despLabel = this.despachos.find(d => d.value === this.selectedDespacho())?.label
+            || this.selectedDespacho() || 'Despacho Judicial';
+          const ciudLabel = this.ciudades.find(c => c.value === this.selectedCiudad())?.label
+            || this.selectedCiudad() || '';
+          const radicadoNum = this.radicadoNumber();
+
+          const optimistic: RadicadoDto = {
+            id: Date.now(),
+            radicadoNumber: radicadoNum,
+            title: `Proceso – ${despLabel}`,
+            despacho: despLabel,
+            departamento: ciudLabel.toUpperCase(),
+            status: 'PENDING',
+            processDate: new Date().toISOString(),
+            lastActionDate: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          };
+
+          this.processes.update(list => [optimistic, ...list]);
+          this.newRadicadoIds.update(s => new Set([...s, radicadoNum]));
+          this.selectedProcess.set(optimistic);
+          this.closeModal();
+
+          const tryReplace = (onNotFound?: () => void) => {
+            this.radicadoService.getAllRadicados().subscribe({
+              next: (data) => {
+                const real = data.find(p => p.radicadoNumber === radicadoNum);
+                if (real) {
+                  this.processes.set(data);
+                  this.selectedProcess.set(real);
+                } else {
+                  onNotFound?.();
+                }
+              },
+              error: () => { /* keep optimistic entry silently */ }
+            });
+          };
+
+          tryReplace(() => setTimeout(() => tryReplace(), 3000));
+        }, 1200);
       }
     });
   }

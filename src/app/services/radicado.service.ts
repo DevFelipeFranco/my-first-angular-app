@@ -91,6 +91,9 @@ export class RadicadoService {
     return from(import('event-source-polyfill')).pipe(
       switchMap(({ EventSourcePolyfill }) => {
         return new Observable<SyncStatusResponse>((observer) => {
+          let receivedTerminal = false;
+          const TERMINAL = ['COMPLETED', 'FINISHED', 'SUCCESS', 'FAILED', 'ERROR'];
+
           const eventSource = new EventSourcePolyfill(url, {
             headers: {
               'Authorization': `Bearer ${token}`
@@ -100,6 +103,9 @@ export class RadicadoService {
           eventSource.onmessage = (event: any) => {
             try {
               const data: SyncStatusResponse = JSON.parse(event.data);
+              if (TERMINAL.includes((data.status || '').toUpperCase())) {
+                receivedTerminal = true;
+              }
               observer.next(data);
             } catch (error) {
               observer.error('Error parsing SSE data: ' + error);
@@ -107,11 +113,16 @@ export class RadicadoService {
           };
 
           eventSource.onerror = (error: any) => {
-            observer.error('SSE connection error or closed by server.');
             eventSource.close();
+            // When the server closes the SSE stream after a terminal event,
+            // the browser fires onerror — that is NORMAL, not a failure.
+            if (receivedTerminal) {
+              observer.complete();
+            } else {
+              observer.error('SSE connection error or closed by server.');
+            }
           };
 
-          // Cleanup when the subscriber unsubscribes
           return () => {
             eventSource.close();
           };
