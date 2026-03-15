@@ -254,7 +254,7 @@ import { takeWhile } from 'rxjs/operators';
                       <app-icon name="users" [size]="11"></app-icon>Sujetos Procesales
                     </p>
                     <div class="space-y-2">
-                      @for (parte of parseSujetos(selectedProcess()!.sujetosProcesales!); track $index) {
+                       @for (parte of parseSujetos(selectedProcess()!.sujetosProcesales!); track $index) {
                         <div class="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/40">
                           <div class="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-100 to-blue-100 dark:from-indigo-500/20 dark:to-blue-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center flex-shrink-0 mt-0.5">
                             <app-icon name="user" [size]="13"></app-icon>
@@ -287,36 +287,40 @@ import { takeWhile } from 'rxjs/operators';
       @if (isModalOpen()) {
         <div class="fixed inset-0 z-[60] flex items-center justify-center">
           <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" (click)="closeModal()"></div>
-          <div class="relative w-full max-w-lg bg-white dark:bg-slate-800 rounded-[2rem] shadow-2xl overflow-hidden animate-fade-in-up m-4 border border-slate-100 dark:border-slate-700">
-            <div class="px-8 py-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between bg-slate-50/50">
+          <div class="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl overflow-hidden animate-fade-in-up m-4 border border-slate-100 dark:border-slate-800/80 dark:shadow-black/70">
+            <div class="px-8 py-7 border-b border-slate-100 dark:border-slate-800/60 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/20">
               <div class="flex items-center gap-4">
-                <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600">
-                  <app-icon name="briefcase" [size]="20" [strokeWidth]="2"></app-icon>
+                <div class="w-12 h-12 bg-blue-100 dark:bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-600 dark:text-blue-400 shadow-inner">
+                  <app-icon name="briefcase" [size]="22" [strokeWidth]="2"></app-icon>
                 </div>
                 <div>
-                  <h3 class="text-xl font-bold text-slate-800 dark:text-slate-200 tracking-tight">Nuevo Proceso Judicial</h3>
-                  <p class="text-sm text-slate-500 font-medium">Completa los datos iniciales</p>
+                  <h3 class="text-xl font-black text-slate-900 dark:text-slate-50 tracking-tight">Nuevo Proceso Judicial</h3>
+                  <p class="text-sm text-slate-500 dark:text-slate-400 font-bold">Completa los datos iniciales</p>
                 </div>
               </div>
-              <button (click)="closeModal()" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors">
+              <button (click)="closeModal()" class="p-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-all">
                 <app-icon name="x" [size]="20" [strokeWidth]="2.5"></app-icon>
               </button>
             </div>
-            <div class="p-8 space-y-5">
+            <div class="p-8 space-y-10">
               <app-searchable-select label="Ciudad" placeholder="Ej. Bogotá D.C." [options]="ciudades" [value]="selectedCiudad()" (valueChange)="selectedCiudad.set($event)"></app-searchable-select>
+              <div class="h-px bg-slate-100 dark:bg-slate-800/40 w-full"></div>
+              
               <app-searchable-select label="Especialidad" placeholder="Seleccione la rama de derecho" [options]="especialidades" [value]="selectedEspecialidad()" (valueChange)="selectedEspecialidad.set($event)"></app-searchable-select>
+              <div class="h-px bg-slate-100 dark:bg-slate-800/40 w-full"></div>
+              
               <app-searchable-select label="Despacho Judicial" placeholder="Busque el juzgado o tribunal" [options]="despachos" [value]="selectedDespacho()" (valueChange)="selectedDespacho.set($event)"></app-searchable-select>
 
               <!-- Radicado Number Field -->
-              <div class="space-y-1.5">
-                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-200">Número de Radicado</label>
-                <div class="relative">
-                  <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                    <app-icon name="file-text" class="text-slate-400" [size]="18"></app-icon>
+              <div class="space-y-1.5 pt-6 border-t border-slate-100 dark:border-slate-800/40">
+                <label class="block text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1.5 ml-1 mt-1">Número de Radicado</label>
+                <div class="relative group">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <app-icon name="file-text" class="text-slate-400 group-focus-within:text-blue-500 transition-colors" [size]="18"></app-icon>
                   </div>
                   <input type="text" [ngModel]="radicadoNumber()" (ngModelChange)="radicadoNumber.set($event)"
                     [disabled]="isSyncing()"
-                    class="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 focus:bg-white dark:focus:bg-slate-900 focus:border-blue-500 focus:ring-4 outline-none transition-all shadow-sm font-mono text-slate-800 dark:text-slate-200 placeholder:text-slate-400 placeholder:font-sans disabled:opacity-60"
+                    class="w-full pl-11 pr-4 py-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:bg-white dark:focus:bg-slate-800/80 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all shadow-sm font-mono text-sm font-bold text-slate-800 dark:text-slate-100 placeholder:text-slate-400 placeholder:font-sans disabled:opacity-60"
                     placeholder="Ej. 05001333300020130157701">
                 </div>
               </div>
@@ -428,24 +432,24 @@ import { takeWhile } from 'rxjs/operators';
             </div>
 
             <!-- Footer -->
-            <div class="px-8 py-5 border-t border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 flex items-center gap-3 justify-end">
+            <div class="px-8 py-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 flex items-center gap-4 justify-end">
               <button (click)="closeModal()" [disabled]="isSyncing()"
-                class="px-5 py-2.5 rounded-xl font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+                class="px-5 py-3 rounded-2xl font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
                 Cancelar
               </button>
               @if (syncStep() === 'error') {
                 <button (click)="registrarProceso()"
-                  class="px-5 py-2.5 rounded-xl font-bold text-white bg-rose-600 hover:bg-rose-700 shadow-md transition-all flex items-center gap-2">
-                  <app-icon name="refresh-cw" [size]="16" [strokeWidth]="2.5"></app-icon>Reintentar
+                  class="px-5 py-3 rounded-2xl font-bold text-white bg-rose-600 hover:bg-rose-700 shadow-lg shadow-rose-500/20 transition-all flex items-center gap-2">
+                  <app-icon name="refresh-cw" [size]="18" [strokeWidth]="2.5"></app-icon>Reintentar
                 </button>
               } @else {
                 <button (click)="registrarProceso()" [disabled]="isSyncing()"
-                  class="px-5 py-2.5 rounded-xl font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-500/30 hover:-translate-y-0.5 transition-all flex items-center gap-2.5 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none outline-none">
+                  class="px-6 py-3 rounded-2xl font-black text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-xl shadow-blue-500/30 shadow-indigo-500/10 hover:-translate-y-0.5 transition-all flex items-center gap-3 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none outline-none">
                   @if (isSyncing()) {
-                    <app-icon name="refresh-cw" [size]="16" class="animate-spin"></app-icon>
+                    <app-icon name="refresh-cw" [size]="18" class="animate-spin"></app-icon>
                     <span>Procesando...</span>
                   } @else {
-                    <app-icon name="plus" [size]="16" [strokeWidth]="2.5"></app-icon>
+                    <app-icon name="plus" [size]="18" [strokeWidth]="2.5"></app-icon>
                     <span>Registrar Proceso</span>
                   }
                 </button>

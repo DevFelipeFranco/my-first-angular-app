@@ -8,7 +8,7 @@ import { IconComponent } from '../components/ui/icons.component';
   standalone: true,
   imports: [CommonModule, RouterLink, IconComponent],
   template: `
-    <div class="min-h-screen bg-slate-50 text-slate-800 dark:text-slate-200 transition-colors duration-300 font-sans selection:bg-indigo-100 selection:text-indigo-900 overflow-x-hidden">
+    <div class="min-h-screen bg-slate-50 text-slate-800 transition-colors duration-300 font-sans selection:bg-indigo-100 selection:text-indigo-900 overflow-x-hidden">
       
       <!-- Navbar -->
       <nav class="fixed w-full z-50 bg-slate-900/80 backdrop-blur-md border-b border-white/10 transition-all duration-300">
@@ -78,7 +78,7 @@ import { IconComponent } from '../components/ui/icons.component';
                 Crear Cuenta Gratis
                 <app-icon name="chevron-right" class="ml-2" [size]="18"></app-icon>
               </a>
-              <a href="#features" class="inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-slate-300 bg-white dark:bg-slate-800 transition-colors duration-300/5 border border-white/10 rounded-full hover:bg-white dark:bg-slate-800 transition-colors duration-300/10 hover:text-white transition-all duration-300 backdrop-blur-sm">
+              <a href="#features" class="inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-slate-300 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:text-white transition-all duration-300 backdrop-blur-sm">
                 Ver Funciones
               </a>
             </div>
@@ -129,38 +129,38 @@ import { IconComponent } from '../components/ui/icons.component';
       </section>
 
       <!-- Features Section -->
-      <section id="features" class="py-24 bg-white dark:bg-slate-800 transition-colors duration-300 relative">
+      <section id="features" class="py-24 bg-white relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-3xl font-bold text-slate-900 dark:text-slate-100 transition-colors duration-300 sm:text-4xl tracking-tight">Todo lo que necesitas para tu estudio jurídico</h2>
+            <h2 class="text-3xl font-bold text-slate-900 sm:text-4xl tracking-tight">Todo lo que necesitas para tu estudio jurídico</h2>
             <p class="mt-4 text-lg text-slate-600">Automatiza tareas rutinarias y enfócate en lo que realmente importa: ganar tus casos.</p>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <!-- Feature 1 -->
-            <div class="group p-8 bg-slate-50 rounded-3xl border border-slate-100 dark:border-slate-700 transition-colors duration-300 hover:bg-white dark:bg-slate-800 transition-colors duration-300 hover:shadow-2xl hover:shadow-indigo-500/10 hover:border-indigo-100 transition-all duration-300 transform hover:-translate-y-1">
+            <div class="group p-8 bg-slate-50 rounded-3xl border border-slate-100 hover:bg-white hover:shadow-2xl hover:shadow-indigo-500/10 hover:border-indigo-100 transition-all duration-300 transform hover:-translate-y-1">
               <div class="w-14 h-14 bg-indigo-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-indigo-600 transition-all duration-300">
                 <app-icon name="briefcase" class="text-indigo-600 group-hover:text-white transition-colors" [size]="28"></app-icon>
               </div>
-              <h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 transition-colors duration-300 mb-3">Expedientes Centralizados</h3>
+              <h3 class="text-xl font-bold text-slate-900 mb-3">Expedientes Centralizados</h3>
               <p class="text-slate-600 leading-relaxed">Organiza todos tus casos legales en un solo lugar. Accede a documentos, actuaciones e historial de forma inmediata.</p>
             </div>
 
             <!-- Feature 2 -->
-            <div class="group p-8 bg-slate-50 rounded-3xl border border-slate-100 dark:border-slate-700 transition-colors duration-300 hover:bg-white dark:bg-slate-800 transition-colors duration-300 hover:shadow-2xl hover:shadow-indigo-500/10 hover:border-indigo-100 transition-all duration-300 transform hover:-translate-y-1">
+            <div class="group p-8 bg-slate-50 rounded-3xl border border-slate-100 hover:bg-white hover:shadow-2xl hover:shadow-indigo-500/10 hover:border-indigo-100 transition-all duration-300 transform hover:-translate-y-1">
               <div class="w-14 h-14 bg-indigo-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-indigo-600 transition-all duration-300">
                 <app-icon name="users" class="text-indigo-600 group-hover:text-white transition-colors" [size]="28"></app-icon>
               </div>
-              <h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 transition-colors duration-300 mb-3">Gestión de Clientes</h3>
+              <h3 class="text-xl font-bold text-slate-900 mb-3">Gestión de Clientes</h3>
               <p class="text-slate-600 leading-relaxed">Mantén una base de datos detallada de tus clientes, historial de consultas y comunicación fluida en cada paso.</p>
             </div>
 
             <!-- Feature 3 -->
-            <div class="group p-8 bg-slate-50 rounded-3xl border border-slate-100 dark:border-slate-700 transition-colors duration-300 hover:bg-white dark:bg-slate-800 transition-colors duration-300 hover:shadow-2xl hover:shadow-indigo-500/10 hover:border-indigo-100 transition-all duration-300 transform hover:-translate-y-1">
+            <div class="group p-8 bg-slate-50 rounded-3xl border border-slate-100 hover:bg-white hover:shadow-2xl hover:shadow-indigo-500/10 hover:border-indigo-100 transition-all duration-300 transform hover:-translate-y-1">
               <div class="w-14 h-14 bg-indigo-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-indigo-600 transition-all duration-300">
                 <app-icon name="calendar" class="text-indigo-600 group-hover:text-white transition-colors" [size]="28"></app-icon>
               </div>
-              <h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 transition-colors duration-300 mb-3">Agenda Judicial Inteligente</h3>
+              <h3 class="text-xl font-bold text-slate-900 mb-3">Agenda Judicial Inteligente</h3>
               <p class="text-slate-600 leading-relaxed">No pierdas ningún vencimiento. Recordatorios automáticos para audiencias, plazos procesales y reuniones.</p>
             </div>
           </div>
@@ -172,23 +172,23 @@ import { IconComponent } from '../components/ui/icons.component';
         <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMCwwLDAsMC4wMikiLz48L3N2Zz4=')]"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-3xl font-bold text-slate-900 dark:text-slate-100 transition-colors duration-300 sm:text-4xl tracking-tight">Planes diseñados para tu crecimiento</h2>
+            <h2 class="text-3xl font-bold text-slate-900 sm:text-4xl tracking-tight">Planes diseñados para tu crecimiento</h2>
             <p class="mt-4 text-lg text-slate-600">Escoge el plan que mejor se adapte al tamaño de tu firma legal.</p>
             
             <div class="mt-8 inline-flex bg-slate-200/60 p-1.5 rounded-full relative shadow-inner">
-              <button class="relative w-32 rounded-full py-2.5 text-sm font-semibold text-slate-900 dark:text-slate-100 transition-colors duration-300 bg-white dark:bg-slate-800 transition-colors duration-300 shadow-sm ring-1 ring-slate-900/5 transition-all">Mensual</button>
-              <button class="relative w-32 rounded-full py-2.5 text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-100 transition-colors duration-300 transition-all">Anual (-20%)</button>
+              <button class="relative w-32 rounded-full py-2.5 text-sm font-semibold text-slate-900 bg-white shadow-sm ring-1 ring-slate-900/5 transition-all">Mensual</button>
+              <button class="relative w-32 rounded-full py-2.5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-all">Anual (-20%)</button>
             </div>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4 max-w-6xl mx-auto items-center">
             
             <!-- Basic Plan -->
-            <div class="bg-white dark:bg-slate-800 transition-colors duration-300 rounded-3xl p-8 border border-slate-100 dark:border-slate-700 transition-colors duration-300 shadow-xl shadow-slate-200/50 hover:shadow-2xl transition-all duration-300">
-              <h3 class="text-xl font-semibold text-slate-900 dark:text-slate-100 transition-colors duration-300">Individual</h3>
+            <div class="bg-white rounded-3xl p-8 border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl transition-all duration-300">
+              <h3 class="text-xl font-semibold text-slate-900">Individual</h3>
               <p class="text-slate-500 text-sm mt-2">Para abogados independientes.</p>
               <div class="mt-6 flex items-baseline gap-2">
-                <span class="text-4xl font-extrabold text-slate-900 dark:text-slate-100 transition-colors duration-300">$29</span>
+                <span class="text-4xl font-extrabold text-slate-900">$29</span>
                 <span class="text-slate-500">/mes</span>
               </div>
               <ul class="mt-8 flex flex-col gap-4">
@@ -261,11 +261,11 @@ import { IconComponent } from '../components/ui/icons.component';
             </div>
 
             <!-- Enterprise Plan -->
-            <div class="bg-white dark:bg-slate-800 transition-colors duration-300 rounded-3xl p-8 border border-slate-100 dark:border-slate-700 transition-colors duration-300 shadow-xl shadow-slate-200/50 hover:shadow-2xl transition-all duration-300">
-              <h3 class="text-xl font-semibold text-slate-900 dark:text-slate-100 transition-colors duration-300">Empresarial</h3>
+            <div class="bg-white rounded-3xl p-8 border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl transition-all duration-300">
+              <h3 class="text-xl font-semibold text-slate-900">Empresarial</h3>
               <p class="text-slate-500 text-sm mt-2">Para grandes firmas y corporativos.</p>
               <div class="mt-6 flex items-baseline gap-2">
-                <span class="text-4xl font-extrabold text-slate-900 dark:text-slate-100 transition-colors duration-300">Personalizado</span>
+                <span class="text-4xl font-extrabold text-slate-900">Personalizado</span>
               </div>
               <ul class="mt-8 flex flex-col gap-4">
                 <li class="flex items-center gap-3">
@@ -293,7 +293,7 @@ import { IconComponent } from '../components/ui/icons.component';
                   <span class="text-slate-600 text-sm">Migración de Datos Incluida</span>
                 </li>
               </ul>
-              <a [routerLink]="['/register']" [queryParams]="{plan: 'empresarial'}" class="mt-8 block w-full py-3.5 px-6 text-center rounded-xl font-semibold text-slate-700 bg-white dark:bg-slate-800 transition-colors duration-300 border border-slate-200 hover:bg-slate-50 hover:shadow-md transition-all">
+              <a [routerLink]="['/register']" [queryParams]="{plan: 'empresarial'}" class="mt-8 block w-full py-3.5 px-6 text-center rounded-xl font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:shadow-md transition-all">
                 Contactar Ventas
               </a>
             </div>

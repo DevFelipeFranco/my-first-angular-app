@@ -79,8 +79,8 @@
           <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
             
             <!-- Custom Role Selector -->
-            <div class="space-y-2 relative">
-              <label class="text-sm font-semibold text-slate-700">Selecciona tu Perfil</label>
+            <div class="space-y-1.5 relative">
+              <label class="block text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1.5 ml-1 mt-1">Selecciona tu Perfil</label>
               
               <button 
                 type="button"
@@ -143,8 +143,8 @@
             </div>
 
             <!-- Email Field -->
-            <div class="space-y-2">
-              <label class="text-sm font-semibold text-slate-700">Correo Electrónico</label>
+            <div class="space-y-1.5">
+              <label class="block text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1.5 ml-1 mt-1">Correo Electrónico</label>
               <div class="relative group">
                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <app-icon name="user" class="text-slate-400 group-focus-within:text-indigo-500 transition-colors" [size]="18"></app-icon>
@@ -159,8 +159,8 @@
             </div>
 
             <!-- Password Field -->
-            <div class="space-y-2">
-              <label class="text-sm font-semibold text-slate-700">Contraseña</label>
+            <div class="space-y-1.5">
+              <label class="block text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1.5 ml-1 mt-1">Contraseña</label>
               <div class="relative group">
                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <app-icon name="lock" class="text-slate-400 group-focus-within:text-indigo-500 transition-colors" [size]="18"></app-icon>
@@ -195,7 +195,7 @@
             <button 
               type="submit" 
               [disabled]="loginForm.invalid || isLoading()"
-              class="relative w-full py-4 text-white rounded-2xl font-bold shadow-xl shadow-indigo-600/30 overflow-hidden group disabled:opacity-70 disabled:cursor-not-allowed transition-all hover:shadow-indigo-600/40 hover:-translate-y-0.5 active:translate-y-0 active:shadow-indigo-600/20"
+              class="relative w-full py-4 text-white rounded-2xl font-bold shadow-lg shadow-indigo-500/20 dark:shadow-black/70 overflow-hidden group disabled:opacity-70 disabled:cursor-not-allowed transition-all hover:shadow-indigo-500/30 hover:-translate-y-0.5 active:translate-y-0 active:shadow-none"
             >
               <div class="absolute inset-0 bg-gradient-to-r from-indigo-600 to-blue-600 transition-opacity duration-300"></div>
               <div class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>

@@ -16,7 +16,7 @@ export interface SelectOption {
     <div class="relative w-full text-left">
       <!-- Label -->
       @if (label()) {
-        <label class="block text-sm font-semibold text-slate-700 mb-1.5">{{ label() }}</label>
+        <label class="block text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1.5 ml-1 mt-1">{{ label() }}</label>
       }
 
       <!-- Trigger Button -->
@@ -46,7 +46,7 @@ export interface SelectOption {
 
       <!-- Dropdown Panel -->
       @if (isOpen()) {
-        <div class="absolute z-50 mt-2 w-full bg-white dark:bg-slate-800 rounded-xl shadow-xl shadow-slate-200/50 border border-slate-100 dark:border-slate-700 transition-colors duration-300 overflow-hidden origin-top animate-fade-in-up" style="animation-duration: 0.2s;">
+        <div class="absolute z-50 mt-2 w-full bg-white dark:bg-slate-900 rounded-xl shadow-xl shadow-slate-200/40 dark:shadow-black/70 border border-slate-100 dark:border-slate-800 transition-colors duration-300 overflow-hidden origin-top animate-fade-in-up" style="animation-duration: 0.2s;">
           
           <!-- Search Input -->
           <div class="p-2 border-b border-slate-50 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
@@ -76,10 +76,12 @@ export interface SelectOption {
             @for (option of filteredOptions(); track option.value) {
               <li 
                 (click)="selectOption(option)"
-                class="relative cursor-pointer select-none py-2.5 pl-4 pr-9 text-sm text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                class="relative cursor-pointer select-none py-2.5 pl-4 pr-9 text-sm text-slate-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-500/10 hover:text-blue-700 dark:hover:text-blue-400 transition-colors"
                 [class.bg-blue-50]="isSelected(option)"
+                [class.dark:bg-blue-500/10]="isSelected(option)"
                 [class.text-blue-700]="isSelected(option)"
-                [class.font-semibold]="isSelected(option)"
+                [class.dark:text-blue-400]="isSelected(option)"
+                [class.font-black]="isSelected(option)"
               >
                 <span class="block truncate">{{ option.label }}</span>
                 @if (isSelected(option)) {
