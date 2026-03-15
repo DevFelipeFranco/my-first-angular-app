@@ -302,37 +302,154 @@ import { takeWhile } from 'rxjs/operators';
                 <app-icon name="x" [size]="20" [strokeWidth]="2.5"></app-icon>
               </button>
             </div>
-            <div class="p-8 space-y-6">
+            <div class="p-8 space-y-5">
               <app-searchable-select label="Ciudad" placeholder="Ej. Bogotá D.C." [options]="ciudades" [value]="selectedCiudad()" (valueChange)="selectedCiudad.set($event)"></app-searchable-select>
               <app-searchable-select label="Especialidad" placeholder="Seleccione la rama de derecho" [options]="especialidades" [value]="selectedEspecialidad()" (valueChange)="selectedEspecialidad.set($event)"></app-searchable-select>
               <app-searchable-select label="Despacho Judicial" placeholder="Busque el juzgado o tribunal" [options]="despachos" [value]="selectedDespacho()" (valueChange)="selectedDespacho.set($event)"></app-searchable-select>
-              <div class="space-y-1.5 text-left">
-                <label class="block text-sm font-semibold text-slate-700">Número de Radicado</label>
+
+              <!-- Radicado Number Field -->
+              <div class="space-y-1.5">
+                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-200">Número de Radicado</label>
                 <div class="relative">
                   <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                     <app-icon name="file-text" class="text-slate-400" [size]="18"></app-icon>
                   </div>
                   <input type="text" [ngModel]="radicadoNumber()" (ngModelChange)="radicadoNumber.set($event)"
-                    class="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-4 outline-none transition-all shadow-sm font-mono text-slate-800 dark:text-slate-200 placeholder:text-slate-400 placeholder:font-sans"
-                    placeholder="23 dígitos del CPN">
+                    [disabled]="isSyncing()"
+                    class="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 focus:bg-white dark:focus:bg-slate-900 focus:border-blue-500 focus:ring-4 outline-none transition-all shadow-sm font-mono text-slate-800 dark:text-slate-200 placeholder:text-slate-400 placeholder:font-sans disabled:opacity-60"
+                    placeholder="Ej. 05001333300020130157701">
                 </div>
-                @if (syncStatus()) {
-                  <p class="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-1 mt-1">
-                    @if (isSyncing()) { <app-icon name="refresh-cw" [size]="11" class="animate-spin"></app-icon> }
-                    @else { <app-icon name="info" [size]="11"></app-icon> }
-                    {{ syncStatus() }}
-                  </p>
-                }
               </div>
+
+              <!-- ─── Sync Progress Steps ─── -->
+              @if (syncStep() !== 'idle') {
+                <div class="rounded-2xl border overflow-hidden transition-all"
+                  [ngClass]="{
+                    'border-blue-200 bg-blue-50/50 dark:border-blue-800/60 dark:bg-blue-900/10': syncStep() === 'posting' || syncStep() === 'tracking',
+                    'border-emerald-200 bg-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-900/10': syncStep() === 'done',
+                    'border-rose-200 bg-rose-50/50 dark:border-rose-800/60 dark:bg-rose-900/10': syncStep() === 'error'
+                  }">
+
+                  <!-- Steps Row -->
+                  <div class="flex items-center px-4 py-3 gap-0 border-b"
+                    [ngClass]="{
+                      'border-blue-100 dark:border-blue-800/40': syncStep() === 'posting' || syncStep() === 'tracking',
+                      'border-emerald-100 dark:border-emerald-800/40': syncStep() === 'done',
+                      'border-rose-100 dark:border-rose-800/40': syncStep() === 'error'
+                    }">
+
+                    <!-- Step 1: POST -->
+                    <div class="flex items-center gap-2 flex-1">
+                      <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold"
+                        [ngClass]="{
+                          'bg-blue-500 text-white animate-pulse': syncStep() === 'posting',
+                          'bg-emerald-500 text-white': syncStep() === 'tracking' || syncStep() === 'done',
+                          'bg-rose-500 text-white': syncStep() === 'error'
+                        }">
+                        @if (syncStep() === 'posting') { <app-icon name="refresh-cw" [size]="12" class="animate-spin"></app-icon> }
+                        @else if (syncStep() === 'error') { <app-icon name="x" [size]="12" [strokeWidth]="3"></app-icon> }
+                        @else { <app-icon name="check" [size]="12" [strokeWidth]="3"></app-icon> }
+                      </div>
+                      <span class="text-xs font-semibold"
+                        [ngClass]="syncStep() === 'posting' ? 'text-blue-700 dark:text-blue-400' : 'text-emerald-700 dark:text-emerald-400'">
+                        Enviando
+                      </span>
+                    </div>
+
+                    <!-- Connector -->
+                    <div class="h-px flex-1 max-w-[32px]"
+                      [ngClass]="syncStep() === 'tracking' || syncStep() === 'done' ? 'bg-emerald-300' : 'bg-slate-200 dark:bg-slate-700'">
+                    </div>
+
+                    <!-- Step 2: SSE -->
+                    <div class="flex items-center gap-2 flex-1 justify-center">
+                      <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold"
+                        [ngClass]="{
+                          'bg-slate-200 dark:bg-slate-700 text-slate-400': syncStep() === 'posting' || syncStep() === 'error',
+                          'bg-blue-500 text-white': syncStep() === 'tracking',
+                          'bg-emerald-500 text-white': syncStep() === 'done'
+                        }">
+                        @if (syncStep() === 'tracking') { <app-icon name="refresh-cw" [size]="12" class="animate-spin"></app-icon> }
+                        @else if (syncStep() === 'done') { <app-icon name="check" [size]="12" [strokeWidth]="3"></app-icon> }
+                        @else { <span>2</span> }
+                      </div>
+                      <span class="text-xs font-semibold"
+                        [ngClass]="{
+                          'text-slate-400': syncStep() === 'posting' || syncStep() === 'error',
+                          'text-blue-700 dark:text-blue-400': syncStep() === 'tracking',
+                          'text-emerald-700 dark:text-emerald-400': syncStep() === 'done'
+                        }">Monitoreando</span>
+                    </div>
+
+                    <!-- Connector -->
+                    <div class="h-px flex-1 max-w-[32px]"
+                      [ngClass]="syncStep() === 'done' ? 'bg-emerald-300' : 'bg-slate-200 dark:bg-slate-700'">
+                    </div>
+
+                    <!-- Step 3: Done -->
+                    <div class="flex items-center gap-2 flex-1 justify-end">
+                      <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold"
+                        [ngClass]="{
+                          'bg-slate-200 dark:bg-slate-700 text-slate-400': syncStep() !== 'done',
+                          'bg-emerald-500 text-white': syncStep() === 'done'
+                        }">
+                        @if (syncStep() === 'done') { <app-icon name="check" [size]="12" [strokeWidth]="3"></app-icon> }
+                        @else { <span>3</span> }
+                      </div>
+                      <span class="text-xs font-semibold"
+                        [ngClass]="syncStep() === 'done' ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-400'">
+                        Completado
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Status Message -->
+                  <div class="px-4 py-3 flex items-start gap-2">
+                    @if (isSyncing()) {
+                      <app-icon name="refresh-cw" [size]="14" class="animate-spin mt-0.5 flex-shrink-0"
+                        [ngClass]="syncStep() === 'tracking' ? 'text-blue-500' : 'text-blue-500'">
+                      </app-icon>
+                    } @else if (syncStep() === 'done') {
+                      <app-icon name="check-circle" [size]="14" class="text-emerald-500 mt-0.5 flex-shrink-0"></app-icon>
+                    } @else if (syncStep() === 'error') {
+                      <app-icon name="alert-circle" [size]="14" class="text-rose-500 mt-0.5 flex-shrink-0"></app-icon>
+                    }
+                    <p class="text-xs font-semibold leading-relaxed"
+                      [ngClass]="{
+                        'text-blue-700 dark:text-blue-400': syncStep() === 'posting' || syncStep() === 'tracking',
+                        'text-emerald-700 dark:text-emerald-400': syncStep() === 'done',
+                        'text-rose-700 dark:text-rose-400': syncStep() === 'error'
+                      }">
+                      {{ syncMessage() }}
+                    </p>
+                  </div>
+                </div>
+              }
             </div>
+
+            <!-- Footer -->
             <div class="px-8 py-5 border-t border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 flex items-center gap-3 justify-end">
-              <button (click)="closeModal()" [disabled]="isSyncing()" class="px-5 py-2.5 rounded-xl font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors disabled:opacity-50">Cancelar</button>
-              <button (click)="testSyncRadicado()" [disabled]="isSyncing()" class="px-4 py-2.5 rounded-xl font-semibold text-indigo-600 border border-indigo-200 hover:bg-indigo-50 transition-colors disabled:opacity-50 flex items-center gap-2">
-                <app-icon name="activity" [size]="16" [strokeWidth]="2.5"></app-icon>Probar Sync
+              <button (click)="closeModal()" [disabled]="isSyncing()"
+                class="px-5 py-2.5 rounded-xl font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+                Cancelar
               </button>
-              <button (click)="simularCreacion()" [disabled]="isSyncing()" class="px-5 py-2.5 rounded-xl font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-md transition-all flex items-center gap-2 disabled:opacity-50">
-                Crear<app-icon name="check" [size]="16" [strokeWidth]="3"></app-icon>
-              </button>
+              @if (syncStep() === 'error') {
+                <button (click)="registrarProceso()"
+                  class="px-5 py-2.5 rounded-xl font-bold text-white bg-rose-600 hover:bg-rose-700 shadow-md transition-all flex items-center gap-2">
+                  <app-icon name="refresh-cw" [size]="16" [strokeWidth]="2.5"></app-icon>Reintentar
+                </button>
+              } @else {
+                <button (click)="registrarProceso()" [disabled]="isSyncing()"
+                  class="px-5 py-2.5 rounded-xl font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-500/30 hover:-translate-y-0.5 transition-all flex items-center gap-2.5 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none outline-none">
+                  @if (isSyncing()) {
+                    <app-icon name="refresh-cw" [size]="16" class="animate-spin"></app-icon>
+                    <span>Procesando...</span>
+                  } @else {
+                    <app-icon name="plus" [size]="16" [strokeWidth]="2.5"></app-icon>
+                    <span>Registrar Proceso</span>
+                  }
+                </button>
+              }
             </div>
           </div>
         </div>
@@ -376,7 +493,9 @@ export class MyProcessesComponent implements OnInit {
   // Modal state
   isModalOpen = signal(false);
   isSyncing = signal(false);
-  syncStatus = signal<string>('');
+  syncStep = signal<'idle' | 'posting' | 'tracking' | 'done' | 'error'>('idle');
+  syncMessage = signal<string>('');
+  syncTrackingId = signal<string>('');
   radicadoNumber = signal<string>('');
   selectedCiudad = signal<string | null>(null);
   selectedEspecialidad = signal<string | null>(null);
@@ -432,12 +551,15 @@ export class MyProcessesComponent implements OnInit {
   openModal() { this.isModalOpen.set(true); }
 
   closeModal() {
+    if (this.isSyncing()) return; // Prevent closing while sync is running
     this.isModalOpen.set(false);
     this.selectedCiudad.set(null);
     this.selectedEspecialidad.set(null);
     this.selectedDespacho.set(null);
     this.radicadoNumber.set('');
-    this.syncStatus.set('');
+    this.syncStep.set('idle');
+    this.syncMessage.set('');
+    this.syncTrackingId.set('');
     this.isSyncing.set(false);
   }
 
@@ -456,33 +578,72 @@ export class MyProcessesComponent implements OnInit {
     }, ...list]);
   }
 
-  testSyncRadicado() {
+  /**
+   * Main sync flow: POST /sync → get trackingId → SSE poll → done
+   */
+  registrarProceso() {
     const rawRadicado = this.radicadoNumber()?.trim();
-    if (!rawRadicado) { this.syncStatus.set('Ingrese un Radicado CPN primero.'); return; }
+    if (!rawRadicado) {
+      this.syncStep.set('error');
+      this.syncMessage.set('Ingrese el número de radicado (CPN) antes de continuar.');
+      return;
+    }
+
     this.isSyncing.set(true);
-    this.syncStatus.set('Iniciando sincronización...');
+    this.syncStep.set('posting');
+    this.syncMessage.set('Enviando solicitud al servidor judicial...');
+
     this.radicadoService.syncRadicado({ radicadoNumber: rawRadicado }).subscribe({
       next: (res) => {
-        this.syncStatus.set(`Tracking: ${res.trackingId} — ${res.status}`);
-        this.pollSyncStatus(res.trackingId);
+        this.syncTrackingId.set(res.trackingId);
+        this.syncStep.set('tracking');
+        this.syncMessage.set(`Radicado recibido. Monitoreando sincronización...`);
+        this.listenSyncStream(res.trackingId);
       },
-      error: () => { this.isSyncing.set(false); this.syncStatus.set('Error iniciando sincronización.'); }
+      error: (err) => {
+        this.isSyncing.set(false);
+        this.syncStep.set('error');
+        const msg = err?.error?.message || err?.message || 'No se pudo contactar al servidor.';
+        this.syncMessage.set(`Error: ${msg}`);
+      }
     });
   }
 
-  private pollSyncStatus(trackingId: string) {
+  private listenSyncStream(trackingId: string) {
     this.radicadoService.getSyncStatusStream(trackingId).pipe(
-      takeWhile(res => !['COMPLETED','FINISHED','SUCCESS','FAILED','ERROR'].includes(res.status?.toUpperCase()), true)
+      takeWhile(res => !['COMPLETED','FINISHED','SUCCESS','FAILED','ERROR'].includes(
+        (res.status || '').toUpperCase()), true)
     ).subscribe({
       next: (res) => {
-        const s = res.status?.toUpperCase();
-        this.syncStatus.set(`SSE: ${s}`);
-        if (['COMPLETED','FINISHED','SUCCESS'].includes(s)) { this.isSyncing.set(false); this.syncStatus.set('¡Sincronización completada!'); }
-        else if (['FAILED','ERROR'].includes(s))           { this.isSyncing.set(false); this.syncStatus.set('La sincronización finalizó con error.'); }
+        const s = (res.status || '').toUpperCase();
+        if (['COMPLETED', 'FINISHED', 'SUCCESS'].includes(s)) {
+          this.isSyncing.set(false);
+          this.syncStep.set('done');
+          this.syncMessage.set('¡Proceso registrado exitosamente!');
+          // Auto-refresh list and close modal after 1.8s
+          setTimeout(() => {
+            this.closeModal();
+            this.loadProcesses();
+          }, 1800);
+        } else if (['FAILED', 'ERROR'].includes(s)) {
+          this.isSyncing.set(false);
+          this.syncStep.set('error');
+          this.syncMessage.set(res.message || 'La sincronización finalizó con un error en el servidor.');
+        } else {
+          // Intermediate status update
+          this.syncMessage.set(`Estado: ${res.status}${res.message ? ' — ' + res.message : ''}`);
+        }
       },
-      error: () => { this.isSyncing.set(false); this.syncStatus.set('Conexión SSE cerrada.'); }
+      error: () => {
+        this.isSyncing.set(false);
+        this.syncStep.set('error');
+        this.syncMessage.set('Se perdió la conexión con el servidor de sincronización.');
+      }
     });
   }
+
+  // Keep legacy method for potential future standalone test
+  testSyncRadicado() { this.registrarProceso(); }
 
   verDetalle(id: string) {
     this.router.navigate(['/judiciales/mis-procesos', id], {

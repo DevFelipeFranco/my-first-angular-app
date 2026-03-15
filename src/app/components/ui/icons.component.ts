@@ -248,6 +248,22 @@ import { CommonModule } from '@angular/common';
           <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
           <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
         }
+        @case ('copy') {
+          <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+          <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+        }
+        @case ('landmark') {
+          <line x1="3" x2="21" y1="22" y2="22"/>
+          <line x1="6" x2="6" y1="18" y2="11"/>
+          <line x1="10" x2="10" y1="18" y2="11"/>
+          <line x1="14" x2="14" y1="18" y2="11"/>
+          <line x1="18" x2="18" y1="18" y2="11"/>
+          <polygon points="12 2 20 7 4 7"/>
+        }
+        @case ('arrow-right') {
+          <path d="M5 12h14"/>
+          <path d="m12 5 7 7-7 7"/>
+        }
       }
     </svg>
   `
