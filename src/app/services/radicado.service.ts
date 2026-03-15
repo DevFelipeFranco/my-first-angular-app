@@ -35,6 +35,26 @@ export interface RadicadoDto {
   sujetosProcesales?: string;
 }
 
+/** Detailed judicial process data returned by the /procesos/:llaveProceso endpoint */
+export interface ProcesoDatosDto {
+  idRegProceso: number;
+  llaveProceso: string;
+  idConexion: number;
+  esPrivado: boolean;
+  fechaProceso: string;
+  codDespachoCompleto: string;
+  despacho: string;
+  ponente: string;
+  tipoProceso: string;
+  claseProceso: string;
+  subclaseProceso: string;
+  recurso: string;
+  ubicacion: string;
+  contenidoRadicacion: string;
+  fechaConsulta: string;
+  ultimaActualizacion: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -112,5 +132,13 @@ export class RadicadoService {
    */
   getRadicadoById(id: number): Observable<RadicadoDto> {
     return this.http.get<RadicadoDto>(`${this.baseUrl}/${id}`);
+  }
+
+  /**
+   * Fetches the full judicial process details by llaveProceso (radicado number).
+   * Endpoint to be confirmed: GET /api/v1/radicados/{llaveProceso}/proceso
+   */
+  getProcesoDatos(llaveProceso: string): Observable<ProcesoDatosDto> {
+    return this.http.get<ProcesoDatosDto>(`${this.baseUrl}/${llaveProceso}/proceso`);
   }
 }

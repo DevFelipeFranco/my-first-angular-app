@@ -11,17 +11,17 @@ import { AuthService } from '../../services/auth.service';
     standalone: true,
     imports: [CommonModule, RouterOutlet, SidebarComponent, BreadcrumbsComponent, IconComponent],
     template: `
-    <div class="flex min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+    <div class="flex h-screen overflow-hidden bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
       <!-- Sidebar -->
       <app-sidebar [expanded]="sidebarExpanded()"></app-sidebar>
 
       <!-- Main Content Wrapper -->
-      <div class="flex-1 flex flex-col min-h-screen transition-all duration-300 ease-in-out"
+      <div class="flex-1 flex flex-col h-screen transition-all duration-300 ease-in-out"
         [class.ml-64]="sidebarExpanded()" [class.ml-20]="!sidebarExpanded()">
         
         <!-- Top Bar -->
         <header
-          class="sticky top-0 z-40 h-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 px-6 flex items-center justify-between transition-colors duration-300">
+          class="flex-shrink-0 sticky top-0 z-40 h-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 px-6 flex items-center justify-between transition-colors duration-300">
           <div class="flex items-center gap-4">
             <button (click)="toggleSidebar()"
               class="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-300 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-100">
@@ -51,8 +51,8 @@ import { AuthService } from '../../services/auth.service';
           </div>
         </header>
 
-        <!-- Main Content Area -->
-        <main class="flex-1 p-6 overflow-x-hidden">
+        <!-- Main Content Area — único scrollbar de la app -->
+        <main class="flex-1 overflow-y-auto overflow-x-hidden p-6">
           <app-breadcrumbs></app-breadcrumbs>
           <router-outlet></router-outlet>
         </main>

@@ -12,7 +12,7 @@ import { takeWhile } from 'rxjs/operators';
   standalone: true,
   imports: [CommonModule, FormsModule, IconComponent, SearchableSelectComponent],
   template: `
-    <div class="h-full flex flex-col p-6 space-y-6 max-w-7xl mx-auto">
+    <div class="flex flex-col space-y-6 max-w-7xl mx-auto">
 
       <!-- Page Header -->
       <div>
