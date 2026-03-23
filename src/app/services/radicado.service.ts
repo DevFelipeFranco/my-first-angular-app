@@ -34,10 +34,31 @@ export interface RadicadoDto {
   lastActionDate: string;
   updatedAt: string;
   sujetosProcesales?: string;
+  ramaJudicialId?: number | null;
 }
 
 /** Detailed judicial process data returned by the /procesos/:llaveProceso endpoint */
 export interface ProcesoDatosDto {
+  idRegProceso: number;
+  llaveProceso: string;
+  idConexion: number;
+  esPrivado: boolean;
+  fechaProceso: string;
+  codDespachoCompleto: string;
+  despacho: string;
+  ponente: string;
+  tipoProceso: string;
+  claseProceso: string;
+  subclaseProceso: string;
+  recurso: string;
+  ubicacion: string;
+  contenidoRadicacion: string;
+  fechaConsulta: string;
+  ultimaActualizacion: string;
+}
+
+/** Datos del Proceso returned by GET /cases/{caseId}/detalle?idRegProceso=xxx */
+export interface DetalleProcesoCasesDto {
   idRegProceso: number;
   llaveProceso: string;
   idConexion: number;
@@ -63,6 +84,43 @@ export interface SujetoProcesalDto {
   esEmplazado: boolean;
   identificacion: string | null;
   nombreRazonSocial: string;
+  cant: number;
+}
+
+/** Documento adjunto al proceso desde GET /cases/{caseId}/documentos */
+export interface DocumentoProcesoDto {
+  idRegDocumento: number;
+  idConexion: number;
+  consActuacion: number | null;
+  guidDocumento: string | null;
+  nombre: string;
+  descripcion: string;
+  tipo: string;
+  fechaCarga: string;
+}
+
+/** Generic pagination wrapper for Cases API */
+export interface Page<T> {
+  content: T[];
+  pageNumber: number;
+  pageSize: number;
+  totalElements: number;
+  totalPages: number;
+}
+
+/** Actuación adjunta al proceso desde GET /cases/{caseId}/actuaciones */
+export interface ActuacionProcesoDto {
+  idRegActuacion: number;
+  llaveProceso: string;
+  consActuacion: number;
+  fechaActuacion: string;
+  actuacion: string;
+  anotacion: string;
+  fechaInicial: string | null;
+  fechaFinal: string | null;
+  fechaRegistro: string;
+  codRegla: string;
+  conDocumentos: boolean;
   cant: number;
 }
 
@@ -174,5 +232,42 @@ export class RadicadoService {
     return this.http.get<SujetoProcesalDto[]>(`${this.casesBaseUrl}/${caseId}/sujetos`).pipe(
       catchError(() => of([]))
     );
+  }
+
+  /**
+   * Fetches full process details from the Cases API.
+   * Endpoint: GET /cases/{caseId}/detalle
+   * Returns null on error so callers can fall back to mock data.
+   */
+  getDetalleProceso(caseId: number): Observable<DetalleProcesoCasesDto | null> {
+    return this.http
+      .get<DetalleProcesoCasesDto>(`${this.casesBaseUrl}/${caseId}/detalle`)
+      .pipe(catchError(() => of(null)));
+  }
+
+  /**
+   * Fetches process documents from the Cases API.
+   * Endpoint: GET /cases/{caseId}/documentos
+   */
+  getDocumentos(caseId: number): Observable<DocumentoProcesoDto[]> {
+    return this.http.get<DocumentoProcesoDto[]>(`${this.casesBaseUrl}/${caseId}/documentos`).pipe(
+      catchError(() => of([]))
+    );
+  }
+
+  /**
+   * Fetches process actions/events (Actuaciones) from the Cases API paginated.
+   * Endpoint: GET /cases/{caseId}/actuaciones?page=0&size=10
+   */
+  getActuaciones(caseId: number, page: number = 0, size: number = 10, sortBy: string = 'fechaActuacion', sortDir: 'asc' | 'desc' = 'desc'): Observable<Page<ActuacionProcesoDto> | null> {
+    return this.http
+      .get<Page<ActuacionProcesoDto>>(`${this.casesBaseUrl}/${caseId}/actuaciones`, {
+        params: {
+          page: page.toString(),
+          size: size.toString(),
+          sort: `${sortBy},${sortDir}`
+        }
+      })
+      .pipe(catchError(() => of(null)));
   }
 }

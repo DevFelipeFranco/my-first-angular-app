@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IconComponent } from '../components/ui/icons.component';
 import { SearchableSelectComponent, SelectOption } from '../components/ui/searchable-select.component';
-import { RadicadoService, RadicadoDto, SujetoProcesalDto } from '../services/radicado.service';
+import { RadicadoService, RadicadoDto, SujetoProcesalDto, DetalleProcesoCasesDto } from '../services/radicado.service';
 import { takeWhile } from 'rxjs/operators';
 
 @Component({
@@ -317,9 +317,15 @@ import { takeWhile } from 'rxjs/operators';
               <!-- Panel Footer CTA -->
               <div class="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 flex-shrink-0">
                 <button (click)="verDetalle(selectedProcess()!.id.toString())"
-                  class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white px-4 py-2.5 rounded-xl text-sm font-bold shadow-md shadow-indigo-500/30 hover:-translate-y-0.5 transition-all outline-none">
-                  <span>Ver Expediente Completo</span>
-                  <app-icon name="arrow-right" [size]="16" [strokeWidth]="2.5"></app-icon>
+                  [disabled]="isLoadingDetalle()"
+                  class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white px-4 py-2.5 rounded-xl text-sm font-bold shadow-md shadow-indigo-500/30 hover:-translate-y-0.5 transition-all outline-none disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none">
+                  @if (isLoadingDetalle()) {
+                    <app-icon name="refresh-cw" [size]="16" class="animate-spin"></app-icon>
+                    <span>Consultando expediente...</span>
+                  } @else {
+                    <span>Ver Expediente Completo</span>
+                    <app-icon name="arrow-right" [size]="16" [strokeWidth]="2.5"></app-icon>
+                  }
                 </button>
               </div>
             </div>
@@ -533,6 +539,9 @@ export class MyProcessesComponent implements OnInit {
   sujetos = signal<SujetoProcesalDto[]>([]);
   isLoadingSujetos = signal(false);
   sujetosError = signal(false);
+
+  /** Detalle loading state (Ver Expediente Completo button) */
+  isLoadingDetalle = signal(false);
 
   filteredProcesses() {
     const q = this.searchQuery.toLowerCase().trim();
@@ -822,8 +831,24 @@ export class MyProcessesComponent implements OnInit {
   testSyncRadicado() { this.registrarProceso(); }
 
   verDetalle(id: string) {
-    this.router.navigate(['/judiciales/mis-procesos', id], {
-      state: { process: this.selectedProcess() }
+    const proc = this.selectedProcess();
+    if (!proc || this.isLoadingDetalle()) return;
+
+    this.isLoadingDetalle.set(true);
+    // El servicio getDetalleProceso espera solo caseId ahora
+    this.radicadoService.getDetalleProceso(proc.id).subscribe({
+      next: (detalle) => {
+        this.isLoadingDetalle.set(false);
+        this.router.navigate(['/judiciales/mis-procesos', id], {
+          state: { process: proc, detalle }
+        });
+      },
+      error: () => {
+        this.isLoadingDetalle.set(false);
+        this.router.navigate(['/judiciales/mis-procesos', id], {
+          state: { process: proc, detalle: null }
+        });
+      }
     });
   }
 
