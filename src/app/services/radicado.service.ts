@@ -1,7 +1,8 @@
 import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Observable, EMPTY, from, switchMap } from 'rxjs';
+import { Observable, EMPTY, from, switchMap, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 export interface SyncRadicadoRequest {
   radicadoNumber: string;
@@ -55,6 +56,16 @@ export interface ProcesoDatosDto {
   ultimaActualizacion: string;
 }
 
+/** Sujeto Procesal as returned by GET /cases/{caseId}/sujetos */
+export interface SujetoProcesalDto {
+  idRegSujeto: number;
+  tipoSujeto: string;
+  esEmplazado: boolean;
+  identificacion: string | null;
+  nombreRazonSocial: string;
+  cant: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -63,6 +74,7 @@ export class RadicadoService {
   private platformId = inject(PLATFORM_ID);
   // Using the absolute URL as given by the user, but we could eventually move it to environment
   private readonly baseUrl = 'http://localhost:8761/api/v1/radicados';
+  private readonly casesBaseUrl = 'http://localhost:8761/api/v1/cases';
 
   /**
    * Starts the asynchronous synchronization process for a given radicado.
@@ -151,5 +163,16 @@ export class RadicadoService {
    */
   getProcesoDatos(llaveProceso: string): Observable<ProcesoDatosDto> {
     return this.http.get<ProcesoDatosDto>(`${this.baseUrl}/${llaveProceso}/proceso`);
+  }
+
+  /**
+   * Fetches the sujetos procesales for a given case.
+   * Endpoint: GET /cases/{caseId}/sujetos
+   * Returns an empty array on error so callers can gracefully degrade.
+   */
+  getSujetosProcesales(caseId: number): Observable<SujetoProcesalDto[]> {
+    return this.http.get<SujetoProcesalDto[]>(`${this.casesBaseUrl}/${caseId}/sujetos`).pipe(
+      catchError(() => of([]))
+    );
   }
 }

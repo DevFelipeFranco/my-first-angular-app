@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IconComponent } from '../components/ui/icons.component';
 import { SearchableSelectComponent, SelectOption } from '../components/ui/searchable-select.component';
-import { RadicadoService, RadicadoDto } from '../services/radicado.service';
+import { RadicadoService, RadicadoDto, SujetoProcesalDto } from '../services/radicado.service';
 import { takeWhile } from 'rxjs/operators';
 
 @Component({
@@ -254,26 +254,64 @@ import { takeWhile } from 'rxjs/operators';
                 </div>
 
                 <!-- Sujetos Procesales -->
-                @if (selectedProcess()!.sujetosProcesales) {
-                  <div class="space-y-2.5">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
-                      <app-icon name="users" [size]="11"></app-icon>Sujetos Procesales
-                    </p>
+                <div class="space-y-2.5">
+                  <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
+                    <app-icon name="users" [size]="11"></app-icon>Sujetos Procesales
+                  </p>
+
+                  <!-- Loading skeleton -->
+                  @if (isLoadingSujetos()) {
+                    <div class="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/40 animate-pulse">
+                      <div class="w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-700 flex-shrink-0"></div>
+                      <div class="flex-1 space-y-1.5">
+                        <div class="h-2 bg-slate-200 dark:bg-slate-700 rounded w-1/3"></div>
+                        <div class="h-2.5 bg-slate-200 dark:bg-slate-700 rounded w-2/3"></div>
+                      </div>
+                    </div>
+                  }
+
+                  <!-- API results -->
+                  @else if (sujetos().length > 0) {
                     <div class="space-y-2">
-                       @for (parte of parseSujetos(selectedProcess()!.sujetosProcesales!); track $index) {
+                      @for (s of sujetos(); track s.idRegSujeto) {
                         <div class="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/40">
                           <div class="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-100 to-blue-100 dark:from-indigo-500/20 dark:to-blue-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center flex-shrink-0 mt-0.5">
                             <app-icon name="user" [size]="13"></app-icon>
                           </div>
                           <div class="min-w-0 flex-1">
-                            <p class="text-[10px] font-bold text-indigo-500 dark:text-indigo-400 uppercase tracking-wide leading-tight">{{ parte.rol }}</p>
+                            <p class="text-[10px] font-bold text-indigo-500 dark:text-indigo-400 uppercase tracking-wide leading-tight">{{ s.tipoSujeto }}</p>
+                            <p class="text-xs font-semibold text-slate-700 dark:text-slate-200 leading-snug mt-0.5">{{ s.nombreRazonSocial }}</p>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  }
+
+                  <!-- Fallback: parse legacy sujetosProcesales string -->
+                  @else if (sujetosError() && selectedProcess()!.sujetosProcesales) {
+                    <div class="space-y-2">
+                      @for (parte of parseSujetos(selectedProcess()!.sujetosProcesales!); track $index) {
+                        <div class="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/40">
+                          <div class="w-7 h-7 rounded-full bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-500/20 dark:to-orange-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <app-icon name="user" [size]="13"></app-icon>
+                          </div>
+                          <div class="min-w-0 flex-1">
+                            <p class="text-[10px] font-bold text-amber-500 dark:text-amber-400 uppercase tracking-wide leading-tight">{{ parte.rol }}</p>
                             <p class="text-xs font-semibold text-slate-700 dark:text-slate-200 leading-snug mt-0.5">{{ parte.nombre }}</p>
                           </div>
                         </div>
                       }
                     </div>
-                  </div>
-                }
+                  }
+
+                  <!-- Empty state -->
+                  @else {
+                    <div class="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-dashed border-slate-200 dark:border-slate-700/50">
+                      <app-icon name="users" [size]="14" class="text-slate-300 dark:text-slate-600 flex-shrink-0"></app-icon>
+                      <p class="text-xs text-slate-400 dark:text-slate-500">Sin información de sujetos procesales</p>
+                    </div>
+                  }
+                </div>
               </div>
 
               <!-- Panel Footer CTA -->
@@ -491,6 +529,11 @@ export class MyProcessesComponent implements OnInit {
   /** Radicado numbers that were just created — shown as NEW until first click */
   newRadicadoIds = signal<Set<string>>(new Set());
 
+  /** Sujetos Procesales state */
+  sujetos = signal<SujetoProcesalDto[]>([]);
+  isLoadingSujetos = signal(false);
+  sujetosError = signal(false);
+
   filteredProcesses() {
     const q = this.searchQuery.toLowerCase().trim();
     if (!q) return this.processes();
@@ -547,7 +590,35 @@ export class MyProcessesComponent implements OnInit {
     if (this.newRadicadoIds().has(proc.radicadoNumber)) {
       this.newRadicadoIds.update(s => { const n = new Set(s); n.delete(proc.radicadoNumber); return n; });
     }
-    this.selectedProcess.set(this.selectedProcess()?.id === proc.id ? null : proc);
+
+    // Toggle: deselect if same row clicked again
+    if (this.selectedProcess()?.id === proc.id) {
+      this.selectedProcess.set(null);
+      this.sujetos.set([]);
+      return;
+    }
+
+    // Open panel immediately with basic info
+    this.selectedProcess.set(proc);
+
+    // Fetch Sujetos Procesales from API
+    this.sujetos.set([]);
+    this.sujetosError.set(false);
+    this.isLoadingSujetos.set(true);
+
+    this.radicadoService.getSujetosProcesales(proc.id).subscribe({
+      next: (data) => {
+        this.sujetos.set(data);
+        this.isLoadingSujetos.set(false);
+      },
+      error: () => {
+        // catchError inside the service already returns of([]), but
+        // if for any reason we reach here, handle gracefully
+        this.sujetos.set([]);
+        this.sujetosError.set(true);
+        this.isLoadingSujetos.set(false);
+      }
+    });
   }
 
   /** Parses "ROL: NOMBRE | ROL: NOMBRE" into structured parts */
