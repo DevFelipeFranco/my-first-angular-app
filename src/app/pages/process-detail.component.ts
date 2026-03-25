@@ -262,10 +262,32 @@ import {
           @if (selectedTab() === 'actuaciones') {
             <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm animate-fade-in text-sm">
               <div class="px-6 py-4 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                <h2 class="font-bold text-slate-800 dark:text-slate-100">Historial de Actuaciones</h2>
-                @if (actuacionesPage()) {
-                  <span class="text-xs text-indigo-700 bg-indigo-50 font-bold px-3 py-1 rounded-lg border border-indigo-100">{{ actuacionesPage()!.totalElements }} Registros</span>
-                }
+                <div class="flex items-center gap-4">
+                  <h2 class="font-bold text-slate-800 dark:text-slate-100">Historial de Actuaciones</h2>
+                  @if (actuacionesPage()) {
+                    <span class="text-xs text-indigo-700 bg-indigo-50 font-bold px-2.5 py-1 rounded-lg border border-indigo-100">{{ actuacionesPage()!.totalElements }} Registros</span>
+                  }
+                </div>
+                
+                <div class="flex items-center gap-3">
+                  <!-- Sync UI -->
+                  @if (syncActuacionesState() !== 'idle') {
+                    <span class="text-xs font-bold transition-colors"
+                      [ngClass]="{
+                        'text-blue-500': syncActuacionesState() === 'loading',
+                        'text-emerald-500': syncActuacionesState() === 'success',
+                        'text-rose-500': syncActuacionesState() === 'error'
+                      }">
+                      {{ syncActuacionesMessage() }}
+                    </span>
+                  }
+                  
+                  <button (click)="syncActuaciones()" [disabled]="isSyncingActuaciones() || isLoadingActuaciones()"
+                    class="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-700/60 rounded-lg text-xs font-bold hover:bg-indigo-100 dark:hover:bg-indigo-800/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                    <app-icon name="refresh-cw" [size]="14" [class.animate-spin]="isSyncingActuaciones()"></app-icon>
+                    Sincronizar
+                  </button>
+                </div>
               </div>
 
               @if (isLoadingActuaciones()) {
@@ -460,6 +482,9 @@ export class ProcessDetailComponent implements OnInit {
   actuacionesLoaded = signal(false);
   actuacionesSortBy = signal<'fechaActuacion' | 'actuacion'>('fechaActuacion');
   actuacionesSortDir = signal<'desc' | 'asc'>('desc');
+  isSyncingActuaciones = signal(false);
+  syncActuacionesState = signal<'idle' | 'loading' | 'success' | 'error'>('idle');
+  syncActuacionesMessage = signal<string>('');
 
   // Sistema de Tabs
   selectedTab = signal<'resumen' | 'actuaciones' | 'documentos'>('resumen');
@@ -575,6 +600,87 @@ export class ProcessDetailComponent implements OnInit {
         this.isLoadingDocumentos.set(false);
         // Marcamos como cargado para que no se reintente sin control
         this.documentosLoaded.set(true);
+      }
+    });
+  }
+
+  syncActuaciones() {
+    const proc = this.process();
+    if (!proc || this.isSyncingActuaciones()) return;
+
+    this.isSyncingActuaciones.set(true);
+    this.syncActuacionesState.set('loading');
+    this.syncActuacionesMessage.set('Conectando y revisando Rama Judicial...');
+
+    // 1. Open SSE Stream
+    this.radicadoService.getActuacionesSyncStream(proc.id).subscribe({
+      next: (res) => {
+        const s = (res.status || '').toUpperCase();
+        if (['COMPLETED', 'FINISHED', 'SUCCESS'].includes(s)) {
+          this.isSyncingActuaciones.set(false);
+          this.syncActuacionesState.set('success');
+          const count = res['synchronized'] ?? 0;
+          this.syncActuacionesMessage.set(
+            count > 0 ? `${count} nuevas` : 'Actualizado'
+          );
+          
+          if (count > 0) {
+            this.loadActuaciones(0);
+          }
+
+          setTimeout(() => this.syncActuacionesState.set('idle'), 4000);
+        } else if (['FAILED', 'ERROR'].includes(s)) {
+          this.isSyncingActuaciones.set(false);
+          this.syncActuacionesState.set('error');
+          this.syncActuacionesMessage.set(res.message || 'Error en sincronización');
+          setTimeout(() => this.syncActuacionesState.set('idle'), 5000);
+        } else {
+          this.syncActuacionesMessage.set(res.message || 'Procesando...');
+        }
+      },
+      error: (err) => {
+        console.error('El stream SSE ha arrojado un error en Angular:', err);
+        // Solo mostramos error si el POST síncrono no ha terminado esto satisfactoriamente ya
+        if (this.syncActuacionesState() !== 'success') {
+          this.isSyncingActuaciones.set(false);
+          this.syncActuacionesState.set('error');
+          const msg = typeof err === 'string' ? err : (err && err.message ? err.message : 'Error SSE (Ver consola)');
+          this.syncActuacionesMessage.set(msg);
+          setTimeout(() => this.syncActuacionesState.set('idle'), 8000);
+        }
+      }
+    });
+
+    // 2. Trigger POST Request
+    this.radicadoService.triggerActuacionesSync(proc.id).subscribe({
+      next: (res) => {
+        let isSuccess = false;
+        let count = 0;
+        
+        if (typeof res === 'string') {
+          if (res.includes('NuevaActuacionEvent')) {
+            const matchCount = res.match(/newCount=(\d+)/);
+            if (matchCount) { count = parseInt(matchCount[1], 10); isSuccess = true; }
+          } else if (res.includes('newCount')) {
+            try {
+              const parsed = JSON.parse(res);
+              if ('newCount' in parsed) { count = parsed.newCount || 0; isSuccess = true; }
+            } catch(e) {}
+          }
+        }
+        
+        // El backend puede enviar el evento directo en la respuesta de este POST.
+        if (isSuccess && this.syncActuacionesState() !== 'success') {
+          this.isSyncingActuaciones.set(false);
+          this.syncActuacionesState.set('success');
+          this.syncActuacionesMessage.set(count > 0 ? `${count} nuevas` : 'Sincronización completada');
+          if (count > 0) this.loadActuaciones(0);
+          setTimeout(() => this.syncActuacionesState.set('idle'), 4000);
+        }
+      },
+      error: (err) => {
+        // Logging error silencioso para no sobreescribir la UI si SSE está corriendo perfecto
+        console.warn('El trigger POST devolvió error:', err);
       }
     });
   }

@@ -315,9 +315,43 @@ import { takeWhile } from 'rxjs/operators';
               </div>
 
               <!-- Panel Footer CTA -->
-              <div class="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 flex-shrink-0">
+              <div class="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 flex-shrink-0 space-y-2.5">
+
+                <!-- Sync Actuaciones feedback -->
+                @if (syncActuacionesState() !== 'idle') {
+                  <div class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition-all"
+                    [ngClass]="{
+                      'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300': syncActuacionesState() === 'loading',
+                      'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300': syncActuacionesState() === 'success',
+                      'bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-300': syncActuacionesState() === 'error'
+                    }">
+                    @if (syncActuacionesState() === 'loading') {
+                      <app-icon name="refresh-cw" [size]="13" class="animate-spin flex-shrink-0"></app-icon>
+                    } @else if (syncActuacionesState() === 'success') {
+                      <app-icon name="check-circle" [size]="13" class="flex-shrink-0"></app-icon>
+                    } @else {
+                      <app-icon name="alert-circle" [size]="13" class="flex-shrink-0"></app-icon>
+                    }
+                    <span>{{ syncActuacionesMessage() }}</span>
+                  </div>
+                }
+
+                <!-- Sync Actuaciones button -->
+                <button (click)="syncActuaciones()"
+                  [disabled]="isSyncingActuaciones() || isLoadingDetalle()"
+                  class="w-full flex items-center justify-center gap-2 border border-indigo-300 dark:border-indigo-700/60 text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/20 hover:bg-indigo-100 dark:hover:bg-indigo-800/30 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed">
+                  @if (isSyncingActuaciones()) {
+                    <app-icon name="refresh-cw" [size]="15" class="animate-spin"></app-icon>
+                    <span>Sincronizando actuaciones...</span>
+                  } @else {
+                    <app-icon name="cloud-download" [size]="15" [strokeWidth]="2"></app-icon>
+                    <span>Sincronizar Actuaciones</span>
+                  }
+                </button>
+
+                <!-- Primary CTA -->
                 <button (click)="verDetalle(selectedProcess()!.id.toString())"
-                  [disabled]="isLoadingDetalle()"
+                  [disabled]="isLoadingDetalle() || isSyncingActuaciones()"
                   class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white px-4 py-2.5 rounded-xl text-sm font-bold shadow-md shadow-indigo-500/30 hover:-translate-y-0.5 transition-all outline-none disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none">
                   @if (isLoadingDetalle()) {
                     <app-icon name="refresh-cw" [size]="16" class="animate-spin"></app-icon>
@@ -543,6 +577,11 @@ export class MyProcessesComponent implements OnInit {
   /** Detalle loading state (Ver Expediente Completo button) */
   isLoadingDetalle = signal(false);
 
+  /** Actuaciones sync state for the detail panel button */
+  isSyncingActuaciones = signal(false);
+  syncActuacionesState = signal<'idle' | 'loading' | 'success' | 'error'>('idle');
+  syncActuacionesMessage = signal<string>('');
+
   filteredProcesses() {
     const q = this.searchQuery.toLowerCase().trim();
     if (!q) return this.processes();
@@ -609,6 +648,10 @@ export class MyProcessesComponent implements OnInit {
 
     // Open panel immediately with basic info
     this.selectedProcess.set(proc);
+
+    // Reset actuaciones sync feedback for the new process
+    this.syncActuacionesState.set('idle');
+    this.syncActuacionesMessage.set('');
 
     // Fetch Sujetos Procesales from API
     this.sujetos.set([]);
@@ -829,6 +872,57 @@ export class MyProcessesComponent implements OnInit {
 
   // Keep legacy method for potential future standalone test
   testSyncRadicado() { this.registrarProceso(); }
+
+  /** Sync actuaciones for the currently selected process from the external judicial system */
+  syncActuaciones() {
+    const proc = this.selectedProcess();
+    if (!proc || this.isSyncingActuaciones()) return;
+
+    this.isSyncingActuaciones.set(true);
+    this.syncActuacionesState.set('loading');
+    this.syncActuacionesMessage.set('Conectando al servidor...');
+
+    // 1. Open SSE Stream
+    this.radicadoService.getActuacionesSyncStream(proc.id).subscribe({
+      next: (res) => {
+        const s = (res.status || '').toUpperCase();
+        if (['COMPLETED', 'FINISHED', 'SUCCESS'].includes(s)) {
+          this.isSyncingActuaciones.set(false);
+          this.syncActuacionesState.set('success');
+          const count = res['synchronized'] ?? 0;
+          this.syncActuacionesMessage.set(
+            count > 0
+              ? `${count} actuación${count !== 1 ? 'es' : ''} sincronizada${count !== 1 ? 's' : ''}.`
+              : 'Actualizado sin cambios.'
+          );
+          setTimeout(() => this.syncActuacionesState.set('idle'), 5000);
+        } else if (['FAILED', 'ERROR'].includes(s)) {
+          this.isSyncingActuaciones.set(false);
+          this.syncActuacionesState.set('error');
+          this.syncActuacionesMessage.set(res.message || 'Error en sincronización');
+          setTimeout(() => this.syncActuacionesState.set('idle'), 6000);
+        } else {
+          this.syncActuacionesMessage.set(res.message || 'Procesando...');
+        }
+      },
+      error: (err) => {
+        this.isSyncingActuaciones.set(false);
+        this.syncActuacionesState.set('error');
+        this.syncActuacionesMessage.set('Error de conexión SSE');
+        setTimeout(() => this.syncActuacionesState.set('idle'), 6000);
+      }
+    });
+
+    // 2. Trigger POST
+    this.radicadoService.triggerActuacionesSync(proc.id).subscribe({
+      error: (err) => {
+        this.isSyncingActuaciones.set(false);
+        this.syncActuacionesState.set('error');
+        this.syncActuacionesMessage.set('Error al inicializar sync');
+        setTimeout(() => this.syncActuacionesState.set('idle'), 6000);
+      }
+    });
+  }
 
   verDetalle(id: string) {
     const proc = this.selectedProcess();

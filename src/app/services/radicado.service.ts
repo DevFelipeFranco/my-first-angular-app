@@ -172,13 +172,33 @@ export class RadicadoService {
 
           eventSource.onmessage = (event: any) => {
             try {
-              const data: SyncStatusResponse = JSON.parse(event.data);
+              let data: SyncStatusResponse;
+              
+              try {
+                const parsed = JSON.parse(event.data);
+                if (typeof parsed === 'string' && parsed.includes('NuevaActuacionEvent')) {
+                  const matchCount = parsed.match(/newCount=(\d+)/);
+                  const count = matchCount ? parseInt(matchCount[1], 10) : 0;
+                  data = { trackingId: '', status: 'SUCCESS', message: count > 0 ? `${count} nuevas` : 'Actualizado', synchronized: count };
+                } else {
+                  data = parsed;
+                }
+              } catch (parseError) {
+                if (typeof event.data === 'string' && event.data.includes('NuevaActuacionEvent')) {
+                  const matchCount = event.data.match(/newCount=(\d+)/);
+                  const count = matchCount ? parseInt(matchCount[1], 10) : 0;
+                  data = { trackingId: '', status: 'SUCCESS', message: count > 0 ? `${count} nuevas` : 'Actualizado', synchronized: count };
+                } else {
+                  throw parseError;
+                }
+              }
+
               if (TERMINAL.includes((data.status || '').toUpperCase())) {
                 receivedTerminal = true;
               }
               observer.next(data);
             } catch (error) {
-              observer.error('Error parsing SSE data: ' + error);
+              observer.error('Error parsing SSE data: ' + error + ' Data: ' + event.data);
             }
           };
 
@@ -252,6 +272,101 @@ export class RadicadoService {
   getDocumentos(caseId: number): Observable<DocumentoProcesoDto[]> {
     return this.http.get<DocumentoProcesoDto[]>(`${this.casesBaseUrl}/${caseId}/documentos`).pipe(
       catchError(() => of([]))
+    );
+  }
+
+  /**
+   * Triggers the asynchronous synchronization of Actuaciones for a given case.
+   * Endpoint: POST /cases/{caseId}/actuaciones/check
+   */
+  triggerActuacionesSync(caseId: number): Observable<string> {
+    return this.http
+      .post(`${this.casesBaseUrl}/${caseId}/actuaciones/check`, {}, { responseType: 'text' })
+      .pipe(catchError((err) => { throw err; }));
+  }
+
+  /**
+   * Listens to the Server-Sent Events (SSE) stream for Actuaciones synchronization status updates.
+   * Endpoint: GET /cases/{caseId}/actuaciones/check
+   */
+  getActuacionesSyncStream(caseId: number): Observable<SyncStatusResponse> {
+    if (!isPlatformBrowser(this.platformId)) {
+      return EMPTY;
+    }
+
+    const token = localStorage.getItem('dokqet_token');
+    const url = `${this.casesBaseUrl}/${caseId}/actuaciones/check`;
+
+    return from(import('event-source-polyfill')).pipe(
+      switchMap(({ EventSourcePolyfill }) => {
+        return new Observable<SyncStatusResponse>((observer) => {
+          let receivedTerminal = false;
+          // We assume 'SUCCESS', 'COMPLETED', 'ERROR', etc are the terminal states.
+          const TERMINAL = ['COMPLETED', 'FINISHED', 'SUCCESS', 'FAILED', 'ERROR'];
+
+          const eventSource = new EventSourcePolyfill(url, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+
+          const handleEvent = (event: any) => {
+            try {
+              let data: SyncStatusResponse;
+              
+              try {
+                const parsed = JSON.parse(event.data);
+                if (typeof parsed === 'string' && parsed.includes('NuevaActuacionEvent')) {
+                  const matchCount = parsed.match(/newCount=(\d+)/);
+                  const count = matchCount ? parseInt(matchCount[1], 10) : 0;
+                  data = { trackingId: '', status: 'SUCCESS', message: count > 0 ? `${count} nuevas` : 'Actualizado', synchronized: count };
+                } else if (typeof parsed === 'object' && parsed !== null && 'newCount' in parsed) {
+                  const count = parsed.newCount || 0;
+                  data = { trackingId: '', status: 'SUCCESS', message: count > 0 ? `${count} nuevas` : 'Actualizado', synchronized: count };
+                } else {
+                  data = parsed;
+                }
+              } catch (parseError) {
+                if (typeof event.data === 'string' && event.data.includes('NuevaActuacionEvent')) {
+                  const matchCount = event.data.match(/newCount=(\d+)/);
+                  const count = matchCount ? parseInt(matchCount[1], 10) : 0;
+                  data = { trackingId: '', status: 'SUCCESS', message: count > 0 ? `${count} nuevas` : 'Actualizado', synchronized: count };
+                } else {
+                  throw parseError;
+                }
+              }
+
+              if (TERMINAL.includes((data.status || '').toUpperCase())) {
+                receivedTerminal = true;
+              }
+              observer.next(data);
+            } catch (error) {
+              observer.error('Error parsing SSE data: ' + error + ' Data: ' + event.data);
+            }
+          };
+
+          eventSource.onmessage = handleEvent;
+          eventSource.addEventListener('NuevaActuacionEvent', handleEvent);
+          eventSource.addEventListener('message', handleEvent);
+          eventSource.addEventListener('sync-status', handleEvent);
+
+          eventSource.onerror = (error: any) => {
+            eventSource.close();
+            if (receivedTerminal) {
+              observer.complete();
+            } else {
+              // Extract error details if possible
+              const errMsg = error && error.message ? error.message : 'Error desconocido de SSE. Revise consola y Network tab.';
+              console.error('SSE onerror object:', error);
+              observer.error('SSE connection error or closed by server. Detalle: ' + errMsg);
+            }
+          };
+
+          return () => {
+            eventSource.close();
+          };
+        });
+      })
     );
   }
 
